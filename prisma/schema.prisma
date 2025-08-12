@@ -22,7 +22,7 @@ model Group {
   description           String
   password              String
   image                 Image
-  tags                  String[]
+  tags                  Tags[]
   aimed_time            Int
   discord_webhook_url   String
   discord_server_url    String
@@ -89,4 +89,12 @@ model Image {
   group_id    Int 
   record      Record    @relation(fields: [record_id], references: [id])
   record_id   Int
+}
+
+model Tags {
+  id              Int       @id @default(autoincrement())
+  created_at      DateTime  @default(now())
+  updated_at      DateTime  @updatedAt
+  group           Group     @relation(fields: [group_id], references: [id])
+  group_id        Int
 }
