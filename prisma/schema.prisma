@@ -1,0 +1,92 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+
+
+model Group {
+  id                    Int       @id @default(autoincrement())
+  nickname              String
+  description           String
+  password              String
+  image                 Image
+  tags                  String[]
+  aimed_time            Int
+  discord_webhook_url   String
+  discord_server_url    String
+  badge                 badge
+  user_count            Int
+  likecount             Int 
+  created_at            DateTime  @default(now())
+  user                  User
+  record                Record
+}
+
+enum badge {
+  PARTICIPANT
+  REOCORD
+  LIKECOUNT
+}
+
+
+model User {
+  id                    Int       @id @default(autoincrement())
+  group                 Group     @relation(fields: [group_id],references: [id])
+  group_id              Int
+  nickname              String
+  password              String
+  record                Record[]
+  total_record_time     Int
+  total_record_count    Int
+}
+
+
+
+
+
+model Record {
+  id                Int         @id @default(autoincrement())
+  nickname          String
+  exercise_type     exercise_type
+  description       String
+  time              Int
+  distance          Float
+  images            Image[]
+  createdAt         DateTime    @default(now())
+  password          String
+  user              User        @relation(fields: [user_id], references: [id])
+  user_id           Int
+  group             Group       @relation(fields: [group_id], references: [id])
+  group_id          Int
+}
+
+
+enum exercise_type {
+  RUNNING
+  CYCLE
+  SWIMMING
+}
+
+
+model Image {
+  id          Int       @id @default(autoincrement())
+  name        String
+  path        String
+  uploadedAt  DateTime  @default(now())
+  group       Group     @relation(fields: [group_id], references: [id]) 
+  group_id    Int 
+  record      Record    @relation(fields: [record_id], references: [id])
+  record_id   Int
+}
