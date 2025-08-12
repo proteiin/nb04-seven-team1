@@ -19,7 +19,7 @@ model Group {
   nickname            String
   description         String
   password            String
-  image               Image    
+  image               Image[]    
   tags                Tags[]
   aimed_time          Int
   discord_webhook_url String
