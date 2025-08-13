@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 
-import rankingRouter from 'src/router/rankingRouter.js';
+import rankingRouter from './src/router/rankingRouter.js';
 
 const PORT = process.env.PORT || 3000;
 
