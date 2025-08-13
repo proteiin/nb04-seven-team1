@@ -16,6 +16,7 @@ datasource db {
 
 model Group {
   id                  Int      @id @default(autoincrement())
+  group_name          String
   nickname            String
   description         String
   password            String
