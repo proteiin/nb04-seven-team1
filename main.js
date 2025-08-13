@@ -2,7 +2,7 @@ import express from 'express';
 import cors from 'cors';
 
 import GroupRouter from "./src/router/group-router.js";
-import rankingRouter from 'src/router/rankingRouter.js';
+import rankingRouter from './src/router/rankingRouter.js';
 
 const PORT = process.env.PORT || 3000;
 
