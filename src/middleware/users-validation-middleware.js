@@ -25,9 +25,30 @@ export async function checkDuplicateNickname(req, res, next) {
         path: 'nickname',
         message: 'nickname is duplicated',
       });
-    } else {
-      next();
     }
+    next();
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function checkNullNickname(req, res, next) {
+  try {
+    const { nickname } = req.body;
+
+    if (!nickname) {
+      return res.status(400).json({
+        path: 'nickname',
+        message: 'nickname is required',
+      });
+    }
+    if (nickname.trim().length === 0) {
+      return res.status(400).json({
+        path: 'nickname',
+        message: 'nickname can not be just blank',
+      });
+    }
+    next();
   } catch (error) {
     next(error);
   }
