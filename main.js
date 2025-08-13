@@ -1,4 +1,5 @@
 import express from 'express';
+import cors from 'cors';
 
 import rankingRouter from 'src/router/rankingRouter.js';
 
