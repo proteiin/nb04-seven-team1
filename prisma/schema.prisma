@@ -47,8 +47,6 @@ model User {
   nickname           String
   password           String
   record             Record[]
-  total_record_time  Int
-  total_record_count Int
 }
 
 model Record {
