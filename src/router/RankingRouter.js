@@ -1,10 +1,10 @@
 import express from 'express';
-import rankingController from '../controller/RankingController.js';
+import RankingController from '../controller/RankingController.js';
 
 export default class RankingRouter {
     constructor() {
         this.router = express.Router({ mergeParams: true });
-        this.rankingController = new rankingController();
+        this.rankingController = new RankingController();
 
         this.initializeRouter();
     }
