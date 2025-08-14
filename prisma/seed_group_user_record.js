@@ -121,6 +121,52 @@ async function main() {
   });
 
   console.log('✅ Seeding 완료!');
+
+  // 이미 group과 user는 생성되어 있다고 가정
+  const group1Users = await prisma.user.findMany({
+    where: { group_id: 1 },
+  });
+
+  const exerciseTypes = ['RUNNING', 'CYCLE', 'SWIMMING'];
+
+  const recordsData = [];
+
+  for (const user of group1Users) {
+    for (let i = 0; i < 33; i++) { // 각 유저당 33개씩 (총 99개)
+      const type = exerciseTypes[Math.floor(Math.random() * exerciseTypes.length)];
+      recordsData.push({
+        nickname: user.nickname,
+        exercise_type: type,
+        description: `${type} 운동 기록`,
+        time: Math.floor(Math.random() * 120) + 20, // 20~140분
+        distance: parseFloat((Math.random() * 20).toFixed(2)), // 0~20km
+        createdAt: new Date(Date.now() - Math.floor(Math.random() * 30) * 24 * 60 * 60 * 1000), // 최근 30일 랜덤
+        password: `rec${Math.floor(Math.random() * 1000)}`,
+        user_id: user.id,
+        group_id: user.group_id,
+      });
+    }
+  }
+
+  // 추가 1개로 100개 채우기
+  const user = group1Users[0];
+  recordsData.push({
+    nickname: user.nickname,
+    exercise_type: 'RUNNING',
+    description: '추가 운동 기록',
+    time: 50,
+    distance: 5,
+    createdAt: new Date(),
+    password: 'recExtra',
+    user_id: user.id,
+    group_id: user.group_id,
+  });
+
+  await prisma.record.createMany({
+    data: recordsData,
+  });
+
+  console.log(`✅ Record ${recordsData.length}개 추가 완료!`);
 }
 
 main()
