@@ -34,7 +34,7 @@ export class UserValidator {
     }
   };
 
-  checkNullNickname = async (req, res, next) => {
+  validateNickname = async (req, res, next) => {
     try {
       const { nickname } = req.body;
 
@@ -48,6 +48,14 @@ export class UserValidator {
         return res.status(400).json({
           path: 'nickname',
           message: 'nickname can not be just blank',
+        });
+      }
+
+      // 닉네임 최소 길이 검사
+      if (nickname.length < 3) {
+        return res.status(400).json({
+          path: 'nickname',
+          message: 'nickname must be at least 3 characters long',
         });
       }
       next();
