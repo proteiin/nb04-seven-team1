@@ -1,11 +1,11 @@
 import express from 'express';
 import {
   groupParticipation,
-  groupleave,
+  groupLeave,
 } from '../controller/user-controller.js';
 
 const router = express.Router();
 
-router.route('/').post(groupParticipation).delete(groupleave);
+router.route('/').post(groupParticipation).delete(groupLeave);
 
 export default router;
