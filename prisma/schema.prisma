@@ -6,7 +6,7 @@
 
 generator client {
   provider = "prisma-client-js"
-  output   = "../generated/prisma"
+
 }
 
 datasource db {
@@ -15,40 +15,55 @@ datasource db {
 }
 
 model Group {
-  id                  Int      @id @default(autoincrement())
-  group_name          String
+  id                  Int        @id @default(autoincrement())
   nickname            String
+  group_name          String
   description         String
   password            String
   image               Image[]    
   tags                Tags[]
-  aimed_time          Int
+  goal_rep            Int
   discord_webhook_url String
   discord_server_url  String
-  badge               badge
-  user_count          Int
-  likecount           Int
-  created_at          DateTime @default(now())
-  user                User[]
+  badge               badge?
+  user_count          Int        @default(0)
+  like_count          Int        @default(0)
+  created_at          DateTime   @default(now())
+  updated_at          DateTime   @updatedAt
+  owner               Owner      @relation(fields: [owner_id], references: [id]) 
+  owner_id            Int        @unique
+  participants        User[]     
   record              Record[]
-  imageId             Int
 }
 
 enum badge {
   PARTICIPANT
-  REOCORD
+  RECORD
   LIKECOUNT
 }
 
+
+model Owner {
+  id                 Int       @id @default(autoincrement())
+  group              Group?     
+  group_id           Int       @unique
+  nickname           String
+  password           String
+  record             Record[] 
+  created_at         DateTime @default(now())
+  updated_at         DateTime @updatedAt
+}
+
+
 model User {
-  id                 Int      @id @default(autoincrement())
-  group              Group    @relation(fields: [group_id], references: [id])
-  group_id           Int
+  id                 Int       @id @default(autoincrement())
+  group              Group?    @relation(fields: [group_id], references: [id])
+  group_id           Int?
   nickname           String
   password           String
   record             Record[]
-  total_record_time  Int
-  total_record_count Int
+  created_at         DateTime @default(now())
+  updated_at         DateTime @updatedAt
 }
 
 model Record {
@@ -65,6 +80,8 @@ model Record {
   user_id       Int
   group         Group         @relation(fields: [group_id], references: [id])
   group_id      Int
+  owner         Owner         @relation(fields: [owner_id], references: [id])
+  owner_id      Int
 }
 
 enum exercise_type {
