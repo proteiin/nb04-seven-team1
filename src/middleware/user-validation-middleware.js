@@ -17,7 +17,7 @@ export class UserValidator {
         });
       }
 
-      const nicknameDuplicated = await usersRepository.findByNickname(
+      const nicknameDuplicated = await this.usersRepository.findByNickname(
         nickname,
         numericGroupId,
       );
@@ -64,8 +64,8 @@ export class UserValidator {
     }
   };
 
-  // 비밀번호 빈 칸, 공백 확인
-  checkNullPassword = async (req, res, next) => {
+  // 비밀번호 확인
+  validatePassword = async (req, res, next) => {
     try {
       const { password } = req.body;
 
@@ -79,6 +79,19 @@ export class UserValidator {
         return res.status(400).json({
           path: 'password',
           message: 'password can not be just blank',
+        });
+      }
+
+      if (password.length < 8) {
+        return res.status(400).json({
+          path: 'password',
+          message: 'password must be at least 8 characters long',
+        });
+      }
+      if (password.length > 18) {
+        return res.status(400).json({
+          path: 'password',
+          message: 'password must be at most 18 characters long',
         });
       }
       next();
