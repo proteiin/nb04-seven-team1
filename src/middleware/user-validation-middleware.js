@@ -1,8 +1,8 @@
-import { UsersRepository } from '../repository/user-repository.js';
+import { UserRepository } from '../repository/user-repository.js';
 
 export class UserValidator {
-  constructor() {
-    this.usersRepository = new UsersRepository();
+  constructor(userRepository) {
+    this.userRepository = userRepository;
   }
   checkDuplicateNickname = async (req, res, next) => {
     try {
@@ -17,7 +17,7 @@ export class UserValidator {
         });
       }
 
-      const nicknameDuplicated = await this.usersRepository.findByNickname(
+      const nicknameDuplicated = await this.userRepository.findByNickname(
         nickname,
         numericGroupId,
       );
