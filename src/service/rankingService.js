@@ -1,20 +1,21 @@
-import rankingRepository from '../repository/rankingRepository.js';
+import RankingRepository from '../repository/RankingRepository.js';
 
-const getRanking = async ({ groupId, period, page, pageSize }) => {
-    const result = await rankingRepository.getRanking({ groupId, period, page, pageSize });
+export default class RankingService {
+    constructor() {
+        this.rankingRepository = new RankingRepository();
+    }
 
-    // 쿼리 결과에 순위 추가
-    const ranking = result.map( (arr, idx) => ({
-        // rank: idx + 1, 
-        participantId: arr.user_id,
-        nickname: arr.nickname,
-        recordCount: arr._count.nickname,
-        recordTime: arr._sum.time,
-    }));
+    getRanking = async ({ groupId, period, page, pageSize }) => {
+        const result = await this.rankingRepository.getRanking({ groupId, period, page, pageSize });
 
-    return ranking;
-};
+        // 쿼리 결과에 순위 추가
+        const ranking = result.map((arr) => ({
+            participantId: arr.user_id,
+            nickname: arr.nickname,
+            recordCount: arr._count.nickname,
+            recordTime: arr._sum.time,
+        }));
 
-export default {
-    getRanking,
-};
+        return ranking;
+    };
+}

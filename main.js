@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 
-import rankingRouter from './src/router/rankingRouter.js';
+import RankingRouter from './src/router/RankingRouter.js';
 
 const PORT = process.env.PORT || 3000;
 
@@ -18,7 +18,9 @@ function requestLogger(req, _, next) {
 
 
 app.use(requestLogger);
-app.use('/groups/:groupId/rank', rankingRouter);
+
+const rankingRouter = new RankingRouter();
+app.use('/groups/:groupId/rank', rankingRouter.getRouter());
 
 
 app.listen(PORT, () => console.log(`Server started on port ${PORT}..`));

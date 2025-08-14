@@ -1,9 +1,20 @@
 import express from 'express';
-import rankingController from '../controller/rankingController.js';
+import rankingController from '../controller/RankingController.js';
 
-const router = express.Router({ mergeParams: true });
+export default class RankingRouter {
+    constructor() {
+        this.router = express.Router({ mergeParams: true });
+        this.rankingController = new rankingController();
 
-router.route('/')
-    .get(rankingController.getRanking);
+        this.initializeRouter();
+    }
 
-export default router;
+    initializeRouter() {
+        this.router.route('/')
+            .get(this.rankingController.getRanking.bind(this.rankingController));
+    }
+
+    getRouter() {
+        return this.router;
+    }
+}
