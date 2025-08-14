@@ -1,5 +1,3 @@
-import { UserRepository } from '../repository/user-repository.js';
-
 export class UserValidator {
   constructor(userRepository) {
     this.userRepository = userRepository;

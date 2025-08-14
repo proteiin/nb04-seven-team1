@@ -4,10 +4,7 @@ import {
   groupLeave,
 } from '../controller/user-controller.js';
 import { UserRepository } from '../repository/user-repository.js';
-import {
-  UserValidator,
-  UserValidator,
-} from '../middleware/user-validation-middleware.js';
+import { UserValidator } from '../middleware/user-validation-middleware.js';
 
 const router = express.Router();
 
