@@ -5,26 +5,16 @@ const prisma = new PrismaClient();
 
 
 
-class GroupDatabase{
+class GroupRepository{
 
     createGroup = async ()=>{
         const newGroup = await prisma.Group.create({
-        data:{
-            group_name: groupName,
-            description,
-            nickname,
-            password,
-            image,
-            tags,
-            aimed_time: aimedTime,
-            discord_webhook_url: discordWebhookUrl,
-            discord_server_url : discordServerUrl
-        }
-    })
-    return newGroup
+            data
+        })
+        return newGroup
     } 
 
-    GetAllGroup = async ()=>{
+    GetAllGroup = async (skip,take,orderBy,groupname)=>{
         const allGroups = await prisma.Group.findMany({
             skip,
             take,
@@ -45,6 +35,15 @@ class GroupDatabase{
             }
         });
         return allGroups
+    }
+
+    GetGroupByIdAll = async()=>{
+        const group = await prisma.Group.findUnique({
+            where:{
+                id:Id
+            },
+        })
+        return group
     }
 
     GetGroupById = async()=>{
@@ -94,3 +93,4 @@ class GroupDatabase{
 
 
 
+export default new GroupRepository
