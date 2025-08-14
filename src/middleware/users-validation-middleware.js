@@ -53,3 +53,26 @@ export async function checkNullNickname(req, res, next) {
     next(error);
   }
 }
+
+// 비밀번호 빈 칸, 공백 확인
+export async function checkNullPassword(req, res, next) {
+  try {
+    const { password } = req.body;
+
+    if (!password) {
+      return res.status(400).json({
+        path: 'password',
+        message: 'password is required',
+      });
+    }
+    if (password.trim().length === 0) {
+      return res.status(400).json({
+        path: 'password',
+        message: 'password can not be just blank',
+      });
+    }
+    next();
+  } catch (error) {
+    next(error);
+  }
+}
