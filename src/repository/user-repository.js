@@ -13,8 +13,8 @@ export class UserRepository {
   };
 
   // 사용자의 그룹 참여 시 그룹의 상세 정보 반환
-  participationInTheGroup = async (groupId) => {
-    const participation = await prisma.group.findUnique({
+  returnGroup = async (groupId) => {
+    const group = await prisma.group.findUnique({
       where: { id: groupId },
       include: {
         tags: true,
@@ -26,6 +26,8 @@ export class UserRepository {
         },
       },
     });
-    return participation;
+    return group;
   };
+
+  // 사용자의 그룹 등록
 }
