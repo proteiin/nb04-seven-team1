@@ -16,7 +16,7 @@ export class UserValidator {
       }
 
       const nicknameDuplicated = await this.userRepository.findUser({
-        group_id: numericGroupIdgroupId,
+        group_id: numericGroupId,
         nickname,
       });
 
