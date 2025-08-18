@@ -147,7 +147,7 @@ export class RecordsRepository {
     const user = await this.prisma.user.findFirst({
         where: {
             group_id: groupId,
-            nickname, nickname,
+            nickname,
         },
     });
     return user;
@@ -193,7 +193,7 @@ export class RecordsRepository {
         take: pageSize,
     });
 
-    const formattedRankings = this.formattedRankings.map(r => ({
+    const formattedRankings = ranking.map(r => ({
         nickname: r.nickname,
         recordCount: r._count.id,
         totalTime: r._sum.time,
