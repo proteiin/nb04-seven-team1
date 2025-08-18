@@ -22,9 +22,11 @@ function requestLogger(req, _, next) {
 app.use(requestLogger);
 
 const rankingRouter = new RankingRouter();
+const imageRouter = new ImageRouter();
 // app.use('/groups', GroupRouter);
 app.use('/groups/:groupId/rank', rankingRouter.getRouter());
 app.use('/groups/:groupId/participants', userRouter);
+app.use('/images', imageRouter.getRouter());
 
 // 전역 에러 핸들러 미들웨어
 // 반드시 모든 라우터 뒤에 위치해야 합니다.
