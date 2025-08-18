@@ -7,11 +7,19 @@ export class RecordsService {
 
     
     createRecord = async (groupId, nickname, exerciseType, description, time, distance, password) => {
-        console.log('Received password in service:', password);
-        const user = { id: 1, password: 'password'};
-        if(!user || user.password !== password) {
-            throw new Error('닉네임과 비밀번호를 확인해주세요.');
+
+        const user = await this.recordsRepository.findUserByNickname(groupId, nickname);
+        if (!user || user.password !== password) {
+            const error = new Error('닉네임 또는 비밀번호를 확인해주세요.');
+            error.status = 401;
+            throw error;
         }
+            if (time <= 0) {
+                const error = new Error('운동 시간은 0보다 커야합니다.');
+                error.status = 400;
+                throw error;
+            }
+        
         const newRecord = await this.recordsRepository.createRecord(
             user.id,
             groupId,
