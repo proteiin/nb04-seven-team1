@@ -18,12 +18,32 @@ export class UserRepository {
     return await prismaClient.user.create({ data });
   };
 
-  // 그룹 인원 수 1 증가.i
+  // 그룹 인원 수 1 증가
   incrementGroupUser = async (groupId, tx) => {
     const prismaClient = tx || prisma;
     return await prismaClient.group.update({
       where: { id: groupId },
       data: { user_count: { increment: 1 } },
+      include: {
+        tags: true,
+        user: {
+          select: {
+            id: true,
+            nickname: true,
+            created_at: true,
+            updated_at: true,
+          },
+        },
+      },
+    });
+  };
+
+  // 그룹 인원 수 1 감소
+  decrementGroupUser = async (groupId, tx) => {
+    const prismaClient = tx || prisma;
+    return await prismaClient.group.update({
+      where: { id: groupId },
+      data: { user_count: { decrement: 1 } },
       include: {
         tags: true,
         user: {
