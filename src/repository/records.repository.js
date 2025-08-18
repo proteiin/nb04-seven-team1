@@ -24,6 +24,7 @@ export class RecordsRepository {
         time,
         distance,
         password,
+        photos,
     ) => {
         const record = await this.prisma.record.create({
             data: {
@@ -35,10 +36,21 @@ export class RecordsRepository {
                 time,
                 distance,
                 password,
+                
+                images: {
+                    create: photos.map(photoPath => ({
+                        name: photoPath.substring(photoPath.lastIndexOf('/') + 1),
+                        path: photoPath,
+                    })),
+                },
             },
+            include: {
+                imgage: true,
+            }
         });
         return record;
     };
+            
 
  /**
  * * 그룹 내 모든 운동 기록 조회

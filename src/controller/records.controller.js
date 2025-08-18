@@ -21,7 +21,8 @@ export class RecordsController {
                 description,
                 time,
                 distance,
-                password,                
+                password,
+                photos,               
             );
 
             return res.status(201).json({ data: newRecord });
