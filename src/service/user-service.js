@@ -1,3 +1,4 @@
+import bycript from 'bcrypt';
 import { UserRepository } from '../repository/user-repository.js';
 
 class UserService {
@@ -28,6 +29,16 @@ class UserService {
     } catch (error) {
       next(error);
     }
+  };
+
+  hashingPassword = async (password) => {
+    const saltRounds = 10; // 암호화 복잡도
+    return await bcrypt.hash(password, saltRounds);
+  };
+
+  compareHashingPassword = async (password, hashingPassword) => {
+    const isMatch = await bcrypt.compare(reqPassword, hashingPassword);
+    return isMatch;
   };
 }
 
