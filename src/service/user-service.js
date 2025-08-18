@@ -16,7 +16,19 @@ class UserService {
     return updatedGroup;
   };
 
-  leaveParticipantFromGroup = async (nickname, password, groupId) => {};
+  leaveParticipantFromGroup = async (nickname, password, groupId) => {
+    try {
+      await prisma.$transaction(async (tx) => {
+        await this.userRepository.leaveGroup(
+          { group_id: groupId, nickname, password },
+          tx,
+        );
+        await this.userRepository.decrementGroupUser(groupId, tx);
+      });
+    } catch (error) {
+      next(error);
+    }
+  };
 }
 
 export default UserService;
