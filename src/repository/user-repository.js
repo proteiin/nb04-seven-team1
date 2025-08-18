@@ -44,17 +44,6 @@ export class UserRepository {
     return await prismaClient.group.update({
       where: { id: groupId },
       data: { user_count: { decrement: 1 } },
-      include: {
-        tags: true,
-        user: {
-          select: {
-            id: true,
-            nickname: true,
-            created_at: true,
-            updated_at: true,
-          },
-        },
-      },
     });
   };
 }
