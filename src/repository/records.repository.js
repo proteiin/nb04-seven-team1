@@ -45,7 +45,7 @@ export class RecordsRepository {
                 },
             },
             include: {
-                imgage: true,
+                images: true,
             }
         });
         return record;

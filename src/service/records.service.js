@@ -1,4 +1,5 @@
 import { RecordsRepository } from '../repository/records.repository.js';
+import axios from 'axios';
 
 export class RecordsService {
     constructor(recordsRepository) {
@@ -29,10 +30,40 @@ export class RecordsService {
             time,
             distance,
             password,
+            photos,
         );
 
+        try {
+            const group = await this.recordsRepository.prisma.group.findUnique({
+                where: { id: groupId },
+                select: { discord_webhook_url: true, nickname: true }
+            });
+
+            if (group && group.discord_webhook_url) {
+                const webhookUrl = group.discord_webhook_url;
+                const groupName = group.nickname;
+                
+                const message = {
+                    content: `${groupName}그룹에 새로운 기록이 등록되었습니다.`
+                             `닉네임: ${nickname}\n` +
+                             `운동 종류: ${exerciseType}\n` +
+                             `운동 시간: ${time}분\n` +
+                             `운동 거리: ${distance}km\n` +
+                             (photos && photos.length > 0 ? `사진: ${photos.join(', ')}\n` : '') +
+                             `확인해보세요.`,
+                };
+
+                await axios.post(webhookUrl, message);
+                console.log('Discord 웹훅 알림 성공');
+            }
+        }   catch (webhookError) {
+            console.log('Discord 웹훅 알림 실패', webhookError.message);
+        }         
+         
         return newRecord;
     }
+
+
 
     findAllRecords = async (groupId, sort, search, page) => {
         const records = await this.recordsRepository.findAllRecords(groupId, sort, search, page);
