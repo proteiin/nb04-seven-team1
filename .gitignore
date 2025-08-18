@@ -2,5 +2,4 @@ node_modules/
 /prisma/migrations
 /generated/prisma
 .env
-/prisma/migrations
 .DS_Store
