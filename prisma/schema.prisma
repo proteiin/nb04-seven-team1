@@ -103,6 +103,7 @@ model Image {
 
 model Tags {
   id         Int      @id @default(autoincrement())
+  name       String 
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
   group      Group    @relation(fields: [group_id], references: [id])
