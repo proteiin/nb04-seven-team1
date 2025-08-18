@@ -36,7 +36,7 @@ export class UserService {
         const error = new Error('nickname not found');
         error.statusCode = 404;
         error.path = 'nickname';
-        return next(error);
+        throw error;
       }
       const checkPassword = await this.compareHashingPassword(
         password,
@@ -45,6 +45,7 @@ export class UserService {
       if (!checkPassword) {
         const error = new Error('password is wrong');
         error.statusCode = 401;
+        error.path = 'password';
         throw error;
       }
       await prisma.$transaction(async (tx) => {
