@@ -1,15 +1,15 @@
 import prisma from '../utils/prisma/index.js';
 
 export class UserRepository {
-  // 닉네임 찾기
-  findByNickname = async (nickname, groupId) => {
-    const userNickname = await prisma.user.findFirst({
+  // 닉네임 중복검사, 비밀번호 검사를 위한 유저 객체 반환
+  finduser = async (nickname, groupId) => {
+    const user = await prisma.user.findFirst({
       where: {
         nickname,
         group_id: groupId,
       },
     });
-    return userNickname;
+    return user;
   };
 
   // 사용자 등록
