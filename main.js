@@ -64,14 +64,15 @@ app.use('/groups/:groupId/participants', userRouter);
 // 전역 에러 핸들러 미들웨어
 // 반드시 모든 라우터 뒤에 위치해야 합니다.
 app.use((err, req, res, next) => {
-  console.error(error); // 에러 로그
+  console.error(err); // 에러 로그
 
   const statusCode = err.statusCode || 500; // 에러 객체의 상태코드가 없으면 500을 기본값으로 사용
 
   const message = err.message || 'unexpected server error';
+  const path = err.path || 'unknown';
 
   res.status(statusCode).json({
-    path,
+    path: path,
     message: message,
   });
 });
