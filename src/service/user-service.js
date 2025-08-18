@@ -29,7 +29,7 @@ export class UserService {
   leaveParticipantFromGroup = async (nickname, password, groupId) => {
     try {
       const user = await this.userRepository.findUser({
-        groupId,
+        group_id: groupId,
         nickname,
       });
       if (!user) {

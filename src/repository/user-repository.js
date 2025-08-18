@@ -2,14 +2,8 @@ import prisma from '../utils/prisma/index.js';
 
 export class UserRepository {
   // 닉네임 중복검사, 비밀번호 검사를 위한 유저 객체 반환
-  findUser = async (nickname, groupId) => {
-    const user = await prisma.user.findFirst({
-      where: {
-        group_id: groupId,
-        nickname,
-      },
-    });
-    return user;
+  findUser = async (where) => {
+    return await prisma.user.findFirst({ where });
   };
 
   // 사용자 등록
