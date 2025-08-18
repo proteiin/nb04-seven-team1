@@ -12,10 +12,18 @@ export class UserRepository {
     return userNickname;
   };
 
-  // 사용자의 그룹 참여 시 그룹의 상세 정보 반환
-  returnGroup = async (groupId) => {
-    const group = await prisma.group.findUnique({
+  // 사용자 등록
+  joinGroup = async (data, tx) => {
+    const prismaClient = tx || prisma;
+    return await prismaClient.user.create({ data });
+  };
+
+  // 그룹 인원 수 1 증가.i
+  incrementGroupUser = async (groupId, tx) => {
+    const prismaClient = tx || prisma;
+    return await prismaClient.group.update({
       where: { id: groupId },
+      data: { user_count: { increment: 1 } },
       include: {
         tags: true,
         user: {
@@ -27,30 +35,6 @@ export class UserRepository {
           },
         },
       },
-    });
-    return group;
-  };
-
-  // 사용자의 그룹 등록
-  joinGroup = async (nickname, password, groupId) => {
-    const result = await prisma.$transaction(async (tx) => {
-      (await tx.user.create({
-        data: {
-          group_id: groupId,
-          nickname,
-          password,
-        },
-      }),
-        await tx.group.update({
-          where: {
-            id: groupId,
-          },
-          data: {
-            user_count: {
-              increment: 1,
-            },
-          },
-        }));
     });
   };
 }
