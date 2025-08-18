@@ -9,22 +9,22 @@ export class UserValidator {
 
       const numericGroupId = Number(groupId);
       if (Number.isNaN(numericGroupId)) {
-        return res.status(400).json({
-          path: 'groupId',
-          message: 'group_id is unvalidated',
-        });
+        const error = new Error('group_id is unvalidated');
+        error.statusCode = 400;
+        error.path = 'groupId';
+        return next(error);
       }
 
       const nicknameDuplicated = await this.userRepository.findUser({
-        group_id: numericGroupId,
+        group_id: numericGroupIdgroupId,
         nickname,
       });
 
       if (nicknameDuplicated) {
-        return res.status(409).json({
-          path: 'nickname',
-          message: 'nickname is duplicated',
-        });
+        const error = new Error('nickname is duplicated');
+        error.statusCode = 409;
+        error.path = 'nickname';
+        return next(error);
       }
       next();
     } catch (error) {
@@ -37,24 +37,24 @@ export class UserValidator {
       const { nickname } = req.body;
 
       if (!nickname) {
-        return res.status(400).json({
-          path: 'nickname',
-          message: 'nickname is required',
-        });
+        const error = new Error('nickname is require');
+        error.statusCode = 400;
+        error.path = 'nickname';
+        return next(error);
       }
       if (nickname.trim().length === 0) {
-        return res.status(400).json({
-          path: 'nickname',
-          message: 'nickname can not be just blank',
-        });
+        const error = new Error('nickname can not be just blank');
+        error.statusCode = 400;
+        error.path = 'nickname';
+        return next(error);
       }
 
       // 닉네임 최소 길이 검사
       if (nickname.length < 3) {
-        return res.status(400).json({
-          path: 'nickname',
-          message: 'nickname must be at least 3 characters long',
-        });
+        const error = new Error('nickname must be at least 3 characters long');
+        error.statusCode = 400;
+        error.path = 'nickname';
+        return next(error);
       }
       next();
     } catch (error) {
@@ -68,29 +68,29 @@ export class UserValidator {
       const { password } = req.body;
 
       if (!password) {
-        return res.status(400).json({
-          path: 'password',
-          message: 'password is required',
-        });
+        const error = new Error('password is required');
+        error.statusCode = 400;
+        error.path = 'password';
+        return next(error);
       }
       if (password.trim().length === 0) {
-        return res.status(400).json({
-          path: 'password',
-          message: 'password can not be just blank',
-        });
+        const error = new Error('password can not be just blank');
+        error.statusCode = 400;
+        error.path = 'password';
+        return next(error);
       }
 
       if (password.length < 8) {
-        return res.status(400).json({
-          path: 'password',
-          message: 'password must be at least 8 characters long',
-        });
+        const error = new Error('password must be at least 8 characters long');
+        error.statusCode = 400;
+        error.path = 'password';
+        return next(error);
       }
       if (password.length > 18) {
-        return res.status(400).json({
-          path: 'password',
-          message: 'password must be at most 18 characters long',
-        });
+        const error = new Error('password must be at most 18 characters long');
+        error.statusCode = 400;
+        error.path = 'password';
+        return next(error);
       }
       next();
     } catch (error) {

@@ -33,9 +33,10 @@ export class UserService {
         nickname,
       });
       if (!user) {
-        const error = new Error('user not found in this group');
+        const error = new Error('nickname not found');
         error.statusCode = 404;
-        throw error;
+        error.path = 'nickname';
+        return next(error);
       }
       const checkPassword = await this.compareHashingPassword(
         password,
