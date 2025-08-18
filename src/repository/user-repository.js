@@ -18,6 +18,12 @@ export class UserRepository {
     return await prismaClient.user.create({ data });
   };
 
+  // 사용자 그룹 탈퇴
+  leaveGroup = async (where, tx) => {
+    const prismaClient = tx || prisma;
+    return await prismaClient.user.delete({ where });
+  };
+
   // 그룹 인원 수 1 증가
   incrementGroupUser = async (groupId, tx) => {
     const prismaClient = tx || prisma;
