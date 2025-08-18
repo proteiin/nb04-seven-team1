@@ -11,8 +11,8 @@ export default class RankingRepository {
    * @param {number} pageSize 요소 수
    */
   getRanking = async ({ groupId, period, page, pageSize }) => {
-    let startDate,
-      endDate = new Date();
+    let startDate;
+    const endDate = new Date();
 
     switch (period) {
       case 'week':
