@@ -1,4 +1,5 @@
-import bycript from 'bcrypt';
+import bcrypt from 'bcrypt';
+import prisma from '../utils/prisma/index.js';
 import { UserRepository } from '../repository/user-repository.js';
 
 class UserService {
@@ -28,10 +29,7 @@ class UserService {
 
   leaveParticipantFromGroup = async (nickname, password, groupId) => {
     try {
-      const user = await this.userRepository.findUser({
-        groupId,
-        nickname,
-      });
+      const user = await this.userRepository.findUser(groupId, nickname);
       if (!user) {
         const error = new Error('user not found in this group');
         error.statusCode = 404;
