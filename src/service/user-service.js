@@ -6,9 +6,11 @@ class UserService {
     this.userRepository = new UserRepository();
   }
   addParticipantToGroup = async (nickname, password, groupId) => {
+    const hashedPassword = await this.hashingPassword(password);
+
     const updatedGroup = await prisma.$transaction(async (tx) => {
       await this.userRepository.joinGroup(
-        { group_id: groupId, nickname, password },
+        { group_id: groupId, nickname, password: hashedPassword },
         tx,
       );
       const result = await this.userRepository.incrementGroupUser(groupId, tx);
@@ -19,15 +21,30 @@ class UserService {
 
   leaveParticipantFromGroup = async (nickname, password, groupId) => {
     try {
+      const user = await this.userRepository.findUser({
+        groupId,
+        nickname,
+      });
+      if (!user) {
+        const error = new Error('user not found in this group');
+        error.statusCode = 404;
+        throw error;
+      }
+      const checkPassword = await this.compareHashingPassword(
+        password,
+        user.password,
+      );
+      if (!checkPassword) {
+        const error = new Error('password is wrong');
+        error.statusCode = 401;
+        throw error;
+      }
       await prisma.$transaction(async (tx) => {
-        await this.userRepository.leaveGroup(
-          { group_id: groupId, nickname, password },
-          tx,
-        );
+        await this.userRepository.leaveGroup({ id: user.id }, tx);
         await this.userRepository.decrementGroupUser(groupId, tx);
       });
     } catch (error) {
-      next(error);
+      throw error;
     }
   };
 
@@ -37,7 +54,7 @@ class UserService {
   };
 
   compareHashingPassword = async (password, hashingPassword) => {
-    const isMatch = await bcrypt.compare(reqPassword, hashingPassword);
+    const isMatch = await bcrypt.compare(password, hashingPassword);
     return isMatch;
   };
 }
