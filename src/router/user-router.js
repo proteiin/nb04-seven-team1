@@ -1,15 +1,8 @@
 import express from 'express';
-import {
-  groupParticipation,
-  groupLeave,
-} from '../controller/user-controller.js';
-import { UserRepository } from '../repository/user-repository.js';
-import { UserValidator } from '../middleware/user-validation-middleware.js';
+import { userController } from '../controller/user-index.js';
+import { userValidator } from '../middleware/user-index.js';
 
 const router = express.Router();
-
-const userRepository = new UserRepository();
-const userValidator = new UserValidator(userRepository);
 
 router
   .route('/')
@@ -17,12 +10,12 @@ router
     userValidator.validateNickname,
     userValidator.validatePassword,
     userValidator.checkDuplicateNickname,
-    groupParticipation,
+    userController.groupParticipation,
   )
   .delete(
     userValidator.validateNickname,
     userValidator.validatePassword,
-    groupLeave,
+    userController.groupLeave,
   );
 
 export default router;
