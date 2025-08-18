@@ -132,15 +132,19 @@ async function main() {
   const recordsData = [];
 
   for (const user of group1Users) {
-    for (let i = 0; i < 33; i++) { // 각 유저당 33개씩 (총 99개)
-      const type = exerciseTypes[Math.floor(Math.random() * exerciseTypes.length)];
+    for (let i = 0; i < 33; i++) {
+      // 각 유저당 33개씩 (총 99개)
+      const type =
+        exerciseTypes[Math.floor(Math.random() * exerciseTypes.length)];
       recordsData.push({
         nickname: user.nickname,
         exercise_type: type,
         description: `${type} 운동 기록`,
         time: Math.floor(Math.random() * 120) + 20, // 20~140분
         distance: parseFloat((Math.random() * 20).toFixed(2)), // 0~20km
-        createdAt: new Date(Date.now() - Math.floor(Math.random() * 30) * 24 * 60 * 60 * 1000), // 최근 30일 랜덤
+        createdAt: new Date(
+          Date.now() - Math.floor(Math.random() * 30) * 24 * 60 * 60 * 1000,
+        ), // 최근 30일 랜덤
         password: `rec${Math.floor(Math.random() * 1000)}`,
         user_id: user.id,
         group_id: user.group_id,

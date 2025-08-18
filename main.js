@@ -10,12 +10,10 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-
 function requestLogger(req, _, next) {
-    console.log(`[${req.method}] ${req.originalUrl}`);
-    next();
+  console.log(`[${req.method}] ${req.originalUrl}`);
+  next();
 }
-
 
 app.use(requestLogger);
 
