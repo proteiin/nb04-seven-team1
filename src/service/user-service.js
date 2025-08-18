@@ -6,17 +6,24 @@ class UserService {
     this.userRepository = new UserRepository();
   }
   addParticipantToGroup = async (nickname, password, groupId) => {
-    const hashedPassword = await this.hashingPassword(password);
+    try {
+      const hashedPassword = await this.hashingPassword(password);
 
-    const updatedGroup = await prisma.$transaction(async (tx) => {
-      await this.userRepository.joinGroup(
-        { group_id: groupId, nickname, password: hashedPassword },
-        tx,
-      );
-      const result = await this.userRepository.incrementGroupUser(groupId, tx);
-      return result;
-    });
-    return updatedGroup;
+      const updatedGroup = await prisma.$transaction(async (tx) => {
+        await this.userRepository.joinGroup(
+          { group_id: groupId, nickname, password: hashedPassword },
+          tx,
+        );
+        const result = await this.userRepository.incrementGroupUser(
+          groupId,
+          tx,
+        );
+        return result;
+      });
+      return updatedGroup;
+    } catch (error) {
+      throw error;
+    }
   };
 
   leaveParticipantFromGroup = async (nickname, password, groupId) => {
