@@ -2,8 +2,7 @@
 import express from 'express'
 import prisma from '@prisma/client'
 
-
-class tagRepository{
+class TagRepository{
     createTag = async(tags,groupId) =>{
         await prisma.tags.create({
                 name: tag,
@@ -22,7 +21,7 @@ class tagRepository{
                 }
             })
         } )
-    }
-
-            
+    }           
 }
+
+export default new TagRepository()
