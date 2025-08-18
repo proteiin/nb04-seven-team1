@@ -22,6 +22,8 @@ export class UserRepository {
           select: {
             id: true,
             nickname: true,
+            created_at: true,
+            updated_at: true,
           },
         },
       },
@@ -30,4 +32,25 @@ export class UserRepository {
   };
 
   // 사용자의 그룹 등록
+  joinGroup = async (nickname, password, groupId) => {
+    const result = await prisma.$transaction(async (tx) => {
+      (await tx.user.create({
+        data: {
+          group_id: groupId,
+          nickname,
+          password,
+        },
+      }),
+        await tx.group.update({
+          where: {
+            id: groupId,
+          },
+          data: {
+            user_count: {
+              increment: 1,
+            },
+          },
+        }));
+    });
+  };
 }
