@@ -1,6 +1,6 @@
 import express from 'express'
-//import { PrismaClient } from '@prisma/client';
-import { PrismaClient } from "./generated/prisma/index.js";
+import { PrismaClient } from '@prisma/client';
+//import { PrismaClient } from "./generated/prisma/index.js";
 
 import { RecordsRepository } from './src/repository/records.repository.js';
 import { RecordsService } from './src/service/records.service.js';
