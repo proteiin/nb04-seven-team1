@@ -15,9 +15,9 @@ export class UserValidator {
         });
       }
 
-      const nicknameDuplicated = await this.userRepository.findByNickname(
-        nickname,
+      const nicknameDuplicated = await this.userRepository.findUser(
         numericGroupId,
+        nickname,
       );
 
       if (nicknameDuplicated) {
