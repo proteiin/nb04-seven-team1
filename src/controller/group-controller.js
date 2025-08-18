@@ -2,29 +2,39 @@
 import { PrismaClient } from "@prisma/client";
 // import prisma from 'prisma'
 import groupRepository from "../repository/group-repository.js";
+import tagRepository from "../repository/tag-repository.js";
+
 
 const prisma = new PrismaClient();
 
 class GroupController {
     createGroup = async (req,res,next) => {
-        const {groupName, description,
-                 nickname, password, 
-                image, tags, aimedTime, 
-                discordWebhookUrl, discordServerUrl} = req.body
         
+        const {name, description, photoUrl,
+            ownerNickname, ownerPassword, 
+            goalRep, discordServerUrl,
+            discordWebhookUrl, tags} = req.body
+         
         const data = {
-                group_name: groupName,
-                description,
-                nickname,
-                password,
-                image,
-                tags,
-                aimed_time: aimedTime,
-                discord_webhook_url: discordWebhookUrl,
-                discord_server_url : discordServerUrl
+            group_name: name, 
+            description, 
+            nickname: ownerNickname,
+            password: ownerPassword,
+            goal_rep: goalRep, 
+            discord_server_url: discordServerUrl,
+            discord_webhook_url: discordWebhookUrl,
+            owner: {
+                create:{
+                    nickname:data.ownerNickname,
+                    password:data.ownerPassword
+                }
             }
+        };
 
-        const newGroup = groupRepository.createGroup(data);
+        const newGroup = await groupRepository.createGroup(data);
+        const groupId = Number(newGroup.id);
+        const newTags = await tagRepository.createTag(tags)
+
 
         return res.status(201).send(newGroup);
     }
@@ -78,38 +88,38 @@ class GroupController {
     }
 
     modifyGroup(req,res,next){
-        //어떻게 현재 페이지의 그룹이 데이터로 받아와지는지, 비밀번호가 
-        //받아와지는 지 
         const {groupId} = Number(req.params.groupId);
 
-        const {inputPassword}  = req.body;
-
-        const {groupName, description,
-                 nickname, password, 
-                image, tags, aimedTime, 
+        const {name, description,
+                ownerNickname, ownerPassword, 
+                photoUrl, tags, goalRep, 
                 discordWebhookUrl, discordServerUrl} = req.body
 
-        const group = groupRepository.GetGroupByIdAll(groupId);
 
+        const group = groupRepository.GetGroupByIdAll(groupId);
         const groupPassword = group.password
+        const groupNickname = group.nickname
         
         const data = {
-                    group_name: groupName,
+                    group_name: name,
                     description,
-                    nickname,
-                    password,
-                    image,
-                    tags,
-                    aimed_time: aimedTime,
+                    goal_rep: goalRep,
                     discord_webhook_url: discordWebhookUrl,
                     discord_server_url : discordServerUrl
                 }
+                
 
-        if (groupPassword == inputPassword){
+        //이미지 구현 필요
+        if (groupPassword == ownerPassword &&
+            groupNickname == ownerNickname)
+        {
             const modifiedGroup = groupRepository.PatchGroup(data);
 
+            if (tag){
+                tagRepository.patchTag(tag, groupId);
+            }
+
             return res.status(200).send(modifiedGroup);
-   
         }
     }
 

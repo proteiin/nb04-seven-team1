@@ -7,10 +7,9 @@ const prisma = new PrismaClient();
 
 class GroupRepository{
 
-    createGroup = async ()=>{
-        const newGroup = await prisma.Group.create({
-            data
-        })
+    createGroup = async (data)=>{
+        
+        const newGroup = await prisma.Group.create({data});
         return newGroup
     } 
 
@@ -19,25 +18,23 @@ class GroupRepository{
             skip,
             take,
             orderBy,
-            where:{
-                group_name: {
-                    contains: groupname
-                }
-            },
+            where:{group_name: {contains: groupname}},
             select:{
                 group_name:true,
                 nickname:true,
                 image:true,
                 tags:true,
-                aimed_time:true,
+                goal_rep:true,
                 discord_server_url:true,
-                discord_webhook_url:true
+                discord_webhook_url:true,
+                owner:true,
+                participants:true
             }
         });
         return allGroups
     }
 
-    GetGroupByIdAll = async()=>{
+    GetGroupByIdAll = async(Id)=>{
         const group = await prisma.Group.findUnique({
             where:{
                 id:Id
@@ -46,17 +43,17 @@ class GroupRepository{
         return group
     }
 
-    GetGroupById = async()=>{
+    GetGroupById = async(groupId)=>{
         const group = await prisma.Group.findUnique({
             where:{
-                id:Id
+                id:groupId
             },
             select:{
                 group_name:true,
                 nickname:true,
                 image:true,
                 tags:true,
-                aimed_time:true,
+                goalRep:true,
                 likecount:true,
                 user_count:true
             }
@@ -64,21 +61,14 @@ class GroupRepository{
         return group
     }
     
-    PatchGroup = async() => {
+    PatchGroup = async(data,groupId) => {
         const modifiedGroup = prisma.Group.update({
-            data:{
-                group_name: groupName,
-                description,
-                nickname,
-                password,
-                image,
-                tags,
-                aimed_time: aimedTime,
-                discord_webhook_url: discordWebhookUrl,
-                discord_server_url : discordServerUrl
-            }
+            where:{
+                id:groupId
+            },
+            data
         });
-        return modifiedGroup
+
     }
 
     DeleteGroup = async(groupId) => {
