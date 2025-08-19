@@ -2,7 +2,7 @@ import express from 'express';
 import { userController } from '../controller/user-index.js';
 import { userValidator } from '../middleware/user-index.js';
 
-const router = express.Router();
+const router = express.Router({ mergeParams: true });
 
 router
   .route('/')
