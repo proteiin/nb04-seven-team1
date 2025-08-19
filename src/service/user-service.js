@@ -49,6 +49,7 @@ export class UserService {
         throw error;
       }
       await prisma.$transaction(async (tx) => {
+        await this.userRepository.deleteRecords({ user_id: user.id }, tx);
         await this.userRepository.leaveGroup({ id: user.id }, tx);
         await this.userRepository.decrementGroupUser(groupId, tx);
       });
