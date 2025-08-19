@@ -7,7 +7,7 @@ export class RecordsService {
     };
 
     
-    createRecord = async (groupId, nickname, exerciseType, description, time, distance, password) => {
+    createRecord = async (groupId, nickname, exerciseType, description, time, distance, password, photos) => {
 
         const user = await this.recordsRepository.findUserByNickname(groupId, nickname);
         if (!user || user.password !== password) {

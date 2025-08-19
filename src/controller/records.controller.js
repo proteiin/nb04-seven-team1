@@ -7,8 +7,11 @@ export class RecordsController {
     createRecord = async (req, res, next) => {
         try {
             const { groupId } = req.params;
-            const { nickname, password, exerciseType, description, time, distance, photos} = req.body
-            ;
+            const { nickname, password, exerciseType, description, time, distance, photos} = req.body;
+            const validExerciseTypes = ['RUNNING', 'CYCLE', 'SWIMMING'];
+            if (!validExerciseTypes.includes(exerciseType)) {
+                return res.status(400).json({ message: '유효한 운동 종류가 아닙니다.'})
+            }
 
             if (!nickname || !password || !exerciseType || !time || !distance) {
                 return res.status(400).json({ message: '필수 값을 모두 입력해주세요.'});
