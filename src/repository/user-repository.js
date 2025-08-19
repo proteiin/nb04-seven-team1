@@ -46,4 +46,10 @@ export class UserRepository {
       data: { user_count: { decrement: 1 } },
     });
   };
+
+  // 유저의 운동 기록을 삭제
+  deleteRecords = async (where, tx) => {
+    const prismaClient = tx || prisma;
+    return await prismaClient.record.deleteMany({ where });
+  };
 }
