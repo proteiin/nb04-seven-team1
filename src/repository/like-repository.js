@@ -3,7 +3,7 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 class LikeRepository {
-  static async updateLikeCount(groupId, value) {
+  async updateLikeCount(groupId, value) {
     return await prisma.group.update({
       where: { id: groupId },
       data: { like_count: { increment: value } },
@@ -12,4 +12,4 @@ class LikeRepository {
   }
 }
 
-export default LikeRepository;
+export default new LikeRepository();
