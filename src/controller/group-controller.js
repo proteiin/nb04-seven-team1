@@ -154,9 +154,7 @@ class GroupController {
             console.log('wrong password');
             return res.send("failed");
         }
-        
     }
-
     }
 }
 

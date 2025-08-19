@@ -89,4 +89,4 @@ class GroupRepository{
 
 
 
-export default new GroupRepository
+export default new GroupRepository();
