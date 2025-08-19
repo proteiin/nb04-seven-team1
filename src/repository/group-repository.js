@@ -79,6 +79,27 @@ class GroupRepository{
         });
     }
 
+    GetPassword = async(group_id) =>{
+        const user = await prisma.user.findUnique({
+            where:{
+                group_id,
+                auth_code: owner
+            }
+        });
+        const password = user.password
+        return password
+    }
+
+    GetNickname = async(group_id) =>{
+        const user = await prisma.user.findUnique({
+            where:{
+                group_id,
+                auth_code: owner
+            }
+        });
+        const nickname = user.nickname;
+        return nickname
+    }
 }
 
 
