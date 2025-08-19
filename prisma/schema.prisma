@@ -31,17 +31,15 @@ model Group {
   created_at          DateTime   @default(now())
   updated_at          DateTime   @updatedAt
   user                User[]
+
   record              Record[]
 }
 
-//
 enum badge {
   PARTICIPANT
   RECORD
   LIKECOUNT
 }
-
-
 
 model User {
   id                 Int        @id @default(autoincrement())
@@ -74,6 +72,8 @@ model Record {
   user_id       Int
   group         Group         @relation(fields: [group_id], references: [id])
   group_id      Int
+  owner         Owner         @relation(fields: [owner_id], references: [id])
+  owner_id      Int
 }
 
 enum exercise_type {
