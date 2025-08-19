@@ -69,7 +69,7 @@ export class RecordsRepository {
     }
 
     const orderByCondition =
-      sortBy === 'time' ? { time: 'desc' } : { createdAt: 'desc'};
+      sortBy === 'time' ? { time: 'desc' } : { created_at: 'desc'};
     
     const records = await this.prisma.record.findMany({
         where: whereCondition,
@@ -186,7 +186,7 @@ export class RecordsRepository {
         by: ['nickname'],
         where: {
             group_id: groupId,
-            createdAt: {
+            created_at: {
                 gte: startDate,
             },
         },
