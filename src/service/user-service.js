@@ -11,7 +11,12 @@ export class UserService {
 
       const updatedGroup = await prisma.$transaction(async (tx) => {
         await this.userRepository.joinGroup(
-          { group_id: groupId, nickname, password: hashedPassword },
+          {
+            group_id: groupId,
+            nickname,
+            password: hashedPassword,
+            auth_code: 'participants',
+          },
           tx,
         );
         const result = await this.userRepository.incrementGroupUser(
