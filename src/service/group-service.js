@@ -7,13 +7,11 @@ import tagRepository from "../repository/tag-repository.js";
 const prisma = new PrismaClient();
 
 class GroupService {
-    createGroup = async (req,res,next) => {
-        
-        const {name, description, photoUrl,
+    createGroup = async ({name, description, photoUrl,
             ownerNickname, ownerPassword, 
             goalRep, discordInviteUrl,
-            discordWebhookUrl, tags} = req.body
-         
+            discordWebhookUrl, tags}) => {
+        
         const data = {
             group_name: name, 
             description, 
@@ -30,14 +28,16 @@ class GroupService {
         };
 
         const newGroup = await groupRepository.createGroup(data);
+        
         const groupId = Number(newGroup.id);
         const newTags = await tagRepository.createTag(tags,groupId)
+        
         return newGroup
     }
 
-    getAllGroups = async (req,res,next) => {
-        let {page=1, limit=10, order='asc',
-            orderBy=createdAt, search} = req.query
+    getAllGroups = async ({skip, take, orderBy, 
+        order, search}) => {
+        
         skip = Number(skip);
         take = Number(take);
 
@@ -81,32 +81,27 @@ class GroupService {
         return allGroups;
     } 
 
-    getGroupById = async(req,res,next) => {
+    getGroupById = async(Id) => {
 
-        const Id = Number(req.params.groupId);
+        
         const group = groupRepository.GetGroupById(Id)
         return group;
     }
 
-    modifyGroup(req,res,next){
-        const {groupId} = Number(req.params.groupId);
-
-        const {name, description,
+    modifyGroup({name, description,
                 ownerNickname, ownerPassword, 
                 photoUrl, tags, goalRep, 
-                discordWebhookUrl, discordInviteUrl} = req.body
-
-
-        const group = groupRepository.GetGroupByIdAll(groupId);
-        const groupPassword = group.password
-        const groupNickname = group.nickname
+                discordWebhookUrl, discordInviteUrl}){
+        
+        const groupPassword = groupRepository.GetPassword(groupId);
+        const groupNickname = groupRepository.GetNickname(groupId);
         
         const data = {
                     group_name: name,
                     description,
                     goal_rep: goalRep,
                     discord_webhook_url: discordWebhookUrl,
-                    discord_server_url : discordServerUrl
+                    discord_server_url : discordInviteUrl
                 }
                 
 
@@ -116,25 +111,21 @@ class GroupService {
         {
             const modifiedGroup = groupRepository.PatchGroup(data);
 
-            if (tag){
-                tagRepository.patchTag(tag, groupId);
+            if (tags){
+                tagRepository.patchTag(tags, groupId);
             }
 
         }
     }
 
-    deleteGroup = async (req,res,next) => {
-        let {inputPassword}  = req.body;
-        let groupId = req.params.groupId;
+    deleteGroup = async (groupId) => {
 
         // console.log(groupId, inputPassword)
 
-        groupId = Number(groupId);
         
-
         const group = groupRepository.GetGroupByIdAll(groupId);
 
-        let groupPassword;
+        const groupPassword = groupRepository.GetPassword(groupId);
 
         if (group){
            groupPassword = group.password;
@@ -143,10 +134,9 @@ class GroupService {
 
         if (groupPassword == inputPassword){
             groupRepository.DeleteGroup(groupId);
-            return res.status(200).send("deleting success");
+            return 'success'
         }else{
-            console.log('wrong password');
-            return res.send("failed");
+            return 'failed'
         }   
     }
     }
