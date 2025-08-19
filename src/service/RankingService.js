@@ -5,10 +5,10 @@ export default class RankingService {
     this.rankingRepository = new RankingRepository();
   }
 
-  getRanking = async ({ groupId, period, page, pageSize }) => {
+  getRanking = async ({ groupId, duration, page, pageSize }) => {
     const result = await this.rankingRepository.getRanking({
       groupId,
-      period,
+      duration,
       page,
       pageSize,
     });

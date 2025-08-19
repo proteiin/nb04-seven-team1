@@ -16,7 +16,7 @@ export default class RankingController {
    */
   getRanking = async (req, res, next) => {
     const { groupId } = req.params;
-    const { period = 'month', page = 1, pageSize = 50 } = req.query;
+    const { duration = 'monthly', page = 1, pageSize = 50 } = req.query;
 
     // Validate groupId
     if (!groupId || isNaN(parseInt(groupId)))
@@ -25,7 +25,7 @@ export default class RankingController {
     try {
       const ranking = await this.rankingService.getRanking({
         groupId: parseInt(groupId),
-        period,
+        duration,
         page: parseInt(page),
         pageSize: parseInt(pageSize),
       });

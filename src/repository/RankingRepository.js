@@ -6,22 +6,22 @@ export default class RankingRepository {
   /**
    * 특정 그룹에 속한 참여자들의 기록을 특정 기간 내에서 기록시간 순으로 순위 매김
    * @param {number} groupId 그룹 ID
-   * @param {string} period 정렬 방법(week, month: default)
+   * @param {string} duration 정렬 방법(week, month: default)
    * @param {number} page 페이지네이션
    * @param {number} pageSize 요소 수
    */
-  getRanking = async ({ groupId, period, page, pageSize }) => {
+  getRanking = async ({ groupId, duration, page, pageSize }) => {
     let startDate;
     const endDate = new Date();
 
-    switch (period) {
-      case 'week':
+    switch (duration) {
+      case 'weekly':
         // Set date before 7 days
         startDate = new Date();
         startDate.setDate(endDate.getDate() - 7);
         break;
 
-      case 'month':
+      case 'monthly':
       default:
         // Set date before 1 month
         startDate = new Date();
