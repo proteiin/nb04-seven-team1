@@ -70,8 +70,6 @@ model Record {
   user_id       Int
   group         Group         @relation(fields: [group_id], references: [id])
   group_id      Int
-  owner         Owner         @relation(fields: [owner_id], references: [id])
-  owner_id      Int
 }
 
 enum exercise_type {
