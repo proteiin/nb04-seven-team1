@@ -1,7 +1,7 @@
 import LikeService from '../service/like-service.js';
 
 class LikeController {
-  static async addLike(req, res, next) {
+  async addLike(req, res, next) {
     try {
       const groupId = parseInt(req.params.groupId, 10);
 
@@ -12,7 +12,7 @@ class LikeController {
     }
   }
 
-  static async removeLike(req, res, next) {
+  async removeLike(req, res, next) {
     try {
       const groupId = parseInt(req.params.groupId, 10);
 
@@ -24,4 +24,4 @@ class LikeController {
   }
 }
 
-export default LikeController;
+export default new LikeController();
