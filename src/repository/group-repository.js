@@ -9,7 +9,13 @@ class GroupRepository{
 
     createGroup = async (data)=>{
         
-        const newGroup = await prisma.Group.create({data});
+        const newGroup = await prisma.Group.create({
+            data,
+            include:{
+                owner:true,
+                tags:true
+            }
+        });
         return newGroup
     } 
 

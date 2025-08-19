@@ -12,7 +12,7 @@ class GroupController {
         
         const {name, description, photoUrl,
             ownerNickname, ownerPassword, 
-            goalRep, discordServerUrl,
+            goalRep, discordInviteUrl,
             discordWebhookUrl, tags} = req.body
          
         const data = {
@@ -21,22 +21,28 @@ class GroupController {
             nickname: ownerNickname,
             password: ownerPassword,
             goal_rep: goalRep, 
-            discord_server_url: discordServerUrl,
+            discord_server_url: discordInviteUrl,
             discord_webhook_url: discordWebhookUrl,
             owner: {
                 create:{
-                    nickname:data.ownerNickname,
-                    password:data.ownerPassword
+                    nickname: ownerNickname,
+                    password: ownerPassword
                 }
-            }
+            },
         };
-
-        const newGroup = await groupRepository.createGroup(data);
-        const groupId = Number(newGroup.id);
-        const newTags = await tagRepository.createTag(tags)
-
-
-        return res.status(201).send(newGroup);
+        try{
+            const newGroup = await groupRepository.createGroup(data);
+            console.log(data);
+            const groupId = Number(newGroup.id);
+            console.log(groupId);
+            const newTags = await tagRepository.createTag(tags,groupId)
+            return res.status(201).send(newGroup);
+        }catch(error){
+            console.error(error);
+            res.send(error);
+            
+        }
+        
     }
 
     getAllGroups = async (req,res,next) => {
