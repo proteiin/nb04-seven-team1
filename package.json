@@ -5,8 +5,10 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint .",
-    "format": "prettier --write .",
-    "seed": "node ./prisma/seed.js"
+    "format": "prettier --write ."
+  },
+  "prisma": {
+    "seed": "node prisma/seed.js"
   },
   "author": "",
   "license": "ISC",
