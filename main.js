@@ -8,7 +8,7 @@ const app = express();
 
 app.use(express.json());
 
-app.use('/group', GroupRouter);
+app.use('/groups', GroupRouter);
 
 
 app.listen(3000, () => {

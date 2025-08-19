@@ -1,26 +1,37 @@
 
 import express from 'express'
-import prisma from '@prisma/client'
+import { PrismaClient }  from '@prisma/client'
 
+const prisma = new PrismaClient();
 class TagRepository{
     createTag = async(tags,groupId) =>{
-        await prisma.tags.create({
-                name: tag,
-                group: {
-                    connect:[{id:groupId}]
+        const newTags = []
+
+        for (let tag of tags){
+            const newTag = await prisma.tag.create({
+                data:{
+                    name: tag,
+                    group: {
+                        connect:{id:groupId}
+                    }
                 }
             });
+            newTags.push(newTag)
+        }
+        console.log('newTags: ', newTags)
+        return newTags;
     }
 
     patchTag = async(tags,groupId) =>{
-        tags.map( async() => {
-            await prisma.tags.patch({
+        const patchTag = tags.map( async() => {
+            await prisma.tag.patch({
                 name: tag,
                 group:{
                     connect:[{id:groupId}]
                 }
             })
-        } )
+        });
+        return patchTag;
     }           
 }
 

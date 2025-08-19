@@ -22,7 +22,7 @@ class GroupService {
                 create:{
                     nickname:ownerNickname,
                     password:ownerPassword,
-                    auth_code:'owner'
+                    auth_code:'OWNER'
                 }
             }
         };
@@ -35,11 +35,11 @@ class GroupService {
         return newGroup
     }
 
-    getAllGroups = async ({skip, take, orderBy, 
+    getAllGroups = async ({page, limit, orderBy, 
         order, search}) => {
         
-        skip = Number(skip);
-        take = Number(take);
+        page = Number(page);
+        limit = Number(limit);
 
         switch (orderBy) {
             case 'likecount':
@@ -73,7 +73,7 @@ class GroupService {
                 orderBy = {created_at: 'desc'}
         };
 
-        let skip = (page-1)* take ;
+        let skip = (page-1)* limit ;
         let take = limit ;
         let groupname = search;
 

@@ -26,7 +26,7 @@ class GroupController {
     getAllGroups = async (req,res,next) => {
 
         let {page=1, limit=10, order='asc',
-            orderBy=createdAt, search} = req.query;
+            orderBy='createdAt', search} = req.query;
         
         const AllGroups = groupService.getAllGroups({page, limit, order,
             orderBy, search});

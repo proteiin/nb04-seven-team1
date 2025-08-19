@@ -22,7 +22,7 @@ model Group {
   tags                Tag[]
   goal_rep            Int
   discord_webhook_url String
-  discord_invite_url  String
+  discord_invite_url  String?
   badge               badge?
   user_count          Int        @default(0) 
   like_count          Int        @default(0)
@@ -53,8 +53,8 @@ model User {
   auth_code          auth_code 
 }
 enum auth_code {
-  Owner
-  participants
+  OWNER
+  PARTICIPANT
 }
 
 model Record {

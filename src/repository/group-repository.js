@@ -21,14 +21,12 @@ class GroupRepository{
             where:{group_name: {contains: groupname}},
             select:{
                 group_name:true,
-                nickname:true,
                 image:true,
                 tags:true,
                 goal_rep:true,
-                discord_server_url:true,
+                discord_invite_url:true,
                 discord_webhook_url:true,
-                owner:true,
-                participants:true
+                user:true
             }
         });
         return allGroups
@@ -50,11 +48,10 @@ class GroupRepository{
             },
             select:{
                 group_name:true,
-                nickname:true,
                 image:true,
                 tags:true,
                 goalRep:true,
-                likecount:true,
+                like_count:true,
                 user_count:true
             }
         })
