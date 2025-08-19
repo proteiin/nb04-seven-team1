@@ -15,9 +15,13 @@
     "@prisma/client": "^6.14.0",
     "bcrypt": "^6.0.0",
 <<<<<<< HEAD
+<<<<<<< HEAD
     "cors": "^2.8.5",
 =======
 >>>>>>> d3a5372 (feat: Add bcrypt for password hashing)
+=======
+    "cors": "^2.8.5",
+>>>>>>> 8b20b6a (feat: Add CORS)
     "express": "^5.1.0",
     "prisma": "^6.14.0"
   },
