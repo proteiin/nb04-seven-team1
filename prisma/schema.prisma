@@ -16,10 +16,8 @@ datasource db {
 
 model Group {
   id                  Int        @id @default(autoincrement())
-  nickname            String
   group_name          String
   description         String
-  password            String
   image               Image[]    
   tags                Tag[]
   goal_rep            Int
