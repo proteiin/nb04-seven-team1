@@ -23,7 +23,7 @@ function requestLogger(req, _, next) {
 app.use(requestLogger);
 
 const rankingRouter = new RankingRouter();
-app.use('/groups', GroupRouter);
+// app.use('/groups', GroupRouter);
 app.use('/groups/:groupId/rank', rankingRouter.getRouter());
 app.use('/groups/:groupId/participants', userRouter);
 
