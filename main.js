@@ -5,6 +5,7 @@ import * as dotenv from 'dotenv'; // 환경변수를 위한 라이브러리
 // import GroupRouter from './src/router/group-router.js';
 import RankingRouter from './src/router/RankingRouter.js';
 import userRouter from './src/router/user-router.js';
+import ImageRouter from './src/router/ImageRouter.js';
 
 dotenv.config();
 
