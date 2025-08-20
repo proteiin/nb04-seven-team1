@@ -13,47 +13,69 @@ class GroupController {
             ownerNickname, ownerPassword, 
             goalRep, discordInviteUrl,
             discordWebhookUrl, tags} = req.body;
-
-        const newGroup = groupService.createGroup({
+        
+        const data = {
             name, description, photoUrl,
             ownerNickname, ownerPassword, 
             goalRep, discordInviteUrl,
-            discordWebhookUrl, tags});
-
-        return res.status(201).send(newGroup);
+            discordWebhookUrl, tags}
+        
+        try{
+            const newGroup = await groupService.createGroup(data);
+            return res.status(201).send(newGroup);
+        }catch(error){
+            res.send(error);
+            console.error(error);
+        }
+        
     }
 
     getAllGroups = async (req,res,next) => {
 
-        let {page=1, limit=10, order='asc',
+        let {page=1, limit=100, order='asc',
             orderBy='createdAt', search} = req.query;
         
-        const AllGroups = groupService.getAllGroups({page, limit, order,
+        try{
+            const AllGroups = await groupService.getAllGroups({page, limit, order,
             orderBy, search});
-
-        return res.status(200).send(AllGroups);
+            return res.status(200).send(AllGroups);
+        }catch(error){
+            res.send(error);
+            console.error(error);
+        }
+        
+        
+        
     } 
 
     getGroupById = async(req,res,next) => {
         const Id = Number(req.params.groupId);
-        const group = groupService.getGroupById(Id);
+        const group = await groupService.getGroupById(Id);
 
         return res.status(200).send(group);
     }
 
-    modifyGroup(req,res,next){
-        const {groupId} = Number(req.params.groupId);
-        
+    modifyGroup = async(req,res,next) => {
+        const groupId = Number(req.params.groupId);
+
         const {name, description,
                 ownerNickname, ownerPassword, 
                 photoUrl, tags, goalRep, 
                 discordWebhookUrl, discordInviteUrl} = req.body
 
-        const modifiedGroup = groupService.modifyGroup({name, description,
+        const data = {groupId,name, description,
                 ownerNickname, ownerPassword, 
                 photoUrl, tags, goalRep, 
-                discordWebhookUrl, discordInviteUrl});
-        return res.status(200).send(modifiedGroup);
+                discordWebhookUrl, discordInviteUrl}
+        try{
+            const modifiedGroupAndTag = await groupService.modifyGroup(data);
+            console.log('컨트롤러에서 보내는값',modifiedGroupAndTag)
+            return res.status(200).send(modifiedGroupAndTag);
+        }catch(error){
+            res.send(error);
+            console.error(error);
+        }
+        
     }
     
 
@@ -62,7 +84,7 @@ class GroupController {
         let groupId = req.params.groupId;
         groupId = Number(groupId);
 
-        const message = groupService.deleteGroup(groupId)
+        const message = await groupService.deleteGroup(groupId)
         return res.status(200).send("deleting success");
     }
 

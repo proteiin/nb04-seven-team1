@@ -12,5 +12,5 @@ app.use('/groups', GroupRouter);
 
 
 app.listen(3000, () => {
-    'app is listen at http://localhost:3000'
+    console.log('app is listen at http://localhost:3000')
 })

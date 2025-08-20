@@ -8,9 +8,10 @@ const prisma = new PrismaClient();
 
 class GroupService {
     createGroup = async ({name, description, photoUrl,
-            ownerNickname, ownerPassword, 
-            goalRep, discordInviteUrl,
-            discordWebhookUrl, tags}) => {
+        ownerNickname, ownerPassword, 
+        goalRep, discordInviteUrl,
+        discordWebhookUrl, tags}) => {
+        
         
         const data = {
             group_name: name, 
@@ -88,15 +89,23 @@ class GroupService {
         return group;
     }
 
-    modifyGroup({name, description,
+    modifyGroup = async (data) => {
+        const {groupId,name, description,
                 ownerNickname, ownerPassword, 
                 photoUrl, tags, goalRep, 
-                discordWebhookUrl, discordInviteUrl}){
+                discordWebhookUrl, discordInviteUrl} = data
+
+                    //전달받은 데이터
+        // const data = {groupId,name, description,
+        //         ownerNickname, ownerPassword, 
+        //         photoUrl, tags, goalRep, 
+        //         discordWebhookUrl, discordInviteUrl}
+           
+        const groupPassword = await groupRepository.GetPassword(groupId);
+        const groupNickname = await groupRepository.GetNickname(groupId);
         
-        const groupPassword = groupRepository.GetPassword(groupId);
-        const groupNickname = groupRepository.GetNickname(groupId);
-        
-        const data = {
+        const prismaData = {
+                    group_id: groupId,
                     group_name: name,
                     description,
                     goal_rep: goalRep,
@@ -104,17 +113,24 @@ class GroupService {
                     discord_server_url : discordInviteUrl
                 }
                 
-
+        console.log('group 패스워드:' , groupPassword, 'input패스워드 ',ownerPassword)
+        console.log('그룹서비스에서 if문 전')
         //이미지 구현 필요
         if (groupPassword == ownerPassword &&
-            groupNickname == ownerNickname)
-        {
-            const modifiedGroup = groupRepository.PatchGroup(data);
+            groupNickname == ownerNickname){
 
-            if (tags){
-                tagRepository.patchTag(tags, groupId);
-            }
+                const modifiedGroup = groupRepository.PatchGroup(prismaData);
 
+                
+                if (tags){
+                    tagRepository.patchTag(tags, groupId);
+                }
+                const result = [modifiedGroup,tags]
+                console.log('그룹서비스에서',result)
+                return result
+        }else{
+            console.log('if문 못들어감')
+            return null
         }
     }
 

@@ -22,12 +22,12 @@ class GroupRepository{
             select:{
                 group_name:true,
                 image:true,
-                tags:true,
                 goal_rep:true,
                 discord_invite_url:true,
                 discord_webhook_url:true,
+                tags:true,
                 user:true
-            }
+            },
         });
         return allGroups
     }
@@ -50,7 +50,7 @@ class GroupRepository{
                 group_name:true,
                 image:true,
                 tags:true,
-                goalRep:true,
+                goal_rep:true,
                 like_count:true,
                 user_count:true
             }
@@ -58,7 +58,12 @@ class GroupRepository{
         return group
     }
     
-    PatchGroup = async(data,groupId) => {
+    PatchGroup = async(data) => {
+        const {groupId,name, description,
+                ownerNickname, ownerPassword, 
+                photoUrl, tags, goalRep, 
+                discordWebhookUrl, discordInviteUrl} = data
+                
         const modifiedGroup = prisma.Group.update({
             where:{
                 id:groupId
@@ -77,25 +82,45 @@ class GroupRepository{
     }
 
     GetPassword = async(group_id) =>{
-        const user = await prisma.user.findUnique({
+        const group = await prisma.group.findUnique({
             where:{
-                group_id,
-                auth_code: owner
+                id: group_id,
+            },
+            include:{
+                user:true,
             }
         });
-        const password = user.password
+        let password;
+        const users = group.user;
+        for (let user of users){
+            if (user.auth_code == 'OWNER'){
+                console.log(user)
+                password = user.password;
+            }
+        }
+        
         return password
     }
 
     GetNickname = async(group_id) =>{
-        const user = await prisma.user.findUnique({
+       const group = await prisma.group.findUnique({
             where:{
-                group_id,
-                auth_code: owner
+                id: group_id,
+            },
+            include:{
+                user:true,
             }
         });
-        const nickname = user.nickname;
-        return nickname
+        let nickname;
+        const users = group.user;
+        for (let user of users){
+            if (user.auth_code == 'OWNER'){
+                console.log(user)
+                nickname = user.nickname;
+            }
+        }
+
+        return nickname;
     }
 }
 

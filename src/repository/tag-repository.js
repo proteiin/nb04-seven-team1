@@ -23,16 +23,33 @@ class TagRepository{
     }
 
     patchTag = async(tags,groupId) =>{
-        const patchTag = tags.map( async() => {
-            await prisma.tag.patch({
-                name: tag,
-                group:{
-                    connect:[{id:groupId}]
+        let patchTag;
+        console.log(tags, groupId)
+
+        const group = await prisma.group.findUnique({
+            where:{
+                id:groupId
+            },
+            include:{
+                tags:true
+            }
+        })
+        console.log('group: ',group);
+        
+        for (let tag of tags){
+            patchTag = await prisma.tag.update({
+                where: {
+                    id:groupId
+                },
+                data:{
+                    name: tag,
+                    group:{connect:{id:groupId}}
                 }
+                
             })
-        });
-        return patchTag;
-    }           
+        }        
+        return patchTag;       
+    }
 }
 
 export default new TagRepository()
