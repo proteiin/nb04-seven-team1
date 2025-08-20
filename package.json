@@ -5,10 +5,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint .",
-    "format": "prettier --write ."
-  },
-  "prisma": {
-    "seed": "node prisma/seed.js"
+    "format": "prettier --write .",
+    "seed": "node ./prisma/seed.js"
   },
   "author": "",
   "license": "ISC",
@@ -16,14 +14,7 @@
   "dependencies": {
     "@prisma/client": "^6.14.0",
     "bcrypt": "^6.0.0",
-<<<<<<< HEAD
-<<<<<<< HEAD
     "cors": "^2.8.5",
-=======
->>>>>>> d3a5372 (feat: Add bcrypt for password hashing)
-=======
-    "cors": "^2.8.5",
->>>>>>> 8b20b6a (feat: Add CORS)
     "express": "^5.1.0",
     "prisma": "^6.14.0"
   },
@@ -37,8 +28,4 @@
     "typescript-eslint": "^8.39.1"
   },
   "type": "module"
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> c7786d1 (feat: Add repoository method for join group)
