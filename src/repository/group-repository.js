@@ -20,6 +20,7 @@ class GroupRepository{
             orderBy,
             where:{group_name: {contains: groupname}},
             select:{
+                id:true,
                 group_name:true,
                 image:true,
                 goal_rep:true,
@@ -77,7 +78,7 @@ class GroupRepository{
         await prisma.Group.delete({
             where:{
                 id : groupId
-            }
+            },
         });
     }
 

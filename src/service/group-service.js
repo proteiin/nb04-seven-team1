@@ -135,28 +135,27 @@ class GroupService {
         }
     }
 
-    deleteGroup = async (groupId) => {
+    deleteGroup = async (groupId, inputPassword) => {
 
         // console.log(groupId, inputPassword)
 
         
-        const group = groupRepository.GetGroupByIdAll(groupId);
+        const group = await groupRepository.GetGroupByIdAll(groupId);
 
-        const groupPassword = groupRepository.GetPassword(groupId);
-
-        if (group){
-           groupPassword = group.password;
+        const groupPassword = await groupRepository.GetPassword(groupId);
+        inputPassword = inputPassword.ownerPassword;
         //에러처리하기
 
-
+        console.log(groupPassword, inputPassword)
         if (groupPassword == inputPassword){
-            groupRepository.DeleteGroup(groupId);
+            await groupRepository.DeleteGroup(groupId);
+            console.log("비밀번호 인증 성공")
             return 'success'
         }else{
             return 'failed'
         }   
     }
-    }
 }
+
 
 export default new GroupService();

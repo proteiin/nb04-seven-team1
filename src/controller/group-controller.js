@@ -80,12 +80,19 @@ class GroupController {
     
 
     deleteGroup = async (req,res,next) => {
-        let {inputPassword}  = req.body;
+        let inputPassword  = req.body;
         let groupId = req.params.groupId;
         groupId = Number(groupId);
-
-        const message = await groupService.deleteGroup(groupId)
-        return res.status(200).send("deleting success");
+        try{
+            const message = await groupService.deleteGroup(groupId, inputPassword)
+            console.log("삭제 완료")
+            return res.status(200).send(message);
+            
+        }catch(error){
+            console.error(error);
+            return res.send("error occured");
+        }
+        
     }
 
 }
