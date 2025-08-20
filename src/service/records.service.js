@@ -21,10 +21,26 @@ export class RecordsService {
                 throw error;
             }
         
-        const newRecord = await this.recordsRepository.createRecord({
-            userId: user.id,
-            ...recordData,   
-    });
+        const imagesToCreate = photos.map(photoPath => ({
+            name: photoPath.substring(photoPath.lastIndexOf('/') + 1),
+            path: photoPath,
+        }));
+
+        const dataToCreate = {
+            user_id: user.id,
+            group_id: groupId,
+            nickname,
+            exercise_type: exerciseType,
+            description,
+            time,
+            distance,
+            password,
+            images: {
+                create: imagesToCreate,
+            },
+        };
+        
+        const newRecord = await this.recordsRepository.createRecord(dataToCreate);
 
         try {
             const group = await this.recordsRepository.prisma.group.findUnique({

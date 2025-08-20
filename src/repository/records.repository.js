@@ -15,45 +15,16 @@ export class RecordsRepository {
  * @param {number} distance - 운동 거리
  * @param {string} password - 비밀번호
  */
-    createRecord = async (recordData) => {
-        const {
-        userId,
-        groupId,
-        nickname,
-        exerciseType,
-        description,
-        time,
-        distance,
-        password,
-        photos,
-    } = recordData;
-
+    createRecord = async (dataToCreate) => {
         const record = await this.prisma.record.create({
-            data: {
-                user_id: userId,
-                group_id: groupId,
-                nickname,
-                exercise_type: exerciseType,
-                description,
-                time,
-                distance,
-                password,
-                
-                images: {
-                    create: photos.map(photoPath => ({
-                        name: photoPath.substring(photoPath.lastIndexOf('/') + 1),
-                        path: photoPath,
-                    })),
-                },
-            },
+            data: dataToCreate,
             include: {
                 images: true,
-            }
+            },
         });
         return record;
     };
-
-
+     
  /**
  * * 그룹 내 모든 운동 기록 조회
  * @param {number} groupId - 그룹 ID
