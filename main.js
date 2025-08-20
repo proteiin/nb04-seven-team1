@@ -25,7 +25,11 @@ function requestLogger(req, _, next) {
 app.use(requestLogger);
 
 const rankingRouter = new RankingRouter();
+<<<<<<< HEAD
 // app.use('/groups', GroupRouter);
+=======
+
+>>>>>>> e1770f1 (fix: fixed main file errors)
 app.use('/groups/:groupId/rank', rankingRouter.getRouter());
 app.use('/groups/:groupId/participants', userRouter);
 
