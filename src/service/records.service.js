@@ -65,8 +65,8 @@ export class RecordsService {
 
 
 
-    findAllRecords = async (groupId, sort, search, page) => {
-        const records = await this.recordsRepository.findAllRecords(groupId, sort, search, page);
+    findAllRecords = async (groupId, orderBy, order, search, page) => {
+        const records = await this.recordsRepository.findAllRecords(groupId, orderBy, order, search, page);
         return records;
     }
 

@@ -60,7 +60,7 @@ export class RecordsRepository {
  * @param {number} page - 페이지 번호
  * @param {number} pageSize - 페이지 당 항목 수
  */
- findAllRecords = async (groupId, sortBy = 'latest', search, page = 1, pageSize = 10) => {
+ findAllRecords = async (groupId, orderBy, order, search, page = 1, pageSize = 10) => {
     const whereCondition = {group_id: groupId};
     if (search) {
         whereCondition.nickname = {
@@ -68,8 +68,11 @@ export class RecordsRepository {
         };
     }
 
-    const orderByCondition =
-      sortBy === 'time' ? { time: 'desc' } : { created_at: 'desc'};
+    let orderByCondition = { created_at: 'desc' };
+    if (orderBy && order) {
+        orderByCondition = { [orderBy]: order.toLowerCase };
+    }
+    
     
     const records = await this.prisma.record.findMany({
         where: whereCondition,

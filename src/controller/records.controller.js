@@ -37,8 +37,8 @@ export class RecordsController {
     findAllRecords = async (req, res, next) => {
         try {
             const { groupId } = req.params;
-            const { sort, search, page } = req.query;
-            const records = await this.recordsService.findAllRecords(+groupId, sort, search, page);
+            const { orderBy, order, search, page } = req.query;
+            const records = await this.recordsService.findAllRecords(+groupId, orderBy, order, search, page);
 
             return res.status(200).json({ data: records });
         }   catch(error) {
