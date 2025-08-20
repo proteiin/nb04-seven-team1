@@ -32,6 +32,7 @@ export class UserRepository {
             nickname: true,
             created_at: true,
             updated_at: true,
+            auth_code: true,
           },
         },
       },
