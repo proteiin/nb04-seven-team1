@@ -1,16 +1,43 @@
+// import express from 'express';
+// import GroupRouter from "./src/router/group-router.js";
+
+
+
+
+// const app = express();
+
+// app.use(express.json());
+
+// app.use('/groups', GroupRouter);
+
+
+// app.listen(3000, () => {
+//     console.log('app is listen at http://localhost:3000')
+// })
+
+
 import express from 'express';
-import GroupRouter from "./src/router/group-router.js";
+import cors from 'cors';
 
+// import GroupRouter from "./src/router/group-router.js";
+import RankingRouter from './src/router/RankingRouter.js';
 
-
+const PORT = process.env.PORT || 3000;
 
 const app = express();
-
 app.use(express.json());
+app.use(cors());
 
-app.use('/groups', GroupRouter);
+function requestLogger(req, _, next) {
+  console.log(`[${req.method}] ${req.originalUrl}`);
+  next();
+}
+
+app.use(requestLogger);
+
+const rankingRouter = new RankingRouter();
+// app.use('/groups', GroupRouter);
+app.use('/groups/:groupId/rank', rankingRouter.getRouter());
 
 
-app.listen(3000, () => {
-    console.log('app is listen at http://localhost:3000')
-})
+app.listen(PORT, () => console.log(`Server started on port ${PORT}..`));
