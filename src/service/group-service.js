@@ -114,6 +114,7 @@ class GroupService {
                 }
                 
         console.log('group 패스워드:' , groupPassword, 'input패스워드 ',ownerPassword)
+        console.log('group 닉네임', )
         console.log('그룹서비스에서 if문 전')
         //이미지 구현 필요
         if (groupPassword == ownerPassword &&
