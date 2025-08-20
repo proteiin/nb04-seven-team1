@@ -13,7 +13,7 @@ export class RecordsController {
                 return res.status(400).json({ message: '유효한 운동 종류가 아닙니다.'})
             }
 
-            if (!nickname || !password || !exerciseType || !time || !distance) {
+            if (!nickname || !password || !time || !distance) {
                 return res.status(400).json({ message: '필수 값을 모두 입력해주세요.'});
             }
             
