@@ -28,13 +28,9 @@ function requestLogger(req, _, next) {
 app.use(requestLogger);
 
 const rankingRouter = new RankingRouter();
-
 // app.use('/groups', GroupRouter);
 app.use('/groups/:groupId/rank', rankingRouter.getRouter());
 app.use('/groups/:groupId/participants', userRouter);
-
-
-
 
 // 전역 에러 핸들러 미들웨어
 // 반드시 모든 라우터 뒤에 위치해야 합니다.
@@ -52,8 +48,6 @@ app.use((err, req, res, next) => {
   });
 });
 
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+app.listen(PORT, () => console.log(`Server started on port ${PORT}..`));
 
 
