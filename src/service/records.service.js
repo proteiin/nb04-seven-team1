@@ -7,8 +7,8 @@ export class RecordsService {
     };
 
     
-    createRecord = async (groupId, nickname, exerciseType, description, time, distance, password, photos) => {
-
+    createRecord = async (recordData) => {
+        const { groupId, nickname, password, exerciseType, description, time, distance, photos } = recordData;
         const user = await this.recordsRepository.findUserByNickname(groupId, nickname);
         if (!user || user.password !== password) {
             const error = new Error('닉네임 또는 비밀번호를 확인해주세요.');
@@ -21,17 +21,10 @@ export class RecordsService {
                 throw error;
             }
         
-        const newRecord = await this.recordsRepository.createRecord(
-            user.id,
-            groupId,
-            nickname,
-            exerciseType,
-            description,
-            time,
-            distance,
-            password,
-            photos,
-        );
+        const newRecord = await this.recordsRepository.createRecord({
+            userId: user.id,
+            ...recordData,   
+    });
 
         try {
             const group = await this.recordsRepository.prisma.group.findUnique({

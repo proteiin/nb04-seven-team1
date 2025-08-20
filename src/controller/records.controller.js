@@ -17,16 +17,20 @@ export class RecordsController {
                 return res.status(400).json({ message: '필수 값을 모두 입력해주세요.'});
             }
             
-            const newRecord = await this.recordsService.createRecord(
-                +groupId,
+            const recordData = {
+                groupId: +groupId,
                 nickname,
                 exerciseType,
                 description,
                 time,
                 distance,
                 password,
-                photos,               
-            );
+                photos: photos,
+            }               
+            
+
+            const newRecord = await this.recordsService.createRecord(recordData);
+            
 
             return res.status(201).json({ data: newRecord });
         }   catch(error) {

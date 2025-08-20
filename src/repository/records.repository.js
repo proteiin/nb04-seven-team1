@@ -15,23 +15,25 @@ export class RecordsRepository {
  * @param {number} distance - 운동 거리
  * @param {string} password - 비밀번호
  */
-    createRecord = async (
+    createRecord = async (recordData) => {
+        const {
         userId,
         groupId,
         nickname,
-        exercise_type,
+        exerciseType,
         description,
         time,
         distance,
         password,
         photos,
-    ) => {
+    } = recordData;
+
         const record = await this.prisma.record.create({
             data: {
                 user_id: userId,
                 group_id: groupId,
                 nickname,
-                exercise_type,
+                exercise_type: exerciseType,
                 description,
                 time,
                 distance,
@@ -50,7 +52,7 @@ export class RecordsRepository {
         });
         return record;
     };
-            
+
 
  /**
  * * 그룹 내 모든 운동 기록 조회
@@ -70,7 +72,7 @@ export class RecordsRepository {
 
     let orderByCondition = { created_at: 'desc' };
     if (orderBy && order) {
-        orderByCondition = { [orderBy]: order.toLowerCase };
+        orderByCondition = { [orderBy]: order.toLowerCase() };
     }
     
     
@@ -216,4 +218,4 @@ export class RecordsRepository {
 
     return formattedRankings;
 };
-};
+}
