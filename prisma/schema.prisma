@@ -14,21 +14,22 @@ datasource db {
 }
 
 model Group {
-  id                  Int        @id @default(autoincrement())
+  id                  Int      @id @default(autoincrement())
+  nickname            String
   group_name          String
   description         String
-  image               Image[]    
+  password            String
+  image               Image[]
   tags                Tag[]
   goal_rep            Int
   discord_webhook_url String
   discord_invite_url  String
   badge               badge?
-  user_count          Int        @default(0) 
-  like_count          Int        @default(0)
-  created_at          DateTime   @default(now())
-  updated_at          DateTime   @updatedAt
+  user_count          Int      @default(0)
+  like_count          Int      @default(0)
+  created_at          DateTime @default(now())
+  updated_at          DateTime @updatedAt
   user                User[]
-
   record              Record[]
 }
 
@@ -39,16 +40,17 @@ enum badge {
 }
 
 model User {
-  id                 Int        @id @default(autoincrement())
-  group              Group      @relation(fields: [group_id], references: [id])
-  group_id           Int
-  nickname           String
-  password           String
-  record             Record[]
-  created_at         DateTime   @default(now())
-  updated_at         DateTime   @updatedAt
-  auth_code          auth_code 
+  id         Int       @id @default(autoincrement())
+  group      Group?    @relation(fields: [group_id], references: [id])
+  group_id   Int?
+  nickname   String
+  password   String
+  record     Record[]
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
+  auth_code  auth_code
 }
+
 enum auth_code {
   Owner
   participants
@@ -90,7 +92,7 @@ model Image {
 
 model Tag {
   id         Int      @id @default(autoincrement())
-  name       String 
+  name       String
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
   group      Group    @relation(fields: [group_id], references: [id])
