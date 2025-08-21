@@ -6,7 +6,7 @@ class LikeController {
       const groupId = parseInt(req.params.groupId, 10);
 
       const likecount = await LikeService.addLike(groupId);
-      res.status(201).json({ message: '좋아요 추가 완료', likecount });
+      res.status(200).json({ message: '좋아요 추가 완료', likecount });
     } catch (err) {
       next(err);
     }
