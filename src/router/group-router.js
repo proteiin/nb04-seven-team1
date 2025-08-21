@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import GroupController from '../controller/group-controller.js';
-import groupMiddleware from '../middelware/group-middleware.js';
+// import groupMiddleware from '../middelware/group-middleware.js';
+import groupMiddleware from '../middleware/group-middleware.js';
 
 const GroupRouter = Router();
 

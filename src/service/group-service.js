@@ -141,7 +141,7 @@ class GroupService {
                 error.statusCode = 401;
                 error.message = "wrong password"
                 error.path = 'password'
-                next(error);
+                throw(error);
             }
         }
         }

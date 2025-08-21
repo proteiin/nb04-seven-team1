@@ -31,7 +31,6 @@ class GroupController {
             error.statusCode = 500;
             error.message = "server Error(Database)"
             error.path = "database"
-            console.error(error);
             next(error)
         }
         
@@ -50,7 +49,6 @@ class GroupController {
             error.statusCode = 500;
             error.message = "server Error(Database)"
             error.path = "database"
-            console.error(error);
             next(error)
         }
     } 
@@ -72,7 +70,6 @@ class GroupController {
             error.statusCode = 500;
             error.message = "server Error(Database)"
             error.path = "database"
-            console.error(error);
             next(error);
         }
     }
@@ -106,7 +103,6 @@ class GroupController {
             return res.status(200).send(modifiedGroupAndTag);
         }catch(error){
             res.send(error);
-            console.error(error);
         }
             
     }
