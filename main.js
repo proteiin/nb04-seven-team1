@@ -33,6 +33,4 @@ app.use( (err, req, res, next) => {
   const path = err.path || 'unknown';
 });
 
-app.listen(3000, () => {
-    console.log('app is listen at http://localhost:3000')
-})
+app.listen(PORT, () => console.log(`Server started on port ${PORT}..`));
