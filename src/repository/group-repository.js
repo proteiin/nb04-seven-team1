@@ -114,6 +114,10 @@ class GroupRepository{
 
         return nickname;
     }
+
+    createGroupAndTag = async() =>{
+        
+    }
 }
 
 

@@ -26,9 +26,9 @@ class GroupController {
         
         try{
             const newGroup = await groupService.createGroup(data);
-            return res.status(201).send(newGroup);
+            return res.statusCode(201).send(newGroup);
         }catch(error){
-            error.status = 500;
+            error.statusCode = 500;
             error.message = "server Error(Database)"
             error.path = "database"
             console.error(error);
@@ -44,9 +44,9 @@ class GroupController {
         try{
             const AllGroups = await groupService.getAllGroups({page, limit, order,
             orderBy, search});
-            return res.status(200).send(AllGroups);
+            return res.statusCode(200).send(AllGroups);
         }catch(error){
-            error.status = 500;
+            error.statusCode = 500;
             error.message = "server Error(Database)"
             error.path = "database"
             console.error(error);
@@ -61,14 +61,14 @@ class GroupController {
             const group = await groupService.getGroupById(groupId);
             if (!group){
                 let error = new Error;
-                error.status = 404;
+                error.statusCode = 404;
                 error.message = "group not found"
                 next(error);
             }
-            return res.status(200).send(group);
+            return res.statusCode(200).send(group);
 
         }catch(error){
-            error.status = 500;
+            error.statusCode = 500;
             error.message = "server Error(Database)"
             error.path = "database"
             console.error(error);
@@ -91,10 +91,10 @@ class GroupController {
                 discordWebhookUrl, discordInviteUrl}
 
         const group = await groupService.getGroupById(groupId);
-        
+
         if (!group){
             let error = new Error;
-            error.status = 404;
+            error.statusCode = 404;
             error.message = "group not found"
             next(error);
         }
@@ -102,12 +102,11 @@ class GroupController {
         try{
             const modifiedGroupAndTag = await groupService.modifyGroup(data);
             
-            return res.status(200).send(modifiedGroupAndTag);
+            return res.statusCode(200).send(modifiedGroupAndTag);
         }catch(error){
             res.send(error);
             console.error(error);
-        }
-        
+        }    
     }
     
     //DELETE METHOD 처리
@@ -118,15 +117,13 @@ class GroupController {
         try{
             const message = await groupService.deleteGroup(groupId, inputPassword)
             console.log("삭제 완료")
-            return res.status(200).send(message);
+            return res.statusCode(200).send(message);
             
         }catch(error){
             console.error(error);
             return res.send("error occured");
         }
-        
     }
-
 }
 
 

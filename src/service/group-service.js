@@ -119,7 +119,7 @@ class GroupService {
         //이미지 구현과 연동 필요
         if (groupNickname != ownerNickname) {
             let error = new Error;
-            error.status = 401;
+            error.statusCode = 401;
             error.message = "wrong nickname"
             error.path = 'nickname'
             next(error);
@@ -138,7 +138,7 @@ class GroupService {
 
             }else{
                 let error = new Error;
-                error.status = 401;
+                error.statusCode = 401;
                 error.message = "wrong password"
                 error.path = 'password'
                 next(error);
@@ -155,7 +155,12 @@ class GroupService {
 
         //삭제할 그룹 찾기 
         const group = await groupRepository.GetGroupByIdAll(groupId);
-
+        if (!group){
+            let error = new Error;
+            error.statusCode = 404;
+            error.message = "Group not found"
+            next(error);
+        }
         const groupPassword = await groupRepository.GetPassword(groupId);
         const reqPassword = inputPassword.ownerPassword;
         //에러처리하기
@@ -166,7 +171,7 @@ class GroupService {
             return 'success'
         }else{
             let error = new Error;
-            error.status = 401;
+            error.statusCode = 401;
             error.message = "wrong password"
             error.path = 'password'
             next(error);
