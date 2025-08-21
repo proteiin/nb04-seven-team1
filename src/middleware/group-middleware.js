@@ -10,7 +10,7 @@ class groupMiddleware{
             goalRep, discordInviteUrl,
             discordWebhookUrl, tags}    
 
-        for (data of inputData){
+        for (const data of inputData){
             if (!data){
                 let error = new Error()
                 error.statusCode = 400;

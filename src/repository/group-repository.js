@@ -85,7 +85,7 @@ class GroupRepository{
         let password;
 
         const users = group.user;
-        for (let user of users){
+        for (const user of users){
             if (user.auth_code == 'OWNER'){
                 password = user.password;
             }
@@ -102,7 +102,7 @@ class GroupRepository{
         });
         let nickname;
         const users = group.user;
-        for (let user of users){
+        for (const user of users){
             if (user.auth_code == 'OWNER'){
                 nickname = user.nickname;
             }
