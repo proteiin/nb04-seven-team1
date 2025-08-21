@@ -29,7 +29,7 @@ async function main() {
       nickname: '그룹장_김리더',
       password: await bcrypt.hash('owner_password', 10),
       group_id: group1.id,
-      auth_code: 'Owner', // 역할을 'Owner'로 지정
+      auth_code: 'OWNER', // 역할을 'Owner'로 지정
     },
   });
 
@@ -39,7 +39,7 @@ async function main() {
       nickname: '홍길동',
       password: await bcrypt.hash('user1pass', 10),
       group_id: group1.id,
-      auth_code: 'participants', // 역할을 'participants'로 지정
+      auth_code: 'PARTICIPANTS', // 역할을 'participants'로 지정
     },
   });
 
@@ -48,7 +48,7 @@ async function main() {
       nickname: '김철수',
       password: await bcrypt.hash('user2pass', 10),
       group_id: group1.id,
-      auth_code: 'participants',
+      auth_code: 'PARTICIPANTS',
     },
   });
 
