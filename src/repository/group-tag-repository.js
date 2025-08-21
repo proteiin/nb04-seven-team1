@@ -8,7 +8,7 @@ class TagRepository{
     //태그 네임 배열로 태그들 생성
     createTagsbyTagNames = async(tagNameArray, groupId) =>{
         let tags = [];
-        for (let tagName of tagNameArray){
+        for (const tagName of tagNameArray){
             const tag = await prisma.tag.create({
                 data:{name:tagName,
                     group: {connect:{id:groupId}}
@@ -62,7 +62,7 @@ class TagRepository{
     
     //tag id 배열에 있는 태그들을 삭제
     deleteTags = async(tagIdArray) => {
-        for (let tagId of tagIdArray){
+        for (const tagId of tagIdArray){
             await prisma.tag.delete({
                 id:tagId
             })
@@ -75,11 +75,11 @@ class TagRepository{
             where:{group_id:groupId}
         })
 
-        for (let tag of tags){
+        for (const tag of tags){
             tagIdarray.push(tag.id);
         }
 
-        for (let tagId of tagIdarray){
+        for (const tagId of tagIdarray){
             await prisma.tag.delete({
                 where:{id:tagId}
             })
