@@ -17,8 +17,13 @@ class TagRepository {
       },
     });
   }
-  async tagsCount(where) {
-    return await prisma.tag.count({ where });
+  async tagsCount(where, order, skip, take) {
+    return await prisma.tag.count({
+      where,
+      orderBy: { created_at: order },
+      skip,
+      take,
+    });
   }
 
   async getTagId(where) {

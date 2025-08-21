@@ -6,14 +6,14 @@ class TagService {
     if (search) {
       where.name = { contains: search, mode: 'insensitive' };
     }
-    const totalCount = await TagRepository.tagsCount(where);
+    const skip = (page - 1) * limit;
+    const take = limit;
+
+    const totalCount = await TagRepository.tagsCount(where, order, skip, take);
 
     if (totalCount === 0) {
       return { tags: [], totalCount: 0 };
     }
-
-    const skip = (page - 1) * limit;
-    const take = limit;
 
     const tags = await TagRepository.getTags(where, order, skip, take);
 
