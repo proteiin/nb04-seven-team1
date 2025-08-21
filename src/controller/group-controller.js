@@ -107,7 +107,8 @@ class GroupController {
         }catch(error){
             res.send(error);
             console.error(error);
-        }    
+        }
+            
     }
     
     //DELETE METHOD 처리
