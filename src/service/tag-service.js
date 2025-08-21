@@ -3,7 +3,7 @@ import TagRepogitory from '../repository/tag-repository.js';
 class TagService {
   async getTags(page, limit, order, search) {
     const where = {
-      tag: { name: { contains: search, mode: 'insensitive' } },
+      name: { contains: search, mode: 'insensitive' },
     };
 
     const skip = (page - 1) * limit;
