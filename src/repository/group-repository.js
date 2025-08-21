@@ -8,9 +8,7 @@ const prisma = new PrismaClient();
 class GroupRepository{
     // 그룹 생성
     createGroup = async (data)=>{
-        
-        const newGroup = await prisma.Group.create({data});
-        return newGroup
+        return await prisma.Group.create({data});
     } 
 
     //모든 그룹 조회
@@ -35,11 +33,9 @@ class GroupRepository{
     }
 
     //그룹을 이용하여 그룹을 참조하는 모델을 불러올 때 사용합니다
-    GetGroupByIdAll = async(Id)=>{
+    GetGroupByIdAll = async(id)=>{
         const group = await prisma.Group.findUnique({
-            where:{
-                id:Id
-            },
+            where:{id},
         })
         return group
     }

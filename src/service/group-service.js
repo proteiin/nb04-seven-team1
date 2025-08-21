@@ -47,27 +47,27 @@ class GroupService {
 
         switch (orderBy) {
             case 'likecount':
-                if (order='asc'){
+                if (order==='asc'){
                     orderBy = {likecount: 'asc'}
-                }else if (order='desc'){
+                }else if (order==='desc'){
                     orderBy = {likecount: 'desc'}
                 }
                 
                 break;
 
             case 'participantCount':
-                if (order='asc'){
+                if (order==='asc'){
                     orderBy = {user_count: 'asc'}
-                }else if (order='desc'){
+                }else if (order==='desc'){
                     orderBy = {user_count: 'desc'}
                 }
                 
                 break;
 
             case 'createdAt':
-                if (order='asc'){
+                if (order==='asc'){
                     orderBy = {created_at: 'asc'}
-                }else if (order='desc'){
+                }else if (order==='desc'){
                     orderBy = {created_at: 'desc'}
                 }
 

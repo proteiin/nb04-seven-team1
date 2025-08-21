@@ -14,7 +14,7 @@ class groupMiddleware{
             if (!data){
                 let error = new Error()
                 error.statusCode = 400;
-                error.message = `%{data} is missing`
+                error.message = `${data} is missing`
                 error.path = data;
                 next(error);
             }
@@ -62,7 +62,7 @@ class groupMiddleware{
             error.statusCode = 400;
             error.message = "The order parameter must be one of the following values: ['asc', 'dsc']"
             error.path = 'order'
-            throw error;
+            next(error) ;
         }
 
         if (orderBy != 'createdAt' && orderBy != 'likeCount' &&

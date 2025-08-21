@@ -26,7 +26,7 @@ class GroupController {
         
         try{
             const newGroup = await groupService.createGroup(data);
-            return res.statusCode(201).send(newGroup);
+            return res.status(201).send(newGroup);
         }catch(error){
             error.statusCode = 500;
             error.message = "server Error(Database)"
@@ -102,9 +102,8 @@ class GroupController {
             
             return res.status(200).send(modifiedGroupAndTag);
         }catch(error){
-            res.send(error);
+            next(error);
         }
-            
     }
     
     //DELETE METHOD 처리

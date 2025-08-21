@@ -25,7 +25,7 @@ class TagRepository{
             where:{id:groupId}
         })
 
-        const tags = await prisma.group.findMany({
+        const tags = await prisma.tag.findMany({
             where:{group_id:groupId}
         })
 
