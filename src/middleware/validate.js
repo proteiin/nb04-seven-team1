@@ -4,6 +4,7 @@ export function validateGroupId(req, res, next) {
   if (isNaN(groupId)) {
     return res.status(400).json({ message: 'groupId must be integer' });
   }
+  req.groupId = groupId
   next();
 }
 
