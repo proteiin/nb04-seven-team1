@@ -15,12 +15,7 @@ export class RecordsService {
             error.status = 401;
             throw error;
         }
-            if (time <= 0) {
-                const error = new Error('운동 시간은 0보다 커야합니다.');
-                error.status = 400;
-                throw error;
-            }
-        
+                             
         const imagesToCreate = photos.map(photoPath => ({
             name: photoPath.substring(photoPath.lastIndexOf('/') + 1),
             path: photoPath,
