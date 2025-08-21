@@ -4,6 +4,7 @@ import { PrismaClient }  from '@prisma/client'
 
 const prisma = new PrismaClient();
 class TagRepository{
+    //태그 생성
     createTag = async(tags,groupId) =>{
         const newTags = []
 
@@ -21,7 +22,7 @@ class TagRepository{
         console.log('newTags: ', newTags)
         return newTags;
     }
-
+    //태그 수정
     patchTag = async(tags,groupId) =>{
         let patchTag;
         console.log(tags, groupId)

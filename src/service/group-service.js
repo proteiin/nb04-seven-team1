@@ -3,10 +3,12 @@ import { PrismaClient } from "@prisma/client";
 import groupRepository from "../repository/group-repository.js";
 import tagRepository from "../repository/tag-repository.js";
 
-
 const prisma = new PrismaClient();
 
+//핵심 로직을 작성하는 코드 
+
 class GroupService {
+    //태그 생성, 그룹생성, 유저생성 (트랜잭션 구현 필요)
     createGroup = async ({name, description, photoUrl,
         ownerNickname, ownerPassword, 
         goalRep, discordInviteUrl,
@@ -36,6 +38,7 @@ class GroupService {
         return newGroup
     }
 
+    //pagination과 그룹들 불러오기, 검색기능
     getAllGroups = async ({page, limit, orderBy, 
         order, search}) => {
         
@@ -82,24 +85,19 @@ class GroupService {
         return allGroups;
     } 
 
+    //특정 그룹 가져오기
     getGroupById = async(Id) => {
-
-        
         const group = groupRepository.GetGroupById(Id)
         return group;
     }
 
+    // 닉네임과 비밀번호 검증, tag와 group, user 수정(트랜잭션 구현 필요)
     modifyGroup = async (data) => {
         const {groupId,name, description,
                 ownerNickname, ownerPassword, 
                 photoUrl, tags, goalRep, 
                 discordWebhookUrl, discordInviteUrl} = data
 
-                    //전달받은 데이터
-        // const data = {groupId,name, description,
-        //         ownerNickname, ownerPassword, 
-        //         photoUrl, tags, goalRep, 
-        //         discordWebhookUrl, discordInviteUrl}
            
         const groupPassword = await groupRepository.GetPassword(groupId);
         const groupNickname = await groupRepository.GetNickname(groupId);
@@ -116,7 +114,9 @@ class GroupService {
         console.log('group 패스워드:' , groupPassword, 'input패스워드 ',ownerPassword)
         console.log('group 닉네임', )
         console.log('그룹서비스에서 if문 전')
-        //이미지 구현 필요
+
+        //이미지 구현과 연동 필요
+
         if (groupPassword == ownerPassword &&
             groupNickname == ownerNickname){
 
@@ -135,6 +135,7 @@ class GroupService {
         }
     }
 
+    // 비밀번호 검증, 그룹, 유저 삭제
     deleteGroup = async (groupId, inputPassword) => {
 
         // console.log(groupId, inputPassword)
@@ -143,11 +144,11 @@ class GroupService {
         const group = await groupRepository.GetGroupByIdAll(groupId);
 
         const groupPassword = await groupRepository.GetPassword(groupId);
-        inputPassword = inputPassword.ownerPassword;
+        let reqPassword = inputPassword.ownerPassword;
         //에러처리하기
 
-        console.log(groupPassword, inputPassword)
-        if (groupPassword == inputPassword){
+        console.log(groupPassword, reqPassword)
+        if (groupPassword == reqPassword){
             await groupRepository.DeleteGroup(groupId);
             console.log("비밀번호 인증 성공")
             return 'success'

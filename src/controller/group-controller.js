@@ -7,7 +7,10 @@ import groupService from "../service/group-service.js";
 
 const prisma = new PrismaClient();
 
+//유효성 검증, req값 불러오기, res 보내는 코드
+
 class GroupController {
+    //CREATE METHOD 처리
     createGroup = async (req,res,next) => {
         const {name, description, photoUrl,
             ownerNickname, ownerPassword, 
@@ -29,7 +32,7 @@ class GroupController {
         }
         
     }
-
+    //GET groups 처리
     getAllGroups = async (req,res,next) => {
 
         let {page=1, limit=100, order='asc',
@@ -47,14 +50,14 @@ class GroupController {
         
         
     } 
-
+    //GET groups/:groupid 처리
     getGroupById = async(req,res,next) => {
         const Id = Number(req.params.groupId);
         const group = await groupService.getGroupById(Id);
 
         return res.status(200).send(group);
     }
-
+    //PATCH METHOD 처리
     modifyGroup = async(req,res,next) => {
         const groupId = Number(req.params.groupId);
 
@@ -78,7 +81,7 @@ class GroupController {
         
     }
     
-
+    //DELETE METHOD 처리
     deleteGroup = async (req,res,next) => {
         let inputPassword  = req.body;
         let groupId = req.params.groupId;

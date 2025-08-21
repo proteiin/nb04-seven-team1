@@ -3,6 +3,7 @@ import GroupController from '../controller/group-controller.js';
 
 const GroupRouter = Router();
 
+//라우팅
 
 GroupRouter.post('/' , (req,res) => GroupController.createGroup(req,res))
 
