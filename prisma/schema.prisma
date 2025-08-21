@@ -15,10 +15,8 @@ datasource db {
 
 model Group {
   id                  Int      @id @default(autoincrement())
-  nickname            String
   group_name          String
   description         String
-  password            String
   image               Image[]
   tags                Tag[]
   goal_rep            Int
@@ -41,8 +39,8 @@ enum badge {
 
 model User {
   id         Int       @id @default(autoincrement())
-  group      Group?    @relation(fields: [group_id], references: [id])
-  group_id   Int?
+  group      Group     @relation(fields: [group_id], references: [id])
+  group_id   Int
   nickname   String
   password   String
   record     Record[]
@@ -52,8 +50,8 @@ model User {
 }
 
 enum auth_code {
-  Owner
-  participants
+  OWNER
+  PARTICIPANTS
 }
 
 model Record {

@@ -15,7 +15,7 @@ export class UserService {
             group_id: groupId,
             nickname,
             password: hashedPassword,
-            auth_code: 'participants',
+            auth_code: 'PARTICIPANTS',
           },
           tx,
         );
@@ -25,10 +25,29 @@ export class UserService {
         );
         return result;
       });
-      return updatedGroup;
+      return this.userSeperate(updatedGroup);
     } catch (error) {
       throw error;
     }
+  };
+
+  userSeperate = async (groupData) => {
+    const { user, ...groupInfo } = groupData;
+
+    const userToSeperate = [...user];
+
+    const ownerArray = userToSeperate.filter((u) => u.auth_code === 'OWNER');
+    const participants = userToSeperate.filter(
+      (u) => u.auth_code === 'PARTICIPANTS',
+    );
+
+    const owner = ownerArray[0]; // OWNER는 객체로 반환
+
+    return {
+      ...groupInfo,
+      owner,
+      participants,
+    };
   };
 
   leaveParticipantFromGroup = async (nickname, password, groupId) => {
