@@ -5,10 +5,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint .",
-    "format": "prettier --write ."
-  },
-  "prisma": {
-    "seed": "node prisma/seed.js"
+    "format": "prettier --write .",
+    "seed": "node ./prisma/seed.js"
   },
   "author": "",
   "license": "ISC",
@@ -20,7 +18,7 @@
     "axios": "^1.11.0",
     "dotenv": "^17.2.1",
     "express": "^5.1.0",
-    "prisma": "^6.13.0"
+    "prisma": "^6.14.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.33.0",

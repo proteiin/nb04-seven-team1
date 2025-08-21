@@ -14,22 +14,38 @@ datasource db {
 }
 
 model Group {
+<<<<<<< HEAD
   id                  Int      @id @default(autoincrement())
   nickname            String
   group_name          String
   description         String
   password            String
   image               Image[]
+=======
+  id                  Int        @id @default(autoincrement())
+  group_name          String
+  description         String
+  image               Image[]    
+>>>>>>> upstream/main
   tags                Tag[]
   goal_rep            Int
   discord_webhook_url String
   discord_invite_url  String
   badge               badge?
+<<<<<<< HEAD
   user_count          Int      @default(0)
   like_count          Int      @default(0)
   created_at          DateTime @default(now())
   updated_at          DateTime @updatedAt
   participants        User[]
+=======
+  user_count          Int        @default(0) 
+  like_count          Int        @default(0)
+  created_at          DateTime   @default(now())
+  updated_at          DateTime   @updatedAt
+  user                User[]
+
+>>>>>>> upstream/main
   record              Record[]
 }
 
@@ -40,6 +56,7 @@ enum badge {
 }
 
 model User {
+<<<<<<< HEAD
   id         Int       @id @default(autoincrement())
   group      Group?    @relation(fields: [group_id], references: [id])
   group_id   Int?
@@ -51,6 +68,18 @@ model User {
   auth_code  auth_code
 }
 
+=======
+  id                 Int        @id @default(autoincrement())
+  group              Group      @relation(fields: [group_id], references: [id])
+  group_id           Int
+  nickname           String
+  password           String
+  record             Record[]
+  created_at         DateTime   @default(now())
+  updated_at         DateTime   @updatedAt
+  auth_code          auth_code 
+}
+>>>>>>> upstream/main
 enum auth_code {
   Oener
   participants
@@ -92,7 +121,11 @@ model Image {
 
 model Tag {
   id         Int      @id @default(autoincrement())
+<<<<<<< HEAD
   name       String
+=======
+  name       String 
+>>>>>>> upstream/main
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
   group      Group    @relation(fields: [group_id], references: [id])

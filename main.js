@@ -6,8 +6,7 @@ import { PrismaClient } from '@prisma/client';
 // import GroupRouter from './src/router/group-router.js';
 import RankingRouter from './src/router/RankingRouter.js';
 import userRouter from './src/router/user-router.js';
-import recordsRouter from './src/router/records.router.js';
-
+import ImageRouter from './src/router/ImageRouter.js';
 import { RecordsRepository } from './src/repository/records.repository.js';
 import { RecordsService } from './src/service/records.service.js';
 import { RecordsController } from './src/controller/records.controller.js';
@@ -15,6 +14,9 @@ import { RecordsController } from './src/controller/records.controller.js';
 dotenv.config();
 
 const PORT = process.env.PORT || 3000;
+
+dotenv.config();
+
 const app = express();
 
 const prisma = new PrismaClient();
@@ -29,15 +31,18 @@ function requestLogger(req, _, next) {
   console.log(`[${req.method}] ${req.originalUrl}`);
   next();
 }
+
 app.use(requestLogger);
 
 const rankingRouter = new RankingRouter();
+const imageRouter = new ImageRouter();
 const recordsRepository = new RecordsRepository(prisma);
 const recordsService = new RecordsService(recordsRepository);
 const recordsController = new RecordsController(recordsService);
 // app.use('/groups', GroupRouter);
 app.use('/groups/:groupId/rank', rankingRouter.getRouter());
 app.use('/groups/:groupId/participants', userRouter);
+app.use('/images', imageRouter.getRouter());
 app.use('/api', recordsRouter(recordsController));
 
 // 전역 에러 핸들러 미들웨어
@@ -56,5 +61,3 @@ app.use((err, req, res, next) => {
 });
 
 app.listen(PORT, () => console.log(`Server started on port ${PORT}..`));
-
-
