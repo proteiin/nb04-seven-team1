@@ -3,19 +3,24 @@ import TagService from '../service/tag-service.js';
 class TagController {
   async getTags(req, res, next) {
     try {
-      const { page = 1, limit = 10, order = 'desc', search } = req.query;
-      const tags = await TagService.getTags(
-        parseInt(page, 10),
-        parseInt(limit, 10),
+      const { order = 'desc', search } = req.query;
+      const page = parseInt(req.query.page || 1, 10);
+      const limit = parseInt(req.query.limit || 10, 10);
+
+      if (Number.isNaN(page) || page < 1 || Number.isNaN(limit) || limit < 1) {
+        return res
+          .status(400)
+          .json({ error: '유효하지 않은 페이지 또는 리밋 값입니다.' });
+      }
+
+      const { tags, totalCount } = await TagService.getTags(
+        page,
+        limit,
         order,
         search,
       );
 
-      if (tags.length === 0) {
-        return res.status(404).json({ error: '조건에 맞는 태그가 없습니다.' });
-      }
-
-      res.status(200).json({ data: tags, total: tags.length });
+      res.status(200).json({ data: tags, total: totalCount });
     } catch (err) {
       next(err);
     }

@@ -2,7 +2,7 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-class TagRepogitory {
+class TagRepository {
   async getTags(where, order, skip, take) {
     return await prisma.tag.findMany({
       where,
@@ -16,6 +16,9 @@ class TagRepogitory {
         updated_at: true,
       },
     });
+  }
+  async tagsCount(where) {
+    return await prisma.tag.count({ where });
   }
 
   async getTagId(where) {
@@ -31,4 +34,4 @@ class TagRepogitory {
   }
 }
 
-export default new TagRepogitory();
+export default new TagRepository();
