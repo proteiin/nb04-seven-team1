@@ -61,18 +61,14 @@ class GroupRepository{
         return group
     }
     //그룹 수정
-    PatchGroup = async(data) => {
-        const {groupId,name, description,
-                ownerNickname, ownerPassword, 
-                photoUrl, tags, goalRep, 
-                discordWebhookUrl, discordInviteUrl} = data
-                
+    PatchGroup = async(inputData, groupId) => { 
         const modifiedGroup = prisma.Group.update({
             where:{
                 id:groupId
             },
-            data
+            data:inputData
         });
+        return modifiedGroup;
 
     }
 
@@ -80,8 +76,9 @@ class GroupRepository{
         await prisma.Group.delete({
             where:{
                 id : groupId
-            },
+            }
         });
+
     }
     //그룹 아이디를 바탕으로 만든사람 비밀번호를 가져옵니다
     GetPassword = async(group_id) =>{
@@ -90,10 +87,10 @@ class GroupRepository{
             include:{user:true,}
         });
         let password;
+
         const users = group.user;
         for (let user of users){
             if (user.auth_code == 'OWNER'){
-                console.log(user)
                 password = user.password;
             }
         }
@@ -111,7 +108,6 @@ class GroupRepository{
         const users = group.user;
         for (let user of users){
             if (user.auth_code == 'OWNER'){
-                console.log(user)
                 nickname = user.nickname;
             }
         }

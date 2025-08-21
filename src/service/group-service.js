@@ -99,35 +99,39 @@ class GroupService {
                 discordWebhookUrl, discordInviteUrl} = data
 
            
+                // const data = {groupId,name, description,
+                // ownerNickname, ownerPassword, 
+                // photoUrl, tags, goalRep, 
+                // discordWebhookUrl, discordInviteUrl}
+
         const groupPassword = await groupRepository.GetPassword(groupId);
         const groupNickname = await groupRepository.GetNickname(groupId);
         
         const prismaData = {
-                    group_id: groupId,
                     group_name: name,
                     description,
                     goal_rep: goalRep,
                     discord_webhook_url: discordWebhookUrl,
-                    discord_server_url : discordInviteUrl
+                    discord_invite_url : discordInviteUrl
                 }
                 
-        console.log('group 패스워드:' , groupPassword, 'input패스워드 ',ownerPassword)
-        console.log('group 닉네임', )
-        console.log('그룹서비스에서 if문 전')
 
         //이미지 구현과 연동 필요
 
         if (groupPassword == ownerPassword &&
             groupNickname == ownerNickname){
+                const modifiedGroup = await groupRepository.PatchGroup(prismaData, groupId);
 
-                const modifiedGroup = groupRepository.PatchGroup(prismaData);
-
-                
+                let newTags;
                 if (tags){
-                    tagRepository.patchTag(tags, groupId);
+                    //기존 태그들 삭제하기    
+                    const deleteTagIds = await tagRepository.deleteTagsbyGroupId(groupId);
+
+                    //태그들 생성하기
+                    newTags = await tagRepository.createTagsbyTagNames(tags,groupId);
                 }
-                const result = [modifiedGroup,tags]
-                console.log('그룹서비스에서',result)
+                const result = [modifiedGroup,newTags]
+
                 return result
         }else{
             console.log('if문 못들어감')
@@ -140,11 +144,11 @@ class GroupService {
 
         // console.log(groupId, inputPassword)
 
-        
+        //삭제할 그룹 찾기 
         const group = await groupRepository.GetGroupByIdAll(groupId);
 
         const groupPassword = await groupRepository.GetPassword(groupId);
-        let reqPassword = inputPassword.ownerPassword;
+        const reqPassword = inputPassword.ownerPassword;
         //에러처리하기
 
         console.log(groupPassword, reqPassword)

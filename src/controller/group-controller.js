@@ -70,6 +70,7 @@ class GroupController {
                 ownerNickname, ownerPassword, 
                 photoUrl, tags, goalRep, 
                 discordWebhookUrl, discordInviteUrl}
+                
         try{
             const modifiedGroupAndTag = await groupService.modifyGroup(data);
             console.log('컨트롤러에서 보내는값',modifiedGroupAndTag)
