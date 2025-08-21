@@ -1,7 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 // import prisma from 'prisma'
 import groupRepository from "../repository/group-repository.js";
-import tagRepository from "../repository/tag-repository.js";
+import tagRepository from "../repository/group-tag-repository.js";
 
 const prisma = new PrismaClient();
 
@@ -142,7 +142,7 @@ class GroupService {
     // 비밀번호 검증, 그룹, 유저 삭제
     deleteGroup = async (groupId, inputPassword) => {
 
-        // console.log(groupId, inputPassword)
+    
 
         //삭제할 그룹 찾기 
         const group = await groupRepository.GetGroupByIdAll(groupId);
@@ -151,7 +151,6 @@ class GroupService {
         const reqPassword = inputPassword.ownerPassword;
         //에러처리하기
 
-        console.log(groupPassword, reqPassword)
         if (groupPassword == reqPassword){
             await groupRepository.DeleteGroup(groupId);
             console.log("비밀번호 인증 성공")

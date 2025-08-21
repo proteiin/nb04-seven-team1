@@ -2,7 +2,7 @@
 import { PrismaClient } from "@prisma/client";
 // import prisma from 'prisma'
 import groupRepository from "../repository/group-repository.js";
-import tagRepository from "../repository/tag-repository.js";
+import tagRepository from "../repository/group-tag-repository.js";
 import groupService from "../service/group-service.js";
 
 const prisma = new PrismaClient();
@@ -70,10 +70,10 @@ class GroupController {
                 ownerNickname, ownerPassword, 
                 photoUrl, tags, goalRep, 
                 discordWebhookUrl, discordInviteUrl}
-                
+
         try{
             const modifiedGroupAndTag = await groupService.modifyGroup(data);
-            console.log('컨트롤러에서 보내는값',modifiedGroupAndTag)
+            
             return res.status(200).send(modifiedGroupAndTag);
         }catch(error){
             res.send(error);
