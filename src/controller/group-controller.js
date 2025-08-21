@@ -16,7 +16,8 @@ class GroupController {
             ownerNickname, ownerPassword, 
             goalRep, discordInviteUrl,
             discordWebhookUrl, tags} = req.body;
-        
+
+
         const data = {
             name, description, photoUrl,
             ownerNickname, ownerPassword, 
@@ -27,8 +28,11 @@ class GroupController {
             const newGroup = await groupService.createGroup(data);
             return res.status(201).send(newGroup);
         }catch(error){
-            res.send(error);
+            error.status = 500;
+            error.message = "server Error(Database)"
+            error.path = "database"
             console.error(error);
+            next(error)
         }
         
     }
@@ -37,26 +41,41 @@ class GroupController {
 
         let {page=1, limit=100, order='asc',
             orderBy='createdAt', search} = req.query;
-        
         try{
             const AllGroups = await groupService.getAllGroups({page, limit, order,
             orderBy, search});
             return res.status(200).send(AllGroups);
         }catch(error){
-            res.send(error);
+            error.status = 500;
+            error.message = "server Error(Database)"
+            error.path = "database"
             console.error(error);
+            next(error)
         }
-        
-        
-        
     } 
+
     //GET groups/:groupid 처리
     getGroupById = async(req,res,next) => {
-        const Id = Number(req.params.groupId);
-        const group = await groupService.getGroupById(Id);
+        const groupId = Number(req.params.groupId);
+        try{
+            const group = await groupService.getGroupById(groupId);
+            if (!group){
+                let error = new Error;
+                error.status = 404;
+                error.message = "group not found"
+                next(error);
+            }
+            return res.status(200).send(group);
 
-        return res.status(200).send(group);
+        }catch(error){
+            error.status = 500;
+            error.message = "server Error(Database)"
+            error.path = "database"
+            console.error(error);
+            next(error)
+        }
     }
+
     //PATCH METHOD 처리
     modifyGroup = async(req,res,next) => {
         const groupId = Number(req.params.groupId);
@@ -70,6 +89,15 @@ class GroupController {
                 ownerNickname, ownerPassword, 
                 photoUrl, tags, goalRep, 
                 discordWebhookUrl, discordInviteUrl}
+
+        const group = await groupService.getGroupById(groupId);
+        
+        if (!group){
+            let error = new Error;
+            error.status = 404;
+            error.message = "group not found"
+            next(error);
+        }
 
         try{
             const modifiedGroupAndTag = await groupService.modifyGroup(data);

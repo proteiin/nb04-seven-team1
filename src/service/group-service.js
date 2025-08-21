@@ -117,26 +117,35 @@ class GroupService {
                 
 
         //이미지 구현과 연동 필요
-
-        if (groupPassword == ownerPassword &&
-            groupNickname == ownerNickname){
-                const modifiedGroup = await groupRepository.PatchGroup(prismaData, groupId);
-
-                let newTags;
-                if (tags){
-                    //기존 태그들 삭제하기    
-                    const deleteTagIds = await tagRepository.deleteTagsbyGroupId(groupId);
-
-                    //태그들 생성하기
-                    newTags = await tagRepository.createTagsbyTagNames(tags,groupId);
-                }
-                const result = [modifiedGroup,newTags]
-
-                return result
+        if (groupNickname != ownerNickname) {
+            let error = new Error;
+            error.status = 401;
+            error.message = "wrong nickname"
+            error.path = 'nickname'
+            next(error);
         }else{
-            console.log('if문 못들어감')
-            return null
+            if (groupPassword == ownerPassword ){
+            const modifiedGroup = await groupRepository.PatchGroup(prismaData, groupId);
+
+            let newTags;
+            if (tags){   
+                const deleteTagIds = await tagRepository.deleteTagsbyGroupId(groupId);
+
+                newTags = await tagRepository.createTagsbyTagNames(tags,groupId);
+            
+                const result = [modifiedGroup,newTags];
+                return result;
+
+            }else{
+                let error = new Error;
+                error.status = 401;
+                error.message = "wrong password"
+                error.path = 'password'
+                next(error);
+            }
         }
+        }
+        
     }
 
     // 비밀번호 검증, 그룹, 유저 삭제
@@ -156,7 +165,11 @@ class GroupService {
             console.log("비밀번호 인증 성공")
             return 'success'
         }else{
-            return 'failed'
+            let error = new Error;
+            error.status = 401;
+            error.message = "wrong password"
+            error.path = 'password'
+            next(error);
         }   
     }
 }
