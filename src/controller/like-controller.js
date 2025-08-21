@@ -14,7 +14,7 @@ class LikeController {
 
   async removeLike(req, res, next) {
     try {
-      const groupId = parseInt(req.params.groupId, 10);
+      const { groupId } = req;
 
       const likecount = await LikeService.removeLike(groupId);
       res.status(200).json({ message: '좋아요 취소 완료', likecount });
