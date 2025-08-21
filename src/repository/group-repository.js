@@ -116,7 +116,19 @@ class GroupRepository{
     }
 
     createGroupAndTag = async() =>{
-        
+        // const newGroup = await prisma.Group.create({data});
+
+        // createTagsbyTagNames = async(tagNameArray, groupId) =>{
+        // let tags = [];
+        // for (let tagName of tagNameArray){
+        //     const tag = await prisma.tag.create({
+        //         data:{name:tagName,
+        //             group: {connect:{id:groupId}}
+        //         }
+        //     })
+        //     tags.push(tag);
+        // }
+        // return tags;
     }
 }
 

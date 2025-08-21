@@ -4,24 +4,6 @@ import { PrismaClient }  from '@prisma/client'
 
 const prisma = new PrismaClient();
 class TagRepository{
-    //그룹 아이
-    // createTags = async(tagNames,groupId) =>{
-    //     const newTags = []
-
-    //     for (let name of tagNames){
-    //         const newTag = await prisma.tag.create({
-    //             data:{
-    //                 name,
-    //                 group: {
-    //                     connect:{id:groupId}
-    //                 }
-    //             }
-    //         });
-    //         newTags.push(newTag)
-    //     }
-    //     console.log('newTags: ', newTags)
-    //     return newTags;
-    // }
 
     //태그 네임 배열로 태그들 생성
     createTagsbyTagNames = async(tagNameArray, groupId) =>{
@@ -61,37 +43,6 @@ class TagRepository{
         }
         return tagIdarray;
     }
-
-    //태그 수정
-    // patchTag = async(tags,groupId) =>{
-    //     let patchTag;
-    //     console.log(tags, groupId)
-
-    //     const group = await prisma.group.findUnique({
-    //         where:{
-    //             id:groupId
-    //         },
-    //         include:{
-    //             tags:true
-    //         }
-    //     })
-
-    //     console.log('group: ',group);
-        
-    //     for (let tag of tags){
-    //         patchTag = await prisma.tag.update({
-    //             where: {
-    //                 group_id:groupId
-    //             },
-    //             data:{
-    //                 name: tag,
-    //                 group:{connect:{id:groupId}}
-    //             }
-                
-    //         })
-    //     }        
-    //     return patchTag;       
-    // }
 
     //태그 수정
     patchTag = async(tagId,data) =>{

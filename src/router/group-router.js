@@ -6,9 +6,9 @@ const GroupRouter = Router();
 
 //라우팅
 
-GroupRouter.post('/' , groupMiddleware.validateGroupForm, (req,res,next) => GroupController.createGroup(req,res,next))
+GroupRouter.post('/' ,  groupMiddleware.validateGroupForm, (req,res,next) => GroupController.createGroup(req,res,next))
 
-GroupRouter.get('/', (req,res,next) => GroupController.getAllGroups(req,res,next))
+GroupRouter.get('/', groupMiddleware.validateGetGroupQuery,(req,res,next) => GroupController.getAllGroups(req,res,next))
 
 GroupRouter.get('/:groupId', groupMiddleware.validateGroupId, (req,res,next) => GroupController.getGroupById(req,res,next))
 

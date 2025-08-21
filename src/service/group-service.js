@@ -122,7 +122,7 @@ class GroupService {
             error.statusCode = 401;
             error.message = "wrong nickname"
             error.path = 'nickname'
-            next(error);
+            throw error;
         }else{
             if (groupPassword == ownerPassword ){
             const modifiedGroup = await groupRepository.PatchGroup(prismaData, groupId);
@@ -150,17 +150,9 @@ class GroupService {
 
     // 비밀번호 검증, 그룹, 유저 삭제
     deleteGroup = async (groupId, inputPassword) => {
-
-    
-
         //삭제할 그룹 찾기 
         const group = await groupRepository.GetGroupByIdAll(groupId);
-        if (!group){
-            let error = new Error;
-            error.statusCode = 404;
-            error.message = "Group not found"
-            next(error);
-        }
+
         const groupPassword = await groupRepository.GetPassword(groupId);
         const reqPassword = inputPassword.ownerPassword;
         //에러처리하기
@@ -168,13 +160,13 @@ class GroupService {
         if (groupPassword == reqPassword){
             await groupRepository.DeleteGroup(groupId);
             console.log("비밀번호 인증 성공")
-            return 'success'
+            return groupPassword
         }else{
             let error = new Error;
             error.statusCode = 401;
             error.message = "wrong password"
             error.path = 'password'
-            next(error);
+            throw error;
         }   
     }
 }

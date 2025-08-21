@@ -18,6 +18,7 @@ class groupMiddleware{
                 error.path = data;
                 next(error);
             }
+            
         }
         
         goalRep = Number(goalRep)
@@ -28,13 +29,15 @@ class groupMiddleware{
             error.path = 'goalRep'
             next(error);
         }
+        next();
 
     }
 
     validateGetGroupQuery = (req,res,next) => {
         let {page=1, limit=100, order='asc',
             orderBy='createdAt', search} = req.query;
-
+        
+        console.log(page)
         page = Number(page)
         limit = Number(limit)
 
@@ -59,7 +62,7 @@ class groupMiddleware{
             error.statusCode = 400;
             error.message = "The order parameter must be one of the following values: ['asc', 'dsc']"
             error.path = 'order'
-            next(error);
+            throw error;
         }
 
         if (orderBy != 'createdAt' && orderBy != 'likeCount' &&
@@ -72,8 +75,7 @@ class groupMiddleware{
             next(error);
         }
 
-
-
+        next();
     }
 
     validateGroupId = (req,res,next) => {
@@ -85,6 +87,7 @@ class groupMiddleware{
             error.path = 'groupId'
             next(error);
         }
+        next();
     }
 
 

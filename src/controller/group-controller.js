@@ -44,7 +44,8 @@ class GroupController {
         try{
             const AllGroups = await groupService.getAllGroups({page, limit, order,
             orderBy, search});
-            return res.statusCode(200).send(AllGroups);
+            
+            return res.status(200).send(AllGroups);
         }catch(error){
             error.statusCode = 500;
             error.message = "server Error(Database)"
@@ -65,14 +66,14 @@ class GroupController {
                 error.message = "group not found"
                 next(error);
             }
-            return res.statusCode(200).send(group);
+            return res.status(200).send(group);
 
         }catch(error){
             error.statusCode = 500;
             error.message = "server Error(Database)"
             error.path = "database"
             console.error(error);
-            next(error)
+            next(error);
         }
     }
 
@@ -102,7 +103,7 @@ class GroupController {
         try{
             const modifiedGroupAndTag = await groupService.modifyGroup(data);
             
-            return res.statusCode(200).send(modifiedGroupAndTag);
+            return res.status(200).send(modifiedGroupAndTag);
         }catch(error){
             res.send(error);
             console.error(error);
@@ -114,14 +115,33 @@ class GroupController {
         let inputPassword  = req.body;
         let groupId = req.params.groupId;
         groupId = Number(groupId);
+
+        const group = await groupRepository.GetGroupByIdAll(groupId);
+        if (!group){
+            let error = new Error;
+            error.statusCode = 404;
+            error.message = "Group not found"
+            next(error) ;
+        }
+
         try{
-            const message = await groupService.deleteGroup(groupId, inputPassword)
-            console.log("삭제 완료")
-            return res.statusCode(200).send(message);
-            
+            const groupPassword = await groupRepository.GetPassword(groupId);
         }catch(error){
-            console.error(error);
-            return res.send("error occured");
+            next(error);
+        }
+        
+        const reqPassword = inputPassword.ownerPassword;
+
+        if (groupPassword == reqPassword){
+            await groupRepository.DeleteGroup(groupId);
+            console.log("비밀번호 인증 성공")
+            return res.status(200).send(groupPassword);
+        }else{
+            let error = new Error;
+            error.statusCode = 401;
+            error.message = "wrong password"
+            error.path = 'password'
+            next(error) ;
         }
     }
 }
