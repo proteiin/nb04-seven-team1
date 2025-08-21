@@ -7,6 +7,7 @@ import { PrismaClient } from '@prisma/client';
 import RankingRouter from './src/router/RankingRouter.js';
 import userRouter from './src/router/user-router.js';
 import ImageRouter from './src/router/ImageRouter.js';
+import recordsRouter from './src/router/records.router.js';
 import { RecordsRepository } from './src/repository/records.repository.js';
 import { RecordsService } from './src/service/records.service.js';
 import { RecordsController } from './src/controller/records.controller.js';

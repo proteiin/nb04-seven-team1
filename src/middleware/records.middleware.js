@@ -8,14 +8,14 @@ export const validateGroupId = (req, res, next) => {
 };
 
 export const validateRecordBody = (req, res, next) => {
-    const { authorNickname, authorPassword, exercise_type, time, distance } = req.body;
+    const { authorNickname, authorPassword, exerciseType, time, distance } = req.body;
 
-    if (!authorNickname || !authorPassword || !exercise_type || time === undefined || time === null) {
+    if (!authorNickname || !authorPassword || !exerciseType || time === undefined || time === null) {
         return res.status(400).json({ message: '닉네임, 비밀번호, 운동 종류와 시간은 필수 항목입니다.'});
     }
 
     const validExerciseTypes = ['RUNNING', 'CYCLE', 'SWIMMING'];
-    if (!validExerciseTypes.includes(exercise_type)) {
+    if (!validExerciseTypes.includes(exerciseType.toUpperCase())) {
         return res.status(400).json({ message: "운동 종류는 'RUNNING', 'CYCLE', 'SWIMMING' 중 하나여야 합니다."
         })
     }
