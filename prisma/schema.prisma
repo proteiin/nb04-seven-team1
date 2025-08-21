@@ -52,7 +52,7 @@ model User {
 }
 
 enum auth_code {
-  Oener
+  Owner
   participants
 }
 
