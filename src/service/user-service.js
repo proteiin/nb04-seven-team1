@@ -83,7 +83,7 @@ export class UserService {
   };
 
   hashingPassword = async (password) => {
-    const saltRounds = 10; // 암호화 복잡도
+    const saltRounds = parseInt(process.env.BCRYPT_SALT_ROUNDS, 10) || 10; // 암호화 복잡도
     return await bcrypt.hash(password, saltRounds);
   };
 
