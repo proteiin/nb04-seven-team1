@@ -11,6 +11,7 @@ import recordsRouter from './src/router/records.router.js';
 import { RecordsRepository } from './src/repository/records.repository.js';
 import { RecordsService } from './src/service/records.service.js';
 import { RecordsController } from './src/controller/records.controller.js';
+import tagRouter from './src/router/tag-router.js';
 
 dotenv.config();
 
@@ -42,6 +43,7 @@ app.use('/groups/:groupId/rank', rankingRouter.getRouter());
 app.use('/groups/:groupId/participants', userRouter);
 app.use('/images', imageRouter.getRouter());
 app.use('/api', recordsRouter(recordsController));
+app.use('/tags', tagRouter);
 
 // 전역 에러 핸들러 미들웨어
 // 반드시 모든 라우터 뒤에 위치해야 합니다.
