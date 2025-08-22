@@ -1,6 +1,7 @@
-import prisma from '../utils/prisma/index.js';
-
 export class UserRepository {
+  constructor(prisma) {
+    this.prisma = prisma;
+  }
   // 닉네임 중복검사, 비밀번호 검사를 위한 유저 객체 반환
   findUser = async (where) => {
     return await prisma.user.findFirst({ where });
@@ -8,19 +9,19 @@ export class UserRepository {
 
   // 사용자 등록
   joinGroup = async (data, tx) => {
-    const prismaClient = tx || prisma;
+    const prismaClient = tx || this.prisma;
     return await prismaClient.user.create({ data });
   };
 
   // 사용자 그룹 탈퇴
   leaveGroup = async (where, tx) => {
-    const prismaClient = tx || prisma;
+    const prismaClient = tx || this.prisma;
     return await prismaClient.user.delete({ where });
   };
 
   // 그룹 인원 수 1 증가
   incrementGroupUser = async (groupId, tx) => {
-    const prismaClient = tx || prisma;
+    const prismaClient = tx || this.prisma;
     return await prismaClient.group.update({
       where: { id: groupId },
       data: { user_count: { increment: 1 } },
@@ -41,7 +42,7 @@ export class UserRepository {
 
   // 그룹 인원 수 1 감소
   decrementGroupUser = async (groupId, tx) => {
-    const prismaClient = tx || prisma;
+    const prismaClient = tx || this.prisma;
     return await prismaClient.group.update({
       where: { id: groupId },
       data: { user_count: { decrement: 1 } },
@@ -50,7 +51,7 @@ export class UserRepository {
 
   // 유저의 운동 기록을 삭제
   deleteRecords = async (where, tx) => {
-    const prismaClient = tx || prisma;
+    const prismaClient = tx || this.prisma;
     return await prismaClient.record.deleteMany({ where });
   };
 }
