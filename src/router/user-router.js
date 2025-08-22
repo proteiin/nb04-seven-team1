@@ -1,19 +1,20 @@
 import express from 'express';
-import { userController } from '../controller/user-index.js';
-import { userValidator } from '../middleware/user-index.js';
 
 const router = express.Router({ mergeParams: true });
 
-router
-  .route('/')
-  .post(
-    userValidator.validateNickname,
-    userValidator.validatePassword,
-    userValidator.checkDuplicateNickname,
-    userController.groupParticipation,
-  )
-  .delete(
-    userValidator.validateNickname,
-    userValidator.validatePassword,
-    userController.groupLeave,
-  );
+export default (userController, userValidator) => {
+  router
+    .route('/')
+    .post(
+      userValidator.validateNickname,
+      userValidator.validatePassword,
+      userValidator.checkDuplicateNickname,
+      userController.groupParticipation,
+    )
+    .delete(
+      userValidator.validateNickname,
+      userValidator.validatePassword,
+      userController.groupLeave,
+    );
+  return router; // 설정이 완료된 라우터 반환
+};
