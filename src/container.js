@@ -4,7 +4,7 @@ import { PrismaClient } from '@prisma/client';
 import { UserRepository } from './repository/index.js';
 import { UserService } from './service/index.js';
 import { UserController } from './controller/index.js';
-import { UserValidator, UserValidator } from './middleware/index.js';
+import { UserValidator } from './middleware/index.js';
 
 // prisma 인스턴스 생성
 const prisma = new PrismaClient();
