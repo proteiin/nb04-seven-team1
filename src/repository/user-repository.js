@@ -4,7 +4,7 @@ export class UserRepository {
   }
   // 닉네임 중복검사, 비밀번호 검사를 위한 유저 객체 반환
   findUser = async (where) => {
-    return await prisma.user.findFirst({ where });
+    return await this.prisma.user.findFirst({ where });
   };
 
   // 사용자 등록
