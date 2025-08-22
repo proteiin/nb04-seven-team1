@@ -6,7 +6,6 @@
 
 generator client {
   provider = "prisma-client-js"
-  output   = "../generated/prisma"
 }
 
 datasource db {
@@ -17,38 +16,42 @@ datasource db {
 model Group {
   id                  Int      @id @default(autoincrement())
   group_name          String
-  nickname            String
   description         String
-  password            String
-  image               Image[]    
-  tags                Tags[]
-  aimed_time          Int
+  image               Image[]
+  tags                Tag[]
+  goal_rep            Int
   discord_webhook_url String
-  discord_server_url  String
-  badge               badge
-  user_count          Int
-  likecount           Int
+  discord_invite_url  String
+  badge               badge?
+  user_count          Int      @default(0)
+  like_count          Int      @default(0)
   created_at          DateTime @default(now())
+  updated_at          DateTime @updatedAt
   user                User[]
   record              Record[]
-  imageId             Int
 }
 
 enum badge {
   PARTICIPANT
-  REOCORD
+  RECORD
   LIKECOUNT
 }
 
 model User {
-  id                 Int      @id @default(autoincrement())
-  group              Group    @relation(fields: [group_id], references: [id])
-  group_id           Int
-  nickname           String
-  password           String
-  record             Record[]
-  total_record_time  Int
-  total_record_count Int
+  id         Int       @id @default(autoincrement())
+  group      Group     @relation(fields: [group_id], references: [id])
+  group_id   Int
+  nickname   String
+  password   String
+  record     Record[]
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
+  auth_code  auth_code
+}
+
+enum auth_code {
+  OWNER
+  PARTICIPANTS
 }
 
 model Record {
@@ -59,7 +62,8 @@ model Record {
   time          Int
   distance      Float
   images        Image[]
-  createdAt     DateTime      @default(now())
+  created_at    DateTime      @default(now())
+  updated_at    DateTime      @updatedAt
   password      String
   user          User          @relation(fields: [user_id], references: [id])
   user_id       Int
@@ -74,18 +78,19 @@ enum exercise_type {
 }
 
 model Image {
-  id         Int      @id @default(autoincrement())
-  name       String
-  path       String
-  uploadedAt DateTime @default(now())
-  group      Group?   @relation(fields: [group_id], references: [id])
-  group_id   Int?
-  record     Record?  @relation(fields: [record_id], references: [id])
-  record_id  Int?
+  id          Int      @id @default(autoincrement())
+  name        String
+  path        String
+  uploaded_at DateTime @default(now())
+  group       Group?   @relation(fields: [group_id], references: [id])
+  group_id    Int?
+  record      Record?  @relation(fields: [record_id], references: [id])
+  record_id   Int?
 }
 
-model Tags {
+model Tag {
   id         Int      @id @default(autoincrement())
+  name       String
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
   group      Group    @relation(fields: [group_id], references: [id])
