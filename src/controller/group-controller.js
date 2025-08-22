@@ -12,17 +12,7 @@ const prisma = new PrismaClient();
 class GroupController {
     //CREATE METHOD 처리
     createGroup = async (req,res,next) => {
-        const {name, description, photoUrl,
-            ownerNickname, ownerPassword, 
-            goalRep, discordInviteUrl,
-            discordWebhookUrl, tags} = req.body;
-
-
-        const data = {
-            name, description, photoUrl,
-            ownerNickname, ownerPassword, 
-            goalRep, discordInviteUrl,
-            discordWebhookUrl, tags}
+        const data = req.body
         
         try{
             const newGroup = await groupService.createGroup(data);
@@ -108,7 +98,7 @@ class GroupController {
     
     //DELETE METHOD 처리
     deleteGroup = async (req,res,next) => {
-        let inputPassword  = req.body;
+        let { ownerPassword : inputPassword } = req.body;
         let groupId = req.params.groupId;
         groupId = Number(groupId);
 
@@ -125,10 +115,8 @@ class GroupController {
         }catch(error){
             next(error);
         }
-        
-        const reqPassword = inputPassword.ownerPassword;
 
-        if (groupPassword == reqPassword){
+        if (groupPassword == inputPassword){
             await groupRepository.DeleteGroup(groupId);
             console.log("비밀번호 인증 성공")
             return res.status(200).send(groupPassword);

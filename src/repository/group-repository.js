@@ -82,16 +82,18 @@ class GroupRepository{
             where:{id: group_id},
             include:{user:true,}
         });
-        let password;
 
         const users = group.user;
         for (const user of users){
             if (user.auth_code == 'OWNER'){
-                password = user.password;
+                return  user.password;
+            }else{
+                const error = new Error;
+                error.status = 400;
+                error.message = "Owner user doesn't exist"
+                throw error
             }
         }
-        
-        return password
     }
 
     // 그룹 아이디를 바탕으로 만든사람 닉네임을 가져옵니다

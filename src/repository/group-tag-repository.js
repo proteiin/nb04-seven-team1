@@ -70,21 +70,9 @@ class TagRepository{
     }
     //group Id로 태그들 삭제
     deleteTagsbyGroupId = async(groupId) => {
-        let tagIdarray = [];
-        const tags =  await prisma.tag.findMany({
+        await prisma.tag.deleteMany({
             where:{group_id:groupId}
-        })
-
-        for (const tag of tags){
-            tagIdarray.push(tag.id);
-        }
-
-        for (const tagId of tagIdarray){
-            await prisma.tag.delete({
-                where:{id:tagId}
-            })
-        }
-        
+        });
     }
 }
 
