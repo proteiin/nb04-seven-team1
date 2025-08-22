@@ -1,9 +1,5 @@
 node_modules/
-
-
-/generated/prisma
-
-
-.env
-
 /prisma/migrations
+/generated/prisma
+.env
+.DS_Store

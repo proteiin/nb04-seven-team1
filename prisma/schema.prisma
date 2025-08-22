@@ -15,7 +15,6 @@ datasource db {
 
 model Group {
   id                  Int      @id @default(autoincrement())
-  nickname            String
   group_name          String
   description         String
   password            String
@@ -30,8 +29,7 @@ model Group {
   created_at          DateTime @default(now())
   updated_at          DateTime @updatedAt
   user                User[]
-
-  record Record[]
+  record              Record[]
 }
 
 enum badge {
@@ -53,8 +51,8 @@ model User {
 }
 
 enum auth_code {
-  Owner
-  participants
+  OWNER
+  PARTICIPANTS
 }
 
 model Record {
