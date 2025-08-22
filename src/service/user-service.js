@@ -1,15 +1,15 @@
 import bcrypt from 'bcrypt';
-import prisma from '../utils/prisma/index.js';
 
 export class UserService {
-  constructor(userRepository) {
+  constructor(userRepository, prisma) {
     this.userRepository = userRepository;
+    this.prisma = prisma;
   }
   addParticipantToGroup = async (nickname, password, groupId) => {
     try {
       const hashedPassword = await this.hashingPassword(password);
 
-      const updatedGroup = await prisma.$transaction(async (tx) => {
+      const updatedGroup = await this.prisma.$transaction(async (tx) => {
         await this.userRepository.joinGroup(
           {
             group_id: groupId,
@@ -72,7 +72,7 @@ export class UserService {
         error.path = 'password';
         throw error;
       }
-      await prisma.$transaction(async (tx) => {
+      await this.prisma.$transaction(async (tx) => {
         await this.userRepository.deleteRecords({ user_id: user.id }, tx);
         await this.userRepository.leaveGroup({ id: user.id }, tx);
         await this.userRepository.decrementGroupUser(groupId, tx);
