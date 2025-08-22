@@ -17,5 +17,3 @@ router
     userValidator.validatePassword,
     userController.groupLeave,
   );
-
-export default router;

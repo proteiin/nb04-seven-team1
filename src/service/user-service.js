@@ -92,5 +92,3 @@ export class UserService {
     return isMatch;
   };
 }
-
-export default UserService;
