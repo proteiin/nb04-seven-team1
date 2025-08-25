@@ -102,9 +102,14 @@ class GroupService {
 
     //특정 그룹 가져오기
     getGroupById = async(Id) => {
-        let group = groupRepository.GetGroupById(Id);
-        group = UserService.userSeperate(group);
-        return group;
+        try{
+            let group = await groupRepository.GetGroupById(Id);
+            group = await userService.userSeperate(group);
+            return group;
+        }catch(error){
+            console.error(error)
+        }
+        
     }
 
     // 닉네임과 비밀번호 검증, tag와 group, user 수정(트랜잭션 구현 필요)
@@ -154,6 +159,7 @@ class GroupService {
 
             }
             }else{
+                
                 let error = new Error;
                 error.statusCode = 401;
                 error.message = "wrong password"
