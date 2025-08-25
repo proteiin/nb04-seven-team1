@@ -9,7 +9,7 @@ class TagRepository{
     createTagsbyTagNames = async(tagNameArray, groupId) =>{
         const data = tagNameArray.map( (name) => ({
             name: name,
-            group_id: groupid
+            group_id: groupId
         }));
 
         await prisma.tag.createMany({

@@ -1,10 +1,8 @@
-import { objectEnumValues } from "@prisma/client/runtime/library";
-
 class groupMiddleware{
     validateGroupForm = (req,res,next) => {
         const inputData = req.body;
 
-        for (const [key,value] of objectEnumValues.entries(inputData)){
+        for (const [key,value] of object.entries(inputData)){
             if (!value){
                 let error = new Error()
                 error.statusCode = 400;

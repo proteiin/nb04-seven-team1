@@ -94,16 +94,21 @@ class GroupRepository{
         });
 
         const users = group.user;
+        let checkOwner = false;
         for (const user of users){
             if (user.auth_code == 'OWNER'){
+                checkOwner = true;
                 return  user.password;
-            }else{
-                const error = new Error;
-                error.status = 400;
-                error.message = "Owner user doesn't exist"
-                throw error
             }
         }
+        if (!checkOwner){
+            const error = new Error;
+            error.status = 400;
+            error.message = "Owner user doesn't exist"
+            throw error
+        }
+
+        
     }
 
     // 그룹 아이디를 바탕으로 만든사람 닉네임을 가져옵니다
@@ -113,17 +118,25 @@ class GroupRepository{
             include:{user:true}
         });
         let nickname;
+
+        let checkOwner = false;
         const users = group.user;
         for (const user of users){
             if (user.auth_code == 'OWNER'){
+                checkOwner = true;
                 nickname = user.nickname;
-            }else{
-                const error = new Error;
-                error.status = 400;
-                error.message = "Owner user doesn't exist"
-                throw error
+
             }
+            }
+        
+
+        if (!checkOwner){
+            const error = new Error;
+            error.status = 400;
+            error.message = "Owner user doesn't exist"
+            throw error
         }
+                
 
         return nickname;
     }
