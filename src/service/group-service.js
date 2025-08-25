@@ -3,7 +3,7 @@ import { PrismaClient } from "@prisma/client";
 import groupRepository from "../repository/group-repository.js";
 import tagRepository from "../repository/group-tag-repository.js";
 
-import UserService from "./user-service.js";
+import { UserService } from "./user-service.js";
 
 const prisma = new PrismaClient();
 const userService = new UserService;
@@ -35,7 +35,7 @@ class GroupService {
         let newGroup = await groupRepository.createGroup(data);
         
         const groupId = Number(newGroup.id);
-        const newTags = await tagRepository.createTag(tags,groupId)
+        const newTags = await tagRepository.createTagsbyTagNames(tags,groupId)
         
         newGroup = userService.userSeparate(newGroup);
 

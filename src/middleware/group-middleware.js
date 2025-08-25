@@ -13,7 +13,7 @@ class groupMiddleware{
             
         }
         
-        const goalRep = Number(goalRep)
+        const goalRep = Number(req.goalRep)
         if (isNaN(goalRep)){
             let error = new Error;
             error.statusCode = 400;
