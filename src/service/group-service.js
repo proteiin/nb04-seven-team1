@@ -124,7 +124,7 @@ class GroupService {
             error.path = 'nickname'
             throw error;
         }else{
-            if (groupPassword == ownerPassword ){
+            if (groupPassword === ownerPassword ){
             const modifiedGroup = await groupRepository.PatchGroup(prismaData, groupId);
 
             let newTags;
@@ -136,13 +136,13 @@ class GroupService {
                 const result = [modifiedGroup,newTags];
                 return result;
 
+            }
             }else{
                 let error = new Error;
                 error.statusCode = 401;
                 error.message = "wrong password"
                 error.path = 'password'
                 throw(error);
-            }
         }
         }
         

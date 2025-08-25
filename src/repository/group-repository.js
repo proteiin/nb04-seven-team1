@@ -74,11 +74,16 @@ class GroupRepository{
     }
 
     DeleteGroup = async(groupId) => {
-        await prisma.Group.delete({
+        try{
+            await prisma.Group.delete({
             where:{
                 id : groupId
             }
         });
+        }catch(error){
+            throw error
+        }
+        
 
     }
     //그룹 아이디를 바탕으로 만든사람 비밀번호를 가져옵니다
@@ -112,6 +117,11 @@ class GroupRepository{
         for (const user of users){
             if (user.auth_code == 'OWNER'){
                 nickname = user.nickname;
+            }else{
+                const error = new Error;
+                error.status = 400;
+                error.message = "Owner user doesn't exist"
+                throw error
             }
         }
 
@@ -135,6 +145,6 @@ class GroupRepository{
     }
 }
 
-    
+
 
 export default new GroupRepository;

@@ -2,15 +2,7 @@ import { objectEnumValues } from "@prisma/client/runtime/library";
 
 class groupMiddleware{
     validateGroupForm = (req,res,next) => {
-        let {name, description, photoUrl,
-            ownerNickname, ownerPassword, 
-            goalRep, discordInviteUrl,
-            discordWebhookUrl, tags} = req.body;
-
-        const inputData = {name, description, photoUrl,
-            ownerNickname, ownerPassword, 
-            goalRep, discordInviteUrl,
-            discordWebhookUrl, tags}    
+        const inputData = req.body;
 
         for (const [key,value] of objectEnumValues.entries(inputData)){
             if (!value){
@@ -91,10 +83,6 @@ class groupMiddleware{
         }
         next();
     }
-
-
-
-
 }
 
 export default new groupMiddleware;
