@@ -31,7 +31,7 @@ app.use(requestLogger);
 
 const rankingRouter = new RankingRouter();
 const imageRouter = new ImageRouter();
-const recordsRepository = new RecordsRepository(prisma);
+const recordsRepository = new RecordsRepository();
 const recordsService = new RecordsService(recordsRepository);
 const recordsController = new RecordsController(recordsService);
   

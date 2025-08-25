@@ -1,11 +1,7 @@
 
-import { PrismaClient } from "@prisma/client";
-// import prisma from 'prisma'
 import groupRepository from "../repository/group-repository.js";
-import tagRepository from "../repository/group-tag-repository.js";
 import groupService from "../service/group-service.js";
 
-const prisma = new PrismaClient();
 
 //유효성 검증, req값 불러오기, res 보내는 코드
 
