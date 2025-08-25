@@ -1,7 +1,8 @@
-import TagService from '../service/tag-service.js';
-
-class TagController {
-  async getTags(req, res, next) {
+export class TagController {
+  constructor(tagService) {
+    this.tagService = tagService;
+  }
+  getTags = async (req, res, next) => {
     try {
       const { order = 'desc', search } = req.query;
       const page = parseInt(req.query.page || 1, 10);
@@ -13,7 +14,7 @@ class TagController {
           .json({ error: '유효하지 않은 페이지 또는 리밋 값입니다.' });
       }
 
-      const { tags, totalCount } = await TagService.getTags(
+      const { tags, totalCount } = await this.tagService.getTags(
         page,
         limit,
         order,
@@ -24,13 +25,13 @@ class TagController {
     } catch (err) {
       next(err);
     }
-  }
+  };
 
-  async getTagId(req, res, next) {
+  getTagId = async (req, res, next) => {
     try {
       const tagId = parseInt(req.params.tagId, 10);
 
-      const tag = await TagService.getTagId(tagId);
+      const tag = await this.tagService.getTagId(tagId);
 
       if (!tag) {
         return res.status(404).json({ error: '태그를 찾을 수 없습니다.' });
@@ -39,7 +40,5 @@ class TagController {
     } catch (err) {
       next(err);
     }
-  }
+  };
 }
-
-export default new TagController();

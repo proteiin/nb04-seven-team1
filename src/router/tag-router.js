@@ -1,9 +1,10 @@
 import express from 'express';
-import TagController from '../controller/tag-controller.js';
 
-const tagRouter = express.Router();
+const router = express.Router();
 
-tagRouter.get('/', TagController.getTags);
-tagRouter.get('/:tagId', TagController.getTagId);
+export default (tagController) => {
+  router.get('/', tagController.getTags);
+  router.get('/:tagId', tagController.getTagId);
 
-export default tagRouter;
+  return router;
+};
