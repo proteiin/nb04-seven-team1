@@ -88,57 +88,77 @@ class GroupRepository{
     }
     //그룹 아이디를 바탕으로 만든사람 비밀번호를 가져옵니다
     GetPassword = async(group_id) =>{
-        const group = await prisma.group.findUnique({
-            where:{id: group_id},
-            include:{user:true,}
-        });
-
-        const users = group.user;
-        let checkOwner = false;
-        for (const user of users){
-            if (user.auth_code == 'OWNER'){
-                checkOwner = true;
-                return  user.password;
+        const owner = await prisma.user.findFirst({
+            where: {
+                group_id: group_id,
+                auth_code: 'OWNER'
             }
-        }
-        if (!checkOwner){
-            const error = new Error;
-            error.status = 400;
-            error.message = "Owner user doesn't exist"
-            throw error
-        }
+        })
+
+        return owner.password;
+
+        
+        // const group = await prisma.group.findUnique({
+        //     where:{id: group_id},
+        //     include:{user:true,}
+        // });
+
+        // const users = group.user;
+        // let checkOwner = false;
+        // for (const user of users){
+        //     if (user.auth_code == 'OWNER'){
+        //         checkOwner = true;
+        //         return  user.password;
+        //     }
+        // }
+        // if (!checkOwner){
+        //     const error = new Error;
+        //     error.status = 400;
+        //     error.message = "Owner user doesn't exist"
+        //     throw error
+        // }
 
         
     }
 
     // 그룹 아이디를 바탕으로 만든사람 닉네임을 가져옵니다
     GetNickname = async(group_id) =>{
-       const group = await prisma.group.findUnique({
-            where:{id: group_id},
-            include:{user:true}
-        });
-        let nickname;
-
-        let checkOwner = false;
-        const users = group.user;
-        for (const user of users){
-            if (user.auth_code == 'OWNER'){
-                checkOwner = true;
-                nickname = user.nickname;
-
+        const owner = await prisma.user.findFirst({
+            where: {
+                group_id: group_id,
+                auth_code: 'OWNER'
             }
-            }
+        })
+
+        return owner.nickname;
+
+
+    //    const group = await prisma.group.findUnique({
+    //         where:{id: group_id},
+    //         include:{user:true}
+    //     });
+    //     let nickname;
+
+    //     let checkOwner = false;
+    //     const users = group.user;
+    //     for (const user of users){
+    //         if (user.auth_code == 'OWNER'){
+    //             checkOwner = true;
+    //             nickname = user.nickname;
+
+    //         }
+    //         }
         
 
-        if (!checkOwner){
-            const error = new Error;
-            error.status = 400;
-            error.message = "Owner user doesn't exist"
-            throw error
-        }
+    //     if (!checkOwner){
+    //         const error = new Error;
+    //         error.status = 400;
+    //         error.message = "Owner user doesn't exist"
+    //         throw error
+    //     }
                 
 
-        return nickname;
+    //     return nickname;
     }
 
     createGroupAndTag = async() =>{
