@@ -27,6 +27,8 @@ class GroupService {
             photo_url: photoUrl,
             badges:['a']
         };
+     
+        newGroup = userService.userSeparate(newGroup);
 
         const ownerData = {
             nickname:ownerNickname,
@@ -137,7 +139,10 @@ class GroupService {
         let group = await groupRepository.GetGroupById(Id);
 
         try{
-            group = await userService.userSeparate(group);
+
+            let group = await groupRepository.GetGroupById(Id);
+            group = await userService.userSaperate(group);
+
             return group;
         }catch(e){
             console.error(e);
