@@ -89,7 +89,7 @@ class GroupService {
             let allGroups= await groupRepository.GetAllGroup(skip,take,orderBy,groupname);
             let newGroups = [];
             for (let group of allGroups){
-                group = await userService.userSaperate(group);
+                group = await userService.userSeparate(group);
                 newGroups.push(group)
             }
             
@@ -104,7 +104,7 @@ class GroupService {
     getGroupById = async(Id) => {
         try{
             let group = await groupRepository.GetGroupById(Id);
-            group = await userService.userSaperate(group);
+            group = await userService.userSeparate(group);
             return group;
         }catch(error){
             console.error(error)
