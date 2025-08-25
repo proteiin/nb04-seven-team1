@@ -14,7 +14,7 @@ datasource db {
 }
 
 model Group {
-  id                  Int      @id @default(autoincrement())
+  id                  Int        @id @default(autoincrement())
   group_name          String
   description         String
   image               Image[]
@@ -31,15 +31,18 @@ model Group {
   record              Record[]
 }
 
+//
 enum badge {
   PARTICIPANT
   RECORD
   LIKECOUNT
 }
 
+
+
 model User {
   id         Int       @id @default(autoincrement())
-  group      Group     @relation(fields: [group_id], references: [id])
+  group      Group     @relation(fields: [group_id], references: [id], onDelete: Cascade)
   group_id   Int
   nickname   String
   password   String
@@ -65,9 +68,9 @@ model Record {
   created_at    DateTime      @default(now())
   updated_at    DateTime      @updatedAt
   password      String
-  user          User          @relation(fields: [user_id], references: [id])
+  user          User          @relation(fields: [user_id], references: [id], onDelete: Cascade)
   user_id       Int
-  group         Group         @relation(fields: [group_id], references: [id])
+  group         Group         @relation(fields: [group_id], references: [id], onDelete: Cascade)
   group_id      Int
 }
 
@@ -93,6 +96,6 @@ model Tag {
   name       String
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
-  group      Group    @relation(fields: [group_id], references: [id])
+  group      Group    @relation(fields: [group_id], references: [id],onDelete: Cascade)
   group_id   Int
 }

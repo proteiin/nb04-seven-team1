@@ -1,9 +1,8 @@
 import express from 'express';
 import cors from 'cors';
 import * as dotenv from 'dotenv'; // 환경변수를 위한 라이브러리
-import { PrismaClient } from '@prisma/client';
 
-// import GroupRouter from './src/router/group-router.js';
+import GroupRouter from './src/router/group-router.js';
 import RankingRouter from './src/router/RankingRouter.js';
 import userRouter from './src/router/user-router.js';
 import ImageRouter from './src/router/ImageRouter.js';
@@ -16,30 +15,27 @@ import likeRouter from './src/router/like-router.js';
 
 dotenv.config();
 
-const PORT = process.env.PORT || 3000;
 const app = express();
+const PORT = process.env.PORT || 3000;
 
-const prisma = new PrismaClient();
-process.on('beforeExit', async () => {
-  await prisma.$disconnect();
-});
 
 app.use(express.json());
 app.use(cors());
+
 
 function requestLogger(req, _, next) {
   console.log(`[${req.method}] ${req.originalUrl}`);
   next();
 }
-
 app.use(requestLogger);
 
 const rankingRouter = new RankingRouter();
 const imageRouter = new ImageRouter();
-const recordsRepository = new RecordsRepository(prisma);
+const recordsRepository = new RecordsRepository();
 const recordsService = new RecordsService(recordsRepository);
 const recordsController = new RecordsController(recordsService);
-// app.use('/groups', GroupRouter);
+  
+app.use('/groups', GroupRouter);
 app.use('/groups/:groupId/rank', rankingRouter.getRouter());
 app.use('/groups/:groupId/participants', userRouter);
 app.use('/images', imageRouter.getRouter());
@@ -57,8 +53,8 @@ app.use((err, req, res, next) => {
   const path = err.path || 'unknown';
 
   res.status(statusCode).json({
-    path: path,
-    message: message,
+    path,
+    message
   });
 });
 
