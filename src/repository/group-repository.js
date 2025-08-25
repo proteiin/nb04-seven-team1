@@ -1,4 +1,4 @@
-import { auth_code, PrismaClient } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 
@@ -86,6 +86,7 @@ class GroupRepository{
                         auth_code:true
                     }
                 },
+                discord_webhook_url,
                 discord_invite_url:true,
                 created_at:true,
                 updated_at:true

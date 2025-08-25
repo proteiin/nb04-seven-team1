@@ -85,30 +85,26 @@ class GroupService {
         let take = limit ;
         let groupname = search;
 
-        try{
-            let allGroups= await groupRepository.GetAllGroup(skip,take,orderBy,groupname);
-            let newGroups = [];
-            for (let group of allGroups){
-                group = await userService.userSeparate(group);
-                newGroups.push(group)
-            }
-            
-            return newGroups
-        }catch(error){
-            console.error(error)
+
+        let allGroups= await groupRepository.GetAllGroup(skip,take,orderBy,groupname);
+        let newGroups = [];
+        for (let group of allGroups){
+            group = await userService.userSeparate(group);
+            newGroups.push(group)
         }
+        
+        return newGroups
+
         
     } 
 
     //특정 그룹 가져오기
     getGroupById = async(Id) => {
-        try{
-            let group = await groupRepository.GetGroupById(Id);
-            group = await userService.userSeparate(group);
-            return group;
-        }catch(error){
-            console.error(error)
-        }
+
+        let group = await groupRepository.GetGroupById(Id);
+        group = await userService.userSeparate(group);
+        return group;
+
         
     }
 
@@ -158,14 +154,7 @@ class GroupService {
                 return result;
 
             }
-            }else{
-                
-                let error = new Error;
-                error.statusCode = 401;
-                error.message = "wrong password"
-                error.path = 'password'
-                throw(error);
-        }
+            }
         }
         
     }
