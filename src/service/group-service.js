@@ -29,7 +29,7 @@ class GroupService {
                 }
             }
         };
-
+        
         const newGroup = await groupRepository.createGroup(data);
         
         const groupId = Number(newGroup.id);

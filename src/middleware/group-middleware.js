@@ -1,3 +1,5 @@
+import { objectEnumValues } from "@prisma/client/runtime/library";
+
 class groupMiddleware{
     validateGroupForm = (req,res,next) => {
         let {name, description, photoUrl,
@@ -10,12 +12,12 @@ class groupMiddleware{
             goalRep, discordInviteUrl,
             discordWebhookUrl, tags}    
 
-        for (const data of inputData){
-            if (!data){
+        for (const [key,value] of objectEnumValues.entries(inputData)){
+            if (!value){
                 let error = new Error()
                 error.statusCode = 400;
-                error.message = `${data} is missing`
-                error.path = data;
+                error.message = `${key} is missing`
+                error.path = key;
                 next(error);
             }
             

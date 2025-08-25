@@ -7,16 +7,27 @@ class TagRepository{
 
     //태그 네임 배열로 태그들 생성
     createTagsbyTagNames = async(tagNameArray, groupId) =>{
-        let tags = [];
-        for (const tagName of tagNameArray){
-            const tag = await prisma.tag.create({
-                data:{name:tagName,
-                    group: {connect:{id:groupId}}
-                }
-            })
-            tags.push(tag);
-        }
-        return tags;
+        const data = tagNameArray.map( (name) => ({
+            name: name,
+            group_id: groupid
+        }));
+
+        await prisma.tag.createMany({
+            data:data
+        })
+
+
+
+        // let tags = [];
+        // for (const tagName of tagNameArray){
+        //     const tag = await prisma.tag.create({
+        //         data:{name:tagName,
+        //             group: {connect:{id:groupId}}
+        //         }
+        //     })
+        //     tags.push(tag);
+        // }
+        // return tags;
     }
 
     //그룹 아이디로 연관된 태그들 가져오기
