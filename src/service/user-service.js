@@ -42,7 +42,8 @@ export class UserService {
     );
 
     const owner = ownerArray[0]; // OWNER는 객체로 반환
-
+    console.log('유저 세퍼레이트에서 오너 ',owner)
+    console.log(participants)
     return {
       ...groupInfo,
       owner,

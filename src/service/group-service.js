@@ -3,8 +3,10 @@ import { PrismaClient } from "@prisma/client";
 import groupRepository from "../repository/group-repository.js";
 import tagRepository from "../repository/group-tag-repository.js";
 
-const prisma = new PrismaClient();
+import UserService from "./user-service.js";
 
+const prisma = new PrismaClient();
+const userService = new UserService;
 //핵심 로직을 작성하는 코드 
 
 class GroupService {
@@ -30,11 +32,13 @@ class GroupService {
             }
         };
         
-        const newGroup = await groupRepository.createGroup(data);
+        let newGroup = await groupRepository.createGroup(data);
         
         const groupId = Number(newGroup.id);
         const newTags = await tagRepository.createTag(tags,groupId)
         
+        newGroup = userService.userSeperate(newGroup);
+
         return newGroup
     }
 
@@ -81,13 +85,25 @@ class GroupService {
         let take = limit ;
         let groupname = search;
 
-        const allGroups= groupRepository.GetAllGroup(skip,take,orderBy,groupname);
-        return allGroups;
+        try{
+            let allGroups= await groupRepository.GetAllGroup(skip,take,orderBy,groupname);
+            let newGroups = [];
+            for (let group of allGroups){
+                group = await userService.userSeperate(group);
+                newGroups.push(group)
+            }
+            
+            return newGroups
+        }catch(error){
+            console.error(error)
+        }
+        
     } 
 
     //특정 그룹 가져오기
     getGroupById = async(Id) => {
-        const group = groupRepository.GetGroupById(Id)
+        let group = groupRepository.GetGroupById(Id);
+        group = UserService.userSeperate(group);
         return group;
     }
 

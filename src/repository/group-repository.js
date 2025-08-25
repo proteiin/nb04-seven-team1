@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { auth_code, PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 
@@ -26,7 +26,15 @@ class GroupRepository{
                 discord_invite_url:true,
                 discord_webhook_url:true,
                 tags:true,
-                user:true
+                user:{
+                    select:{
+                        id:true,
+                        nickname:true,
+                        updated_at:true,
+                        created_at:true,
+                        auth_code:true
+                    }
+                }
             }
         });
         return allGroups
