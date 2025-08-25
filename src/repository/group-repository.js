@@ -18,21 +18,16 @@ class GroupRepository{
             take,
             orderBy,
             where:{group_name: {contains: groupname}},
-            include : {
-                _count:{
-                    select:{
-                        id:true,
-                        group_name:true,
-                        image:true,
-                        goal_rep:true,
-                        discord_invite_url:true,
-                        discord_webhook_url:true,
-                        tags:true,
-                        user:true
+            select:{
+                id:true,
+                group_name:true,
+                image:true,
+                goal_rep:true,
+                discord_invite_url:true,
+                discord_webhook_url:true,
+                tags:true,
+                user:true
             }
-                }
-            }
-            ,
         });
         return allGroups
     }
