@@ -25,19 +25,19 @@ export class UserService {
         );
         return result;
       });
-      return this.userSeperate(updatedGroup);
+      return this.userSeparate(updatedGroup);
     } catch (error) {
       throw error;
     }
   };
 
-  userSeperate = async (groupData) => {
+  userSeparate = async (groupData) => {
     const { user, ...groupInfo } = groupData;
 
-    const userToSeperate = [...user];
+    const userToSeparate = [...user];
 
-    const ownerArray = userToSeperate.filter((u) => u.auth_code === 'OWNER');
-    const participants = userToSeperate.filter(
+    const ownerArray = userToSeparate.filter((u) => u.auth_code === 'OWNER');
+    const participants = userToSeparate.filter(
       (u) => u.auth_code === 'PARTICIPANTS',
     );
 
@@ -50,14 +50,14 @@ export class UserService {
     };
   };
 
-  userSeperateForAllGroups = async (groupArray) => {
+  userSeparateForAllGroups = async (groupArray) => {
     return groupArray.map((groupData) => {
       const { user, ...groupInfo } = groupData;
 
-      const userToSeperate = [...user];
+      const userToSeparate = [...user];
 
-      const ownerArray = userToSeperate.filter((u) => u.auth_code === 'OWNER');
-      const participants = userToSeperate.filter(
+      const ownerArray = userToSeparate.filter((u) => u.auth_code === 'OWNER');
+      const participants = userToSeparate.filter(
         (u) => u.auth_code === 'PARTICIPANTS',
       );
 
