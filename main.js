@@ -39,7 +39,7 @@ const recordsService = new RecordsService(recordsRepository);
 const recordsController = new RecordsController(recordsService);
 
 // 컨테이너에서 필요에 따라 꺼내서 라우터에 전달합니다.
-const { userController, userValidator } = container;
+const { userController, userValidator, tagController } = container;
 
 app.use('/groups', GroupRouter);
 app.use('/groups/:groupId/rank', rankingRouter.getRouter());
@@ -49,7 +49,7 @@ app.use(
 );
 app.use('/images', imageRouter.getRouter());
 app.use('/api', recordsRouter(recordsController));
-app.use('/tags', tagRouter);
+app.use('/tags', tagRouter(tagController));
 app.use('/groups/:groupId/likes', likeRouter);
 
 // 이미지 파일 정적 제공
