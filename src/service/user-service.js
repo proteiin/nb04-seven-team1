@@ -42,8 +42,8 @@ export class UserService {
     );
 
     const owner = ownerArray[0]; // OWNER는 객체로 반환
-    // console.log(owner)
- return {
+\
+     return {
       id: groupInfo.id,
       name: groupInfo.group_name,
       description: groupInfo.description,
