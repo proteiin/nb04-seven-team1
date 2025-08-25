@@ -37,7 +37,7 @@ class GroupService {
         const groupId = Number(newGroup.id);
         const newTags = await tagRepository.createTag(tags,groupId)
         
-        newGroup = userService.userSeperate(newGroup);
+        newGroup = userService.userSeparate(newGroup);
 
         return newGroup
     }
@@ -89,7 +89,7 @@ class GroupService {
             let allGroups= await groupRepository.GetAllGroup(skip,take,orderBy,groupname);
             let newGroups = [];
             for (let group of allGroups){
-                group = await userService.userSeperate(group);
+                group = await userService.userSaperate(group);
                 newGroups.push(group)
             }
             
@@ -104,7 +104,7 @@ class GroupService {
     getGroupById = async(Id) => {
         try{
             let group = await groupRepository.GetGroupById(Id);
-            group = await userService.userSeperate(group);
+            group = await userService.userSaperate(group);
             return group;
         }catch(error){
             console.error(error)

@@ -25,13 +25,13 @@ export class UserService {
         );
         return result;
       });
-      return this.userSeperate(updatedGroup);
+      return this.userSeparate(updatedGroup);
     } catch (error) {
       throw error;
     }
   };
 
-  userSeperate = async (groupData) => {
+  userSeparate = async (groupData) => {
     const { user, ...groupInfo } = groupData;
     const userToSeperate = [...user];
 
