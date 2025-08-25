@@ -2,7 +2,7 @@ class groupMiddleware{
     validateGroupForm = (req,res,next) => {
         const inputData = req.body;
 
-        for (const [key,value] of object.entries(inputData)){
+        for (const [key,value] of Object.entries(inputData)){
             if (!value){
                 let error = new Error()
                 error.statusCode = 400;
@@ -13,7 +13,7 @@ class groupMiddleware{
             
         }
         
-        goalRep = Number(goalRep)
+        const goalRep = Number(req.goalRep)
         if (isNaN(goalRep)){
             let error = new Error;
             error.statusCode = 400;
@@ -28,8 +28,7 @@ class groupMiddleware{
     validateGetGroupQuery = (req,res,next) => {
         let {page=1, limit=100, order='asc',
             orderBy='createdAt', search} = req.query;
-        
-        console.log(page)
+
         page = Number(page)
         limit = Number(limit)
 

@@ -49,7 +49,7 @@ export class UserService {
       participants,
     };
   };
-
+  
   userSeparateForAllGroups = async (groupArray) => {
     return groupArray.map((groupData) => {
       const { user, ...groupInfo } = groupData;

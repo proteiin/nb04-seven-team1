@@ -3,8 +3,10 @@ import { PrismaClient } from "@prisma/client";
 import groupRepository from "../repository/group-repository.js";
 import tagRepository from "../repository/group-tag-repository.js";
 
-const prisma = new PrismaClient();
+import { UserService } from "./user-service.js";
 
+const prisma = new PrismaClient();
+const userService = new UserService;
 //핵심 로직을 작성하는 코드 
 
 class GroupService {
@@ -30,11 +32,13 @@ class GroupService {
             }
         };
         
-        const newGroup = await groupRepository.createGroup(data);
+        let newGroup = await groupRepository.createGroup(data);
         
         const groupId = Number(newGroup.id);
-        const newTags = await tagRepository.createTag(tags,groupId)
+        const newTags = await tagRepository.createTagsbyTagNames(tags,groupId)
         
+        newGroup = userService.userSeparate(newGroup);
+
         return newGroup
     }
 
@@ -81,14 +85,27 @@ class GroupService {
         let take = limit ;
         let groupname = search;
 
-        const allGroups= groupRepository.GetAllGroup(skip,take,orderBy,groupname);
-        return allGroups;
+
+        let allGroups= await groupRepository.GetAllGroup(skip,take,orderBy,groupname);
+        let newGroups = [];
+        for (let group of allGroups){
+            group = await userService.userSeparate(group);
+            newGroups.push(group)
+        }
+        
+        return newGroups
+
+        
     } 
 
     //특정 그룹 가져오기
     getGroupById = async(Id) => {
-        const group = groupRepository.GetGroupById(Id)
+
+        let group = await groupRepository.GetGroupById(Id);
+        group = await userService.userSeparate(group);
         return group;
+
+        
     }
 
     // 닉네임과 비밀번호 검증, tag와 group, user 수정(트랜잭션 구현 필요)
@@ -137,13 +154,7 @@ class GroupService {
                 return result;
 
             }
-            }else{
-                let error = new Error;
-                error.statusCode = 401;
-                error.message = "wrong password"
-                error.path = 'password'
-                throw(error);
-        }
+            }
         }
         
     }
