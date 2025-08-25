@@ -26,8 +26,9 @@ class GroupRepository{
                 goal_rep:true,
                 discord_invite_url:true,
                 discord_webhook_url:true,
+                updated_at,
+                created_at,
                 tags:true,
-                image:true,
                 user:{
                     select:{
                         id:true,
@@ -85,8 +86,6 @@ class GroupRepository{
                         auth_code:true
                     }
                 },
-                image:true,
-                discord_invite_url:true,
                 discord_invite_url:true,
                 created_at:true,
                 updated_at:true
