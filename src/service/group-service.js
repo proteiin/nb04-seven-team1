@@ -141,8 +141,7 @@ class GroupService {
         try{
 
             let group = await groupRepository.GetGroupById(Id);
-            group = await userService.userSaperate(group);
-
+            group = await userService.userSeparate(group);
             return group;
         }catch(e){
             console.error(e);

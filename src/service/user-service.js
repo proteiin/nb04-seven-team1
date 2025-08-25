@@ -33,8 +33,8 @@ export class UserService {
 
   userSeparate = async (groupData) => {
     const { user, ...groupInfo } = groupData;
-
     const userToSeparate = [...user];
+
 
     const ownerArray = userToSeparate.filter((u) => u.auth_code === 'OWNER');
     const participants = userToSeparate.filter(
