@@ -26,7 +26,7 @@ export default class ImageRouter {
     this.router
       .route('/')
       .post(
-        this.upload.array('images', 5),
+        this.upload.array('files', 5),
         this.imageController.getImage.bind(this.imageController),
       );
   }

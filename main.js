@@ -52,6 +52,9 @@ app.use('/api', recordsRouter(recordsController));
 app.use('/tags', tagRouter);
 app.use('/groups/:groupId/likes', likeRouter);
 
+// 이미지 파일 정적 제공
+app.use('/uploads', express.static('uploads'));
+
 // 전역 에러 핸들러 미들웨어
 // 반드시 모든 라우터 뒤에 위치해야 합니다.
 app.use((err, req, res, next) => {
