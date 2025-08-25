@@ -13,13 +13,14 @@ class GroupRepository{
 
     //모든 그룹 조회
     GetAllGroup = async (skip,take,orderBy,groupname)=>{
-        const allGroups = await prisma.Group.findMany({
+        let allGroups = await prisma.Group.findMany({
             skip,
             take,
             orderBy,
             where:{group_name: {contains: groupname}},
             select:{
                 id:true,
+                description:true,
                 group_name:true,
                 image:true,
                 goal_rep:true,
@@ -38,6 +39,19 @@ class GroupRepository{
                 }
             }
         });
+
+        allGroups = allGroups.map( g => ({
+            name: g.group_name,
+            id: g.id,
+            tags: g.tags,
+            description: g.description,
+            user:g.user,
+            photoUrl: g.image,
+            discordWebhookUrl: g.discord_webhook_url,
+            discordInviteUrl: g.discord_invite_url,
+            likeCount: g.like_count,
+            createdAt: g.created_at,
+        }))
         return allGroups
     }
 
@@ -50,11 +64,13 @@ class GroupRepository{
     }
     //특정 그룹 조회
     GetGroupById = async(groupId)=>{
-        const group = await prisma.Group.findUnique({
+        let group = await prisma.Group.findUnique({
             where:{
                 id:groupId
             },
             select:{
+                id:true,
+                description:true,
                 group_name:true,
                 image:true,
                 tags:true,
@@ -76,6 +92,20 @@ class GroupRepository{
                 updated_at:true
             }
         })
+
+        group = {
+            name: group.group_name,
+            id:group.id,
+            tags: group.tags,
+            description: group.description,
+            user:group.user,
+            photoUrl: group.image,
+            discordWebhookUrl: group.discord_webhook_url,
+            discordInviteUrl: group.discord_invite_url,
+            likeCount: group.like_count,
+            createdAt: group.created_at,
+        };
+
         return group
     }
     //그룹 수정
