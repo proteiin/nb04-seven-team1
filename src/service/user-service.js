@@ -33,6 +33,7 @@ export class UserService {
 
   userSeparate = async (groupData) => {
     const { user, ...groupInfo } = groupData;
+
     const userToSeparate = [...user];
 
     const ownerArray = userToSeparate.filter((u) => u.auth_code === 'OWNER');
@@ -41,11 +42,33 @@ export class UserService {
     );
 
     const owner = ownerArray[0]; // OWNER는 객체로 반환
+
     return {
       ...groupInfo,
       owner,
       participants,
     };
+  };
+  
+  userSeparateForAllGroups = async (groupArray) => {
+    return groupArray.map((groupData) => {
+      const { user, ...groupInfo } = groupData;
+
+      const userToSeparate = [...user];
+
+      const ownerArray = userToSeparate.filter((u) => u.auth_code === 'OWNER');
+      const participants = userToSeparate.filter(
+        (u) => u.auth_code === 'PARTICIPANTS',
+      );
+
+      const owner = ownerArray[0]; // OWNER는 객체로 반환
+
+      return {
+        ...groupInfo,
+        owner,
+        participants,
+      };
+    });
   };
 
   leaveParticipantFromGroup = async (nickname, password, groupId) => {
