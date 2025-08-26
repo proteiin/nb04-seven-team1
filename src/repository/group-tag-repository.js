@@ -1,4 +1,4 @@
-export class TagRepository{
+export class GroupTagRepository{
     constructor(prisma) {
         this.prisma = prisma;
     }
