@@ -1,5 +1,3 @@
-import { PrismaClient } from '@prisma/client';
-
 export class RecordsRepository {
    constructor(prisma) { 
         this.prisma = prisma;

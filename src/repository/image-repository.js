@@ -1,8 +1,6 @@
-import { PrismaClient } from "@prisma/client";
-
-export default class ImageRepository {
-  constructor() {
-    this.prisma = new PrismaClient();
+export class ImageRepository {
+  constructor(prisma) {
+    this.prisma = prisma;
   }
 
   insertMetadata = async (files) => {

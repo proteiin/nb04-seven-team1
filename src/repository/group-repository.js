@@ -1,19 +1,16 @@
-import { PrismaClient } from "@prisma/client";
-const prisma = new PrismaClient();
+export class GroupRepository{
+    constructor(prisma) {
+        this.prisma = prisma;
+    }
 
-
-
-//prisma 데이터 베이스 관련 코드
-
-class GroupRepository{
     // 그룹 생성
     createGroup = async (data)=>{
-        return await prisma.Group.create({data});
+        return await this.prisma.Group.create({data});
     } 
 
     //모든 그룹 조회
     GetAllGroup = async (skip,take,orderBy,groupname)=>{
-        const allGroups = await prisma.Group.findMany({
+        const allGroups = await this.prisma.Group.findMany({
             skip,
             take,
             orderBy,
@@ -34,14 +31,14 @@ class GroupRepository{
 
     //그룹을 이용하여 그룹을 참조하는 모델을 불러올 때 사용합니다
     GetGroupByIdAll = async(id)=>{
-        const group = await prisma.Group.findUnique({
+        const group = await this.prisma.Group.findUnique({
             where:{id},
         })
         return group
     }
     //특정 그룹 조회
     GetGroupById = async(groupId)=>{
-        const group = await prisma.Group.findUnique({
+        const group = await this.prisma.Group.findUnique({
             where:{
                 id:groupId
             },
@@ -58,7 +55,7 @@ class GroupRepository{
     }
     //그룹 수정
     PatchGroup = async(inputData, groupId) => { 
-        const modifiedGroup = prisma.Group.update({
+        const modifiedGroup = this.prisma.Group.update({
             where:{
                 id:groupId
             },
@@ -70,7 +67,7 @@ class GroupRepository{
 
     DeleteGroup = async(groupId) => {
         try{
-            await prisma.Group.delete({
+            await this.prisma.Group.delete({
             where:{
                 id : groupId
             }
@@ -83,7 +80,7 @@ class GroupRepository{
     }
     //그룹 아이디를 바탕으로 만든사람 비밀번호를 가져옵니다
     GetPassword = async(group_id) =>{
-        const owner = await prisma.user.findFirst({
+        const owner = await this.prisma.user.findFirst({
             where: {
                 group_id: group_id,
                 auth_code: 'OWNER'
@@ -93,7 +90,7 @@ class GroupRepository{
         return owner.password;
 
         
-        // const group = await prisma.group.findUnique({
+        // const group = await this.prisma.group.findUnique({
         //     where:{id: group_id},
         //     include:{user:true,}
         // });
@@ -118,7 +115,7 @@ class GroupRepository{
 
     // 그룹 아이디를 바탕으로 만든사람 닉네임을 가져옵니다
     GetNickname = async(group_id) =>{
-        const owner = await prisma.user.findFirst({
+        const owner = await this.prisma.user.findFirst({
             where: {
                 group_id: group_id,
                 auth_code: 'OWNER'
@@ -128,7 +125,7 @@ class GroupRepository{
         return owner.nickname;
 
 
-    //    const group = await prisma.group.findUnique({
+    //    const group = await this.prisma.group.findUnique({
     //         where:{id: group_id},
     //         include:{user:true}
     //     });
@@ -157,12 +154,12 @@ class GroupRepository{
     }
 
     createGroupAndTag = async() =>{
-        // const newGroup = await prisma.Group.create({data});
+        // const newGroup = await this.prisma.Group.create({data});
 
         // createTagsbyTagNames = async(tagNameArray, groupId) =>{
         // let tags = [];
         // for (let tagName of tagNameArray){
-        //     const tag = await prisma.tag.create({
+        //     const tag = await this.prisma.tag.create({
         //         data:{name:tagName,
         //             group: {connect:{id:groupId}}
         //         }
@@ -172,7 +169,3 @@ class GroupRepository{
         // return tags;
     }
 }
-
-
-
-export default new GroupRepository;

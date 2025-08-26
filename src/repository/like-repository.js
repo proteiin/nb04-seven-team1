@@ -1,6 +1,18 @@
-import { PrismaClient } from '@prisma/client';
+export class LikeRepository {
+  constructor(prisma) {
+    this.prisma = prisma;
+  }
 
-const prisma = new PrismaClient();
+  async updateLikeCount(groupId, value) {
+    return await prisma.group.update({
+      where: { id: groupId },
+      data: { like_count: { increment: value } },
+      select: { id: true, like_count: true },
+    });
+  }
+}
+
+/* const prisma = new PrismaClient();
 
 class LikeRepository {
   async updateLikeCount(groupId, value) {
@@ -12,4 +24,4 @@ class LikeRepository {
   }
 }
 
-export default new LikeRepository();
+export default new LikeRepository(); */

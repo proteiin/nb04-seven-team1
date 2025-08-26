@@ -1,9 +1,7 @@
-
-import express from 'express'
-import { PrismaClient }  from '@prisma/client'
-
-const prisma = new PrismaClient();
-class TagRepository{
+export class TagRepository{
+    constructor(prisma) {
+        this.prisma = prisma;
+    }
 
     //태그 네임 배열로 태그들 생성
     createTagsbyTagNames = async(tagNameArray, groupId) =>{
@@ -12,7 +10,7 @@ class TagRepository{
             group_id: groupId
         }));
 
-        await prisma.tag.createMany({
+        await this.prisma.tag.createMany({
             data:data
         })
 
@@ -20,7 +18,7 @@ class TagRepository{
 
         // let tags = [];
         // for (const tagName of tagNameArray){
-        //     const tag = await prisma.tag.create({
+        //     const tag = await this.prisma.tag.create({
         //         data:{name:tagName,
         //             group: {connect:{id:groupId}}
         //         }
@@ -32,11 +30,11 @@ class TagRepository{
 
     //그룹 아이디로 연관된 태그들 가져오기
     getTagsByGroupId = async(groupId) => {
-        const group = await prisma.group.findUnique({
+        const group = await this.prisma.group.findUnique({
             where:{id:groupId}
         })
 
-        const tags = await prisma.tag.findMany({
+        const tags = await this.prisma.tag.findMany({
             where:{group_id:groupId}
         })
 
@@ -46,7 +44,7 @@ class TagRepository{
     //.그룹 아이디로 연관된 태그 아이디들 가져오기
     getTagIdsByGroupId = async(groupId) => {
         let tagIdarray = [];
-        const tags =  await prisma.group.findMany({
+        const tags =  await this.prisma.group.findMany({
             where:{group_id:groupId}
         })
         for (tag of tags){
@@ -57,7 +55,7 @@ class TagRepository{
 
     //태그 수정
     patchTag = async(tagId,data) =>{
-        const tag = await prisma.tag.update({
+        const tag = await this.prisma.tag.update({
             where:{id:tagId},
             data
         })
@@ -65,7 +63,7 @@ class TagRepository{
 
     // 태그 id로 들어온 태그를 삭제
     deleteTag = async(tagId) => {
-        await prisma.tag.delete({
+        await this.prisma.tag.delete({
             where:{id:tagId}
         });
     
@@ -74,17 +72,15 @@ class TagRepository{
     //tag id 배열에 있는 태그들을 삭제
     deleteTags = async(tagIdArray) => {
         for (const tagId of tagIdArray){
-            await prisma.tag.delete({
+            await this.prisma.tag.delete({
                 id:tagId
             })
         }
     }
     //group Id로 태그들 삭제
     deleteTagsbyGroupId = async(groupId) => {
-        await prisma.tag.deleteMany({
+        await this.prisma.tag.deleteMany({
             where:{group_id:groupId}
         });
     }
 }
-
-export default new TagRepository()
