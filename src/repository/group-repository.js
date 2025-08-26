@@ -10,6 +10,8 @@ class GroupRepository{
     createGroup = async (data)=>{
         let newGroup = await prisma.Group.create({data});
         return newGroup
+        let newGroup = await prisma.Group.create({data});
+        return newGroup
     } 
 
       //그룹의 수 조회

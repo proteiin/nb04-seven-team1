@@ -15,7 +15,6 @@ class groupMiddleware{
 
         const goalRep = Number(inputData.goalRep);
 
-
         if (isNaN(goalRep)){
             let error = new Error;
             error.statusCode = 400;

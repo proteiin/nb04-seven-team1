@@ -19,6 +19,8 @@ class GroupService {
         
         const newdata = {
             like_count: 0,
+        const newdata = {
+            like_count: 0,
             group_name: name, 
             description, 
             goal_rep: goalRep, 
@@ -38,6 +40,7 @@ class GroupService {
         const newGroup = await groupRepository.createGroup(newdata);
         const groupId = Number(newGroup.id);
         const newTags = await tagRepository.createTagsbyTagNames(tags,groupId)
+        const newOnwer = await groupRepository.createOwnerbyGroupId(ownerData,groupId)
         const newOnwer = await groupRepository.createOwnerbyGroupId(ownerData,groupId)
         
         let findGroup = await groupRepository.GetGroupById(groupId);
