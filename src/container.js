@@ -9,6 +9,7 @@ import {
   GroupRepository,
   RankingRepository,
   RecordsRepository,
+  GroupTagRepository,
 } from './repository/index.js';
 
 import { 
@@ -47,6 +48,7 @@ const tagRepository = new TagRepository(prisma);
 const imageRepository = new ImageRepository(prisma);
 const likeRepository = new LikeRepository(prisma);
 const groupRepository = new GroupRepository(prisma);
+const groupTagRepository = new GroupTagRepository(prisma);
 const rankingRepository = new RankingRepository(prisma);
 const recordsRepository = new RecordsRepository(prisma);
 
@@ -55,7 +57,7 @@ const userService = new UserService(userRepository, prisma); // user-serviceÏóêÏ
 const tagService = new TagService(tagRepository);
 const imageService = new ImageService(imageRepository);
 const likeService = new LikeService(likeRepository);
-const groupService = new GroupService(groupRepository, tagRepository);
+const groupService = new GroupService(groupRepository, groupTagRepository);
 const rankingService = new RankingService(rankingRepository);
 const recordsService = new RecordsService(recordsRepository);
 
