@@ -1,4 +1,4 @@
-import RankingService from '../service/RankingService.js';
+import RankingService from '../service/ranking-service.js';
 
 export default class RankingController {
   constructor() {
@@ -6,7 +6,7 @@ export default class RankingController {
   }
 
   /**
-   * rankingRouter.js를 위한 Controller
+   * ranking-router.js를 위한 Controller
    * @returns {
    *   "rank": Number
    *   "nickname": string

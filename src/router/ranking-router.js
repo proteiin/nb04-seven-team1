@@ -1,5 +1,5 @@
 import express from 'express';
-import RankingController from '../controller/RankingController.js';
+import RankingController from '../controller/ranking-controller.js';
 
 export default class RankingRouter {
   constructor() {

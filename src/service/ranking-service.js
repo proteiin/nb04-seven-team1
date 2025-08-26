@@ -1,4 +1,4 @@
-import RankingRepository from '../repository/RankingRepository.js';
+import RankingRepository from '../repository/ranking-repository.js';
 
 export default class RankingService {
   constructor() {
