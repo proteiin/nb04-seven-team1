@@ -1,4 +1,3 @@
-import { RecordsRepository } from '../repository/records-repository.js';
 import axios from 'axios';
 
 export class RecordsService {

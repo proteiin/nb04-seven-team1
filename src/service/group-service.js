@@ -1,13 +1,9 @@
-import { PrismaClient } from "@prisma/client";
-// import prisma from 'prisma'
-import groupRepository from "../repository/group-repository.js";
-import tagRepository from "../repository/group-tag-repository.js";
+export class GroupService {
+    constructor(groupRepository, tagRepository) {
+        this.groupRepository = groupRepository;
+        this.tagRepository = tagRepository;
+    }
 
-const prisma = new PrismaClient();
-
-//핵심 로직을 작성하는 코드 
-
-class GroupService {
     //태그 생성, 그룹생성, 유저생성 (트랜잭션 구현 필요)
     createGroup = async ({name, description, photoUrl,
         ownerNickname, ownerPassword, 
@@ -170,6 +166,3 @@ class GroupService {
         }   
     }
 }
-
-
-export default new GroupService();
