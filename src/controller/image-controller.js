@@ -1,4 +1,4 @@
-import ImageService from '../service/ImageService.js';
+import ImageService from '../service/image-service.js';
 
 export default class ImageController {
   constructor() {

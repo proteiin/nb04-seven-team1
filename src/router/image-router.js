@@ -1,5 +1,5 @@
 import express from 'express';
-import ImageController from '../controller/ImageController.js';
+import ImageController from '../controller/image-controller.js';
 import multer from 'multer';
 
 export default class ImageRouter {

@@ -5,15 +5,15 @@ import * as dotenv from 'dotenv'; // 환경변수를 위한 라이브러리
 import container from './src/container.js';
 
 import GroupRouter from './src/router/group-router.js';
-import RankingRouter from './src/router/RankingRouter.js';
+import RankingRouter from './src/router/ranking-router.js';
 import userRouter from './src/router/user-router.js'; // 라우터 함수를 가져와야 합니다.
-import ImageRouter from './src/router/ImageRouter.js';
-import recordsRouter from './src/router/records.router.js';
+import ImageRouter from './src/router/image-router.js';
+import recordsRouter from './src/router/records-router.js';
 
 // 컨테이너로 가져오시면 지워도 될 것 같습니다.
-import { RecordsRepository } from './src/repository/records.repository.js';
-import { RecordsService } from './src/service/records.service.js';
-import { RecordsController } from './src/controller/records.controller.js';
+import { RecordsRepository } from './src/repository/records-repository.js';
+import { RecordsService } from './src/service/records-service.js';
+import { RecordsController } from './src/controller/records-controller.js';
 import tagRouter from './src/router/tag-router.js';
 import likeRouter from './src/router/like-router.js';
 

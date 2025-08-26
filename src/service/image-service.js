@@ -1,4 +1,4 @@
-import ImageRepository from '../repository/ImageRepository.js';
+import ImageRepository from '../repository/image-repository.js';
 
 export default class ImageService {
   constructor() {
