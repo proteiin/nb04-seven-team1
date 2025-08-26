@@ -1,5 +1,4 @@
 import express from 'express';
-import ImageController from '../controller/image-controller.js';
 import multer from 'multer';
 
 const router = express.Router({ mergeParams: true });
@@ -20,8 +19,8 @@ export default (imageController) => {
   router
     .route('/')
     .post(
-      this.upload.array('files', 5),
-      this.imageController.getImage.bind(this.imageController),
+      upload.array('files', 5),
+      imageController.getImage.bind(imageController),
     );
 
   return router;

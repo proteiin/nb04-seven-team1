@@ -5,7 +5,7 @@ const router = express.Router({ mergeParams: true });
 export default (rankingController) => {
   router
     .route('/')
-    .get(this.rankingController.getRanking.bind(this.rankingController));
+    .get(rankingController.getRanking.bind(rankingController));
 
   return router;
 };

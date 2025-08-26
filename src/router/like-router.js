@@ -1,14 +1,15 @@
 import express from 'express';
-import { validateGroupId } from '../middleware';
+import { GroupMiddleware } from '../middleware/group-middleware.js';
 
 // export default likeRouter = express.Router({ mergeParams: true });
 
 const router = express.Router({ mergeParams: true });
+const groupMiddleware = new GroupMiddleware();
 
 export default (likeController) => {
   router.route('/')
-    .post(validateGroupId, likeController.addLike)
-    .delete(validateGroupId, likeController.removeLike);
+    .post(groupMiddleware.validateGroupId, likeController.addLike)
+    .delete(groupMiddleware.validateGroupId, likeController.removeLike);
 
   return router;
 }

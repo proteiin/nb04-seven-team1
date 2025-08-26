@@ -11,7 +11,7 @@ export class GroupController {
         const data = req.body
         
         try{
-            const newGroup = await groupService.createGroup(data);
+            const newGroup = await this.groupService.createGroup(data);
             return res.status(201).send(newGroup);
         }catch(error){
             error.statusCode = 500;
@@ -27,13 +27,12 @@ export class GroupController {
         let {page=1, limit=100, order='asc',
             orderBy='createdAt', search} = req.query;
         try{
-            const AllGroups = await groupService.getAllGroups({page, limit, order,
+            const AllGroups = await this.groupService.getAllGroups({page, limit, order,
             orderBy, search});
             
             return res.status(200).send(AllGroups);
         }catch(error){
             error.statusCode = 500;
-            error.message = "server Error(Database)"
             error.path = "database"
             next(error)
         }
@@ -43,7 +42,7 @@ export class GroupController {
     getGroupById = async(req,res,next) => {
         const groupId = Number(req.params.groupId);
         try{
-            const group = await groupService.getGroupById(groupId);
+            const group = await this.groupService.getGroupById(groupId);
             if (!group){
                 let error = new Error;
                 error.statusCode = 404;
@@ -54,7 +53,6 @@ export class GroupController {
 
         }catch(error){
             error.statusCode = 500;
-            error.message = "server Error(Database)"
             error.path = "database"
             next(error);
         }
@@ -74,7 +72,7 @@ export class GroupController {
                 photoUrl, tags, goalRep, 
                 discordWebhookUrl, discordInviteUrl}
 
-        const group = await groupService.getGroupById(groupId);
+        const group = await this.groupService.getGroupById(groupId);
 
         if (!group){
             let error = new Error;
@@ -84,7 +82,7 @@ export class GroupController {
         }
 
         try{
-            const modifiedGroupAndTag = await groupService.modifyGroup(data);
+            const modifiedGroupAndTag = await this.groupService.modifyGroup(data);
             
             return res.status(200).send(modifiedGroupAndTag);
         }catch(error){
@@ -98,7 +96,7 @@ export class GroupController {
         let groupId = req.params.groupId;
         groupId = Number(groupId);
 
-        const group = await groupRepository.GetGroupByIdAll(groupId);
+        const group = await this.groupRepository.GetGroupByIdAll(groupId);
         if (!group){
             let error = new Error;
             error.statusCode = 404;
@@ -107,13 +105,13 @@ export class GroupController {
         }
 
         try{
-            const groupPassword = await groupRepository.GetPassword(groupId);
+            const groupPassword = await this.groupRepository.GetPassword(groupId);
         }catch(error){
             next(error);
         }
 
         if (groupPassword == inputPassword){
-            await groupRepository.DeleteGroup(groupId);
+            await this.groupRepository.DeleteGroup(groupId);
             console.log("비밀번호 인증 성공")
             return res.status(200).send(groupPassword);
         }else{

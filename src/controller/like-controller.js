@@ -7,7 +7,7 @@ export class LikeController {
     try {
       const { groupId } = req;
 
-      const likecount = await LikeService.addLike(groupId);
+      const likecount = await this.likeService.addLike(groupId);
       res.status(200).json({ message: '좋아요 추가 완료', likecount });
     } catch (err) {
       next(err);
@@ -18,7 +18,7 @@ export class LikeController {
     try {
       const { groupId } = req;
 
-      const likecount = await LikeService.removeLike(groupId);
+      const likecount = await this.likeService.removeLike(groupId);
       res.status(200).json({ message: '좋아요 취소 완료', likecount });
     } catch (err) {
       next(err);

@@ -26,10 +26,10 @@ export class GroupService {
             }
         };
         
-        const newGroup = await groupRepository.createGroup(data);
+        const newGroup = await this.groupRepository.createGroup(data);
         
         const groupId = Number(newGroup.id);
-        const newTags = await tagRepository.createTag(tags,groupId)
+        const newTags = await this.tagRepository.createTag(tags,groupId)
         
         return newGroup
     }
@@ -77,13 +77,13 @@ export class GroupService {
         let take = limit ;
         let groupname = search;
 
-        const allGroups= groupRepository.GetAllGroup(skip,take,orderBy,groupname);
+        const allGroups= this.groupRepository.GetAllGroup(skip,take,orderBy,groupname);
         return allGroups;
     } 
 
     //특정 그룹 가져오기
     getGroupById = async(Id) => {
-        const group = groupRepository.GetGroupById(Id)
+        const group = this.groupRepository.GetGroupById(Id)
         return group;
     }
 
@@ -100,8 +100,8 @@ export class GroupService {
                 // photoUrl, tags, goalRep, 
                 // discordWebhookUrl, discordInviteUrl}
 
-        const groupPassword = await groupRepository.GetPassword(groupId);
-        const groupNickname = await groupRepository.GetNickname(groupId);
+        const groupPassword = await this.groupRepository.GetPassword(groupId);
+        const groupNickname = await this.groupRepository.GetNickname(groupId);
         
         const prismaData = {
                     group_name: name,
@@ -121,13 +121,13 @@ export class GroupService {
             throw error;
         }else{
             if (groupPassword === ownerPassword ){
-            const modifiedGroup = await groupRepository.PatchGroup(prismaData, groupId);
+            const modifiedGroup = await this.groupRepository.PatchGroup(prismaData, groupId);
 
             let newTags;
             if (tags){   
-                const deleteTagIds = await tagRepository.deleteTagsbyGroupId(groupId);
+                const deleteTagIds = await this.tagRepository.deleteTagsbyGroupId(groupId);
 
-                newTags = await tagRepository.createTagsbyTagNames(tags,groupId);
+                newTags = await this.tagRepository.createTagsbyTagNames(tags,groupId);
             
                 const result = [modifiedGroup,newTags];
                 return result;
@@ -147,14 +147,14 @@ export class GroupService {
     // 비밀번호 검증, 그룹, 유저 삭제
     deleteGroup = async (groupId, inputPassword) => {
         //삭제할 그룹 찾기 
-        const group = await groupRepository.GetGroupByIdAll(groupId);
+        const group = await this.groupRepository.GetGroupByIdAll(groupId);
 
-        const groupPassword = await groupRepository.GetPassword(groupId);
+        const groupPassword = await this.groupRepository.GetPassword(groupId);
         const reqPassword = inputPassword.ownerPassword;
         //에러처리하기
 
         if (groupPassword == reqPassword){
-            await groupRepository.DeleteGroup(groupId);
+            await this.groupRepository.DeleteGroup(groupId);
             console.log("비밀번호 인증 성공")
             return groupPassword
         }else{
