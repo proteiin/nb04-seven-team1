@@ -17,29 +17,29 @@ class GroupService {
         discordWebhookUrl, tags}) => {
         
         
-        const data = {
+        const newdata = {
+            like_count: 0,
             group_name: name, 
             description, 
             goal_rep: goalRep, 
             discord_invite_url: discordInviteUrl,
             discord_webhook_url: discordWebhookUrl,
-            user: {
-                create:{
-                    nickname:ownerNickname,
-                    password:ownerPassword,
-                    auth_code:'OWNER'
-                }
-            }
         };
-        
-        let newGroup = await groupRepository.createGroup(data);
-        
+
+        const ownerData = {
+            nickname:ownerNickname,
+            password:ownerPassword
+        }
+
+        const newGroup = await groupRepository.createGroup(newdata);
         const groupId = Number(newGroup.id);
         const newTags = await tagRepository.createTagsbyTagNames(tags,groupId)
+        const newOnwer = await groupRepository.createOwnerbyGroupId(ownerData,groupId)
         
-        newGroup = userService.userSeparate(newGroup);
+        let findGroup = await groupRepository.GetGroupById(groupId);
+        console.log(findGroup)
 
-        return newGroup
+        return findGroup
     }
 
     //pagination과 그룹들 불러오기, 검색기능
@@ -142,18 +142,17 @@ class GroupService {
             throw error;
         }else{
             if (groupPassword === ownerPassword ){
-            const modifiedGroup = await groupRepository.PatchGroup(prismaData, groupId);
+                const modifiedGroup = await groupRepository.PatchGroup(prismaData, groupId);
 
-            let newTags;
-            if (tags){   
-                const deleteTagIds = await tagRepository.deleteTagsbyGroupId(groupId);
+                let newTags;
+                if (tags){   
+                    const deleteTagIds = await tagRepository.deleteTagsbyGroupId(groupId);
 
-                newTags = await tagRepository.createTagsbyTagNames(tags,groupId);
-            
-                const result = [modifiedGroup,newTags];
-                return result;
-
-            }
+                    newTags = await tagRepository.createTagsbyTagNames(tags,groupId);
+                
+                    const result = [modifiedGroup,newTags];
+                    return result;
+                }
             }
         }
         

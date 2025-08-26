@@ -8,7 +8,8 @@ const prisma = new PrismaClient();
 class GroupRepository{
     // 그룹 생성
     createGroup = async (data)=>{
-        return await prisma.Group.create({data});
+        let newGroup = await prisma.Group.create({data});
+        return newGroup
     } 
 
     //모든 그룹 조회
@@ -47,6 +48,8 @@ class GroupRepository{
             tags: g.tags,
             description: g.description,
             user:g.user,
+            // user.updatedAt = g.user.updated_at,
+            // user.createdAt = g.user.created_at,
             photoUrl: g.image,
             discordWebhookUrl: g.discord_webhook_url,
             discordInviteUrl: g.discord_invite_url,
@@ -105,9 +108,9 @@ class GroupRepository{
             likeCount: group.like_count,
             createdAt: group.created_at,
         };
-
         return group
     }
+
     //그룹 수정
     PatchGroup = async(inputData, groupId) => { 
         const modifiedGroup = prisma.Group.update({
@@ -117,7 +120,6 @@ class GroupRepository{
             data:inputData
         });
         return modifiedGroup;
-
     }
 
     DeleteGroup = async(groupId) => {
@@ -130,9 +132,8 @@ class GroupRepository{
         }catch(error){
             throw error
         }
-        
-
     }
+
     //그룹 아이디를 바탕으로 만든사람 비밀번호를 가져옵니다
     GetPassword = async(group_id) =>{
         const owner = await prisma.user.findFirst({
@@ -143,28 +144,6 @@ class GroupRepository{
         })
 
         return owner.password;
-
-        
-        // const group = await prisma.group.findUnique({
-        //     where:{id: group_id},
-        //     include:{user:true,}
-        // });
-
-        // const users = group.user;
-        // let checkOwner = false;
-        // for (const user of users){
-        //     if (user.auth_code == 'OWNER'){
-        //         checkOwner = true;
-        //         return  user.password;
-        //     }
-        // }
-        // if (!checkOwner){
-        //     const error = new Error;
-        //     error.status = 400;
-        //     error.message = "Owner user doesn't exist"
-        //     throw error
-        // }
-
         
     }
 
@@ -179,52 +158,25 @@ class GroupRepository{
 
         return owner.nickname;
 
-
-    //    const group = await prisma.group.findUnique({
-    //         where:{id: group_id},
-    //         include:{user:true}
-    //     });
-    //     let nickname;
-
-    //     let checkOwner = false;
-    //     const users = group.user;
-    //     for (const user of users){
-    //         if (user.auth_code == 'OWNER'){
-    //             checkOwner = true;
-    //             nickname = user.nickname;
-
-    //         }
-    //         }
-        
-
-    //     if (!checkOwner){
-    //         const error = new Error;
-    //         error.status = 400;
-    //         error.message = "Owner user doesn't exist"
-    //         throw error
-    //     }
-                
-
-    //     return nickname;
     }
 
-    createGroupAndTag = async() =>{
-        // const newGroup = await prisma.Group.create({data});
 
-        // createTagsbyTagNames = async(tagNameArray, groupId) =>{
-        // let tags = [];
-        // for (let tagName of tagNameArray){
-        //     const tag = await prisma.tag.create({
-        //         data:{name:tagName,
-        //             group: {connect:{id:groupId}}
-        //         }
-        //     })
-        //     tags.push(tag);
-        // }
-        // return tags;
+    createOwnerbyGroupId = async(data, groupId) => {
+        const {nickname, password} = data
+
+        const newOwner= await prisma.user.create({
+            data:{
+                nickname,
+                password,
+                group:{
+                    connect:{id:groupId}
+                },
+                auth_code: 'OWNER'
+            }
+            
+        });
+        return newOwner;
+
     }
 }
-
-
-
 export default new GroupRepository;

@@ -14,30 +14,37 @@ class GroupController {
             const newGroup = await groupService.createGroup(data);
             return res.status(201).send(newGroup);
         }catch(error){
-            error.statusCode = 500;
-            error.message = "server Error(Database)"
-            error.path = "database"
             next(error)
         }
         
     }
     //GET groups 처리
-    getAllGroups = async (req,res,next) => {
+      getAllGroups = async (req, res, next) => {
+    try {
+      const queryOption = req.validateQuery;
+      const allGroups = await groupService.getAllGroups(queryOption);
+      return res.status(200).send(allGroups);
+    } catch (error) {
+      next(error);
+    }
+  };
 
-        let {page=1, limit=100, order='asc',
-            orderBy='createdAt', search} = req.query;
-        try{
-            const AllGroups = await groupService.getAllGroups({page, limit, order,
-            orderBy, search});
+    // getAllGroups = async (req,res,next) => {
+
+    //     let {page=1, limit=20, order='asc',
+    //         orderBy='createdAt', search} = req.query;
+    //     try{
+    //         const AllGroups = await groupService.getAllGroups({page, limit, order,
+    //         orderBy, search});
             
-            return res.status(200).send(AllGroups);
-        }catch(error){
-            error.statusCode = 500;
-            error.message = "server Error(Database)"
-            error.path = "database"
-            next(error)
-        }
-    } 
+    //         return res.status(200).send(AllGroups);
+    //     }catch(error){
+    //         error.statusCode = 500;
+    //         error.message = "server Error(Database)"
+    //         error.path = "database"
+    //         next(error)
+    //     }
+    // } 
 
     //GET groups/:groupid 처리
     getGroupById = async(req,res,next) => {
