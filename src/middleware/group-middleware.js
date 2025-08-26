@@ -1,4 +1,4 @@
-class groupMiddleware{
+export class GroupMiddleware{
     validateGroupForm = (req,res,next) => {
         const inputData = req.body;
 
@@ -82,5 +82,3 @@ class groupMiddleware{
         next();
     }
 }
-
-export default new groupMiddleware;
