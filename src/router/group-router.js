@@ -1,20 +1,16 @@
-import { Router } from 'express';
-import GroupController from '../controller/group-controller.js';
-// import groupMiddleware from '../middelware/group-middleware.js';
-import groupMiddleware from '../middleware/group-middleware.js';
+import express from 'express';
 
-const GroupRouter = Router();
+const router = express.Router();
 
-//라우팅
+export default (groupController, groupMiddleware) => {
+  router.route('/')
+    .post(groupMiddleware.validateGroupForm,  groupController.createGroup)
+    .get(groupMiddleware.validateGetGroupQuery, groupController.getAllGroups);
 
-GroupRouter.post('/' ,  groupMiddleware.validateGroupForm,  GroupController.createGroup)
+  router.route('/:groupId')
+    .get(groupMiddleware.validateGroupId, groupController.getGroupById)
+    .patch(groupMiddleware.validateGroupId, groupMiddleware.validateGroupForm, groupController.modifyGroup)
+    .delete(groupMiddleware.validateGroupId, groupController.deleteGroup);
 
-GroupRouter.get('/', groupMiddleware.validateGetGroupQuery, GroupController.getAllGroups)
-
-GroupRouter.get('/:groupId', groupMiddleware.validateGroupId, GroupController.getGroupById)
-
-GroupRouter.patch('/:groupId', groupMiddleware.validateGroupId, groupMiddleware.validateGroupForm, GroupController.modifyGroup)
-
-GroupRouter.delete('/:groupId', groupMiddleware.validateGroupId, GroupController.deleteGroup)
-
-export default GroupRouter
+  return router;
+};

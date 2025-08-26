@@ -1,12 +1,19 @@
 import express from 'express';
-import LikeController from '../controller/like-controller.js';
-import { validateGroupId } from '../middleware/validate.js';
+import { validateGroupId } from '../middleware';
 
-const likeRouter = express.Router({ mergeParams: true });
+// export default likeRouter = express.Router({ mergeParams: true });
 
-likeRouter
+const router = express.Router({ mergeParams: true });
+
+export default (likeController) => {
+  router.route('/')
+    .post(validateGroupId, likeController.addLike)
+    .delete(validateGroupId, likeController.removeLike);
+
+  return router;
+}
+
+/* likeRouter
   .route('/')
   .post(validateGroupId, LikeController.addLike)
-  .delete(validateGroupId, LikeController.removeLike);
-
-export default likeRouter;
+  .delete(validateGroupId, LikeController.removeLike); */
