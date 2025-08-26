@@ -20,6 +20,7 @@ async function main() {
       goal_rep: 500,
       discord_webhook_url: 'https://discord.com/api/webhooks/groupA',
       discord_invite_url: 'https://discord.gg/groupA',
+      photo_url:'string'
     },
   });
 

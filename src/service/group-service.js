@@ -3,8 +3,9 @@ import { PrismaClient } from "@prisma/client";
 import groupRepository from "../repository/group-repository.js";
 import tagRepository from "../repository/group-tag-repository.js";
 
-const prisma = new PrismaClient();
+import { UserService } from "./user-service.js";
 
+const userService = new UserService;
 //핵심 로직을 작성하는 코드 
 
 class GroupService {
@@ -14,81 +15,138 @@ class GroupService {
         goalRep, discordInviteUrl,
         discordWebhookUrl, tags}) => {
         
-        
-        const data = {
+        const newdata = {
+            like_count: 0,
             group_name: name, 
             description, 
             goal_rep: goalRep, 
             discord_invite_url: discordInviteUrl,
             discord_webhook_url: discordWebhookUrl,
-            user: {
-                create:{
-                    nickname:ownerNickname,
-                    password:ownerPassword,
-                    auth_code:'OWNER'
-                }
-            }
+            photo_url: photoUrl,
+            badges:['a']
         };
+     
         
-        const newGroup = await groupRepository.createGroup(data);
-        
+
+        const ownerData = {
+            nickname:ownerNickname,
+            password:ownerPassword
+        }
+
+        const newGroup = await groupRepository.createGroup(newdata);
         const groupId = Number(newGroup.id);
-        const newTags = await tagRepository.createTag(tags,groupId)
+        const newTags = await tagRepository.createTagsbyTagNames(tags,groupId)
+        const newOnwer = await groupRepository.createOwnerbyGroupId(ownerData,groupId)
         
-        return newGroup
+        let findGroup = await groupRepository.GetGroupById(groupId);
+        findGroup = await userService.userSeparate(findGroup)
+
+        return findGroup
     }
-
-    //pagination과 그룹들 불러오기, 검색기능
-    getAllGroups = async ({page, limit, orderBy, 
-        order, search}) => {
         
-        page = Number(page);
-        limit = Number(limit);
+    //pagination과 그룹들 불러오기, 검색기능
+    // getAllGroups = async ({page, limit, orderBy, 
+    //     order, search}) => {
+        
+    //     page = Number(page);
+    //     limit = Number(limit);
 
-        switch (orderBy) {
-            case 'likecount':
-                if (order==='asc'){
-                    orderBy = {likecount: 'asc'}
-                }else if (order==='desc'){
-                    orderBy = {likecount: 'desc'}
-                }
+    //     switch (orderBy) {
+    //         case 'likecount':
+    //             if (order==='asc'){
+    //                 orderBy = {likecount: 'asc'}
+    //             }else if (order==='desc'){
+    //                 orderBy = {likecount: 'desc'}
+    //             }
                 
-                break;
+    //             break;
 
-            case 'participantCount':
-                if (order==='asc'){
-                    orderBy = {user_count: 'asc'}
-                }else if (order==='desc'){
-                    orderBy = {user_count: 'desc'}
-                }
+    //         case 'participantCount':
+    //             if (order==='asc'){
+    //                 orderBy = {user_count: 'asc'}
+    //             }else if (order==='desc'){
+    //                 orderBy = {user_count: 'desc'}
+    //             }
                 
-                break;
+    //             break;
 
-            case 'createdAt':
-                if (order==='asc'){
-                    orderBy = {created_at: 'asc'}
-                }else if (order==='desc'){
-                    orderBy = {created_at: 'desc'}
-                }
+    //         case 'createdAt':
+    //             if (order==='asc'){
+    //                 orderBy = {created_at: 'asc'}
+    //             }else if (order==='desc'){
+    //                 orderBy = {created_at: 'desc'}
+    //             }
 
-                break;
+    //             break;
 
-            default:
-                orderBy = {created_at: 'desc'}
-        };
+    //         default:
+    //             orderBy = {created_at: 'desc'}
+    //     };
 
-        let skip = (page-1)* limit ;
-        let take = limit ;
-        let groupname = search;
+    //     let skip = (page-1)* limit ;
+    //     let take = limit ;
+    //     let groupname = search;
 
-        const allGroups= groupRepository.GetAllGroup(skip,take,orderBy,groupname);
-        return allGroups;
-    } 
+
+    //     let allGroups= await groupRepository.GetAllGroup(skip,take,orderBy,groupname);
+    //     let newGroups = [];
+    //     // for (let group of allGroups){
+    //     //     group = await userService.userSeparate(group);
+    //     //     newGroups.push(group)
+    //     // }
+
+    //     // allGroups = 
+    //     allGroups = await userService.userSeparateForAllGroups(allGroups);
+        
+    //     let result = {'data': allGroups, 'total': take}
+    //     return result
+
+    // } 
+// 그룹 목록 조회
+    getAllGroups = async ({ page, limit, orderBy, order, search }) => {
+    const orderByMap = {
+      likecount: 'like_count',
+      participantCount: 'user_count',
+      createdAt: 'created_at',
+    };
+
+    const dbColumn = orderByMap[orderBy] || 'created_at';
+    const prismaOrderBy = { [dbColumn]: order };
+
+    const skip = (page - 1) * limit;
+    const take = limit;
+
+    const allGroups = await groupRepository.GetAllGroup({
+      skip,
+      take,
+      orderBy: prismaOrderBy,
+      search,
+    });
+
+    const newGroups = userService.userSeparateForAllGroups(allGroups);
+    return newGroups;
+  };
+// 그룹 카운트
+  countAllGroups = async (search) => {
+    return await groupRepository.countAllGroups({ search });
+  };
 
     //특정 그룹 가져오기
     getGroupById = async(Id) => {
-        const group = groupRepository.GetGroupById(Id)
-        return group;
+
+        let group = await groupRepository.GetGroupById(Id);
+
+        try{
+
+            let group = await groupRepository.GetGroupById(Id);
+            group = await userService.userSeparate(group);
+            return group;
+        }catch(e){
+            console.error(e);
+            next(e)
+        }
+        
+
     }
 
     // 닉네임과 비밀번호 검증, tag와 group, user 수정(트랜잭션 구현 필요)
@@ -125,25 +183,18 @@ class GroupService {
             throw error;
         }else{
             if (groupPassword === ownerPassword ){
-            const modifiedGroup = await groupRepository.PatchGroup(prismaData, groupId);
+                let modifiedGroup = await groupRepository.PatchGroup(prismaData, groupId);
 
-            let newTags;
-            if (tags){   
-                const deleteTagIds = await tagRepository.deleteTagsbyGroupId(groupId);
+                let newTags;
+                if (tags){   
+                    const deleteTagIds = await tagRepository.deleteTagsbyGroupId(groupId);
 
-                newTags = await tagRepository.createTagsbyTagNames(tags,groupId);
-            
-                const result = [modifiedGroup,newTags];
-                return result;
-
+                    newTags = await tagRepository.createTagsbyTagNames(tags,groupId);
+                }
+                let findGroup = await groupRepository.GetGroupById(groupId)
+                findGroup = userService.userSeparate(findGroup);
+                return findGroup
             }
-            }else{
-                let error = new Error;
-                error.statusCode = 401;
-                error.message = "wrong password"
-                error.path = 'password'
-                throw(error);
-        }
         }
         
     }

@@ -1,16 +1,28 @@
 import { RecordsService } from '../service/records-service.js'; // 서비스 경로
 
+
 export class RecordsController {
     constructor(recordsService) {
-        this.recordsService = recordsService;
+        this.recordsService = new RecordsService;
+
     }
     createRecord = async (req, res, next) => {
         try {
-            const { groupId } = req.params;
-            const { authorNickname: nickname, authorPassword: password, exerciseType, description, time, distance, photos} = req.body;
-                                  
+            let { groupId } = req.params;
+            groupId = Number(groupId)
+            let { authorNickname: nickname, authorPassword: password, exerciseType, description, time, distance, photos} = req.body;
+            //에러 확인용 코드
+            
+            if (exerciseType == 'run'){
+                exerciseType = 'RUNNING';
+            }else if (exerciseType =='bike'){
+                exerciseType = 'CYCLE';
+            }else if (exerciseType =='swim'){
+                exerciseType = 'SWIMMING';
+            }
+
             const recordData = {
-                groupId: +groupId,
+                groupId: groupId,
                 nickname,
                 exerciseType,
                 description,
@@ -22,10 +34,10 @@ export class RecordsController {
             
 
             const newRecord = await this.recordsService.createRecord(recordData);
-            
+            console.log(newRecord)
 
-            return res.status(201).json({ data: newRecord });
-        }   catch(error) {
+            return res.status(201).json(newRecord);
+        }catch(error) {
             next(error);
         }
     };
@@ -33,10 +45,9 @@ export class RecordsController {
     findAllRecords = async (req, res, next) => {
         try {
             const { groupId } = req.params;
-            const { orderBy, order, search, page } = req.query;
-            const records = await this.recordsService.findAllRecords(+groupId, orderBy, order, search, page);
-
-            return res.status(200).json({ data: records });
+            let { limit=6,orderBy='createdAt', order='desc', search="", page=1} = req.query;
+            const records = await this.recordsService.findAllRecords({groupId, orderBy, order, search, page, limit});
+            return res.status(200).json(records);
         }   catch(error) {
             next(error);
         }

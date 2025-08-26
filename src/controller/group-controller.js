@@ -14,30 +14,45 @@ class GroupController {
             const newGroup = await groupService.createGroup(data);
             return res.status(201).send(newGroup);
         }catch(error){
-            error.statusCode = 500;
-            error.message = "server Error(Database)"
-            error.path = "database"
             next(error)
         }
         
     }
     //GET groups 처리
-    getAllGroups = async (req,res,next) => {
+  getAllGroups = async (req, res, next) => {
+    try {
+      const queryOption = req.validateQuery;
+      const allGroups = await groupService.getAllGroups(queryOption);
+      const countAllGroups = await groupService.countAllGroups(
+        queryOption.search,
+      );
+      const responseData = {
+        data: allGroups,
+        total: countAllGroups,
+      };
 
-        let {page=1, limit=100, order='asc',
-            orderBy='createdAt', search} = req.query;
-        try{
-            const AllGroups = await groupService.getAllGroups({page, limit, order,
-            orderBy, search});
+      return res.status(200).send(responseData);
+    } catch (error) {
+      next(error);
+    }
+  };
+
+    // getAllGroups = async (req,res,next) => {
+
+    //     let {page=1, limit=20, order='asc',
+    //         orderBy='createdAt', search} = req.query;
+    //     try{
+    //         const AllGroups = await groupService.getAllGroups({page, limit, order,
+    //         orderBy, search});
             
-            return res.status(200).send(AllGroups);
-        }catch(error){
-            error.statusCode = 500;
-            error.message = "server Error(Database)"
-            error.path = "database"
-            next(error)
-        }
-    } 
+    //         return res.status(200).send(AllGroups);
+    //     }catch(error){
+    //         error.statusCode = 500;
+    //         error.message = "server Error(Database)"
+    //         error.path = "database"
+    //         next(error)
+    //     }
+    // } 
 
     //GET groups/:groupid 처리
     getGroupById = async(req,res,next) => {
@@ -53,9 +68,6 @@ class GroupController {
             return res.status(200).send(group);
 
         }catch(error){
-            error.statusCode = 500;
-            error.message = "server Error(Database)"
-            error.path = "database"
             next(error);
         }
     }
@@ -106,16 +118,15 @@ class GroupController {
             next(error) ;
         }
 
-        try{
-            const groupPassword = await groupRepository.GetPassword(groupId);
-        }catch(error){
-            next(error);
-        }
+
+        const groupPassword = await groupRepository.GetPassword(groupId);
+
 
         if (groupPassword == inputPassword){
             await groupRepository.DeleteGroup(groupId);
             console.log("비밀번호 인증 성공")
-            return res.status(200).send(groupPassword);
+            const result = {"ownerPassword": groupPassword}
+            return res.status(200).send(result);
         }else{
             let error = new Error;
             error.statusCode = 401;
