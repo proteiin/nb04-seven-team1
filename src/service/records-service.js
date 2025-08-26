@@ -112,7 +112,7 @@ export class RecordsService {
             const totalRecords = await this.recordsRepository.getTotalRecords(groupId);
             let formatRecords= [];
             
-            console.log(records);
+
             for (const r of records){
                 let formatRecord= {}
                 formatRecord.id = r.id,
