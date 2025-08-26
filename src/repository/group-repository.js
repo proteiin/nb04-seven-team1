@@ -32,7 +32,7 @@ class GroupRepository{
       orderBy,
       where,
       include: {
-        image: true,
+        // photo_url: true,
         tags: true,
         // badge: true,
         user: {
@@ -107,7 +107,6 @@ class GroupRepository{
     return await prisma.group.findUnique({
       where: { id: groupId },
       include: {
-        image: true,
         tags: true,
         // badge: true,
         user: {

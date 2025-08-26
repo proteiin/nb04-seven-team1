@@ -18,11 +18,11 @@ model Group {
   group_name          String
   description         String
   photo_url           String
-  tag                 Tag[]
+  tags                Tag[]
   goal_rep            Int
   discord_webhook_url String
   discord_invite_url  String
-  badge               badge?
+  badges              String[]
   user_count          Int      @default(0)
   like_count          Int      @default(0)
   created_at          DateTime @default(now())
@@ -31,12 +31,6 @@ model Group {
   record              Record[]
 }
 
-//
-enum badge {
-  PARTICIPANT
-  RECORD
-  LIKECOUNT
-}
 
 
 

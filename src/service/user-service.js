@@ -52,7 +52,7 @@ export class UserService {
       discordInviteUrl: groupInfo.discord_invite_url,
       likeCount: groupInfo.like_count,
 
-      photoUrl: groupInfo.image, // image 모델 관련 로직 추가 필요
+      photoUrl: groupInfo.photo_url, // image 모델 관련 로직 추가 필요
       tags: groupInfo.tags.map((tag) => tag.name),
       badges: groupInfo.badges, // badge 로직 추가
 
@@ -99,7 +99,7 @@ export class UserService {
       discordInviteUrl: groupInfo.discord_invite_url,
       likeCount: groupInfo.like_count,
 
-      photoUrl: groupInfo.image, // image 모델 관련 로직 추가 필요
+      photoUrl: groupInfo.photo_url, // image 모델 관련 로직 추가 필요
       tags: groupInfo.tags.map((tag) => tag.name),
       badges: groupInfo.badges, // badge 로직 추가
 

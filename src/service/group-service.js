@@ -24,7 +24,8 @@ class GroupService {
             goal_rep: goalRep, 
             discord_invite_url: discordInviteUrl,
             discord_webhook_url: discordWebhookUrl,
-            photo_url: photoUrl
+            photo_url: photoUrl,
+            badges:['a']
         };
 
         const ownerData = {
@@ -39,7 +40,6 @@ class GroupService {
         
         let findGroup = await groupRepository.GetGroupById(groupId);
         findGroup = await userService.userSeparate(findGroup)
-        console.log(findGroup)
 
         return findGroup
     }
@@ -103,7 +103,7 @@ class GroupService {
 
     // } 
 // 그룹 목록 조회
-      getAllGroups = async ({ page, limit, orderBy, order, search }) => {
+    getAllGroups = async ({ page, limit, orderBy, order, search }) => {
     const orderByMap = {
       likecount: 'like_count',
       participantCount: 'user_count',
@@ -135,7 +135,7 @@ class GroupService {
     getGroupById = async(Id) => {
 
         let group = await groupRepository.GetGroupById(Id);
-        console.log(group)
+
         try{
             group = await userService.userSeparate(group);
             return group;
