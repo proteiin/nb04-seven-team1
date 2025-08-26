@@ -35,7 +35,6 @@ import {
 import { 
   UserValidator, 
   GroupMiddleware,
-  validateGroupId,
 } from './middleware/index.js';
 
 // prisma 인스턴스 생성
@@ -73,7 +72,6 @@ const recordsController = new RecordsController(recordsService);
 // Middlewares
 const userValidator = new UserValidator(userRepository);
 const groupMiddleware = new GroupMiddleware();
-// validateGroupId
 
 // 조립된 인스턴스를 하나의 객체로 모아서 내보내기
 export default {
@@ -86,6 +84,5 @@ export default {
   rankingController,
   recordsController,
   groupMiddleware,
-  validateGroupId,
   // 다른 기능도 추가하시면 될 것 같습니다.
 };
