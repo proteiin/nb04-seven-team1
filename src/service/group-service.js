@@ -16,9 +16,6 @@ class GroupService {
         goalRep, discordInviteUrl,
         discordWebhookUrl, tags}) => {
         
-        
-        const newdata = {
-            like_count: 0,
         const newdata = {
             like_count: 0,
             group_name: name, 
@@ -41,14 +38,13 @@ class GroupService {
         const groupId = Number(newGroup.id);
         const newTags = await tagRepository.createTagsbyTagNames(tags,groupId)
         const newOnwer = await groupRepository.createOwnerbyGroupId(ownerData,groupId)
-        const newOnwer = await groupRepository.createOwnerbyGroupId(ownerData,groupId)
         
         let findGroup = await groupRepository.GetGroupById(groupId);
         findGroup = await userService.userSeparate(findGroup)
 
         return findGroup
     }
-
+        
     //pagination과 그룹들 불러오기, 검색기능
     // getAllGroups = async ({page, limit, orderBy, 
     //     order, search}) => {
