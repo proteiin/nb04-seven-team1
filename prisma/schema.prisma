@@ -19,8 +19,6 @@ model Group {
   description         String
   photo_url           String
   tags                Tag[]
-  photo_url           String
-  tag                 Tag[]
   goal_rep            Int
   discord_webhook_url String
   discord_invite_url  String
