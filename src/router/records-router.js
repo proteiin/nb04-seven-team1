@@ -10,8 +10,8 @@ import express from 'express';
     return router;
 };
 */
-import { validateGroupId, validateRecordBody } from '../middleware/records.middleware.js';
-//import { RecordsController } from '../controller/records.controller.js';
+import { validateGroupId, validateRecordBody } from '../middleware/records-middleware.js';
+//import { RecordsController } from '../controller/records-controller.js';
 
 export default (recordsController) => {
     const router = express.Router();

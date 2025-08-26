@@ -1,4 +1,4 @@
-import { RecordsService } from '../service/records.service.js'; // 서비스 경로
+import { RecordsService } from '../service/records-service.js'; // 서비스 경로
 
 export class RecordsController {
     constructor(recordsService) {
