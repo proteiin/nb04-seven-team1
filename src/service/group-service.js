@@ -5,7 +5,6 @@ import tagRepository from "../repository/group-tag-repository.js";
 
 import { UserService } from "./user-service.js";
 
-const prisma = new PrismaClient();
 const userService = new UserService;
 //핵심 로직을 작성하는 코드 
 
