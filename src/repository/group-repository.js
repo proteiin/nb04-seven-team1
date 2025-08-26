@@ -12,52 +12,88 @@ class GroupRepository{
         return newGroup
     } 
 
-    //모든 그룹 조회
-    GetAllGroup = async (skip,take,orderBy,groupname)=>{
-        let allGroups = await prisma.Group.findMany({
-            skip,
-            take,
-            orderBy,
-            where:{group_name: {contains: groupname}},
-            select:{
-                id:true,
-                description:true,
-                group_name:true,
-                image:true,
-                goal_rep:true,
-                discord_invite_url:true,
-                discord_webhook_url:true,
-                updated_at:true,
-                created_at:true,
-                tags:true,
-                user:{
-                    select:{
-                        id:true,
-                        nickname:true,
-                        updated_at:true,
-                        created_at:true,
-                        auth_code:true
-                    }
-                }
-            }
-        });
+      //그룹의 수 조회
+  countAllGroups = async (data) => {
+    const { search } = data;
+    const where = search ? { group_name: { contains: search } } : {};
+    return await prisma.Group.count({ where });
+  };
 
-        allGroups = allGroups.map( g => ({
-            name: g.group_name,
-            id: g.id,
-            tags: g.tags,
-            description: g.description,
-            user:g.user,
-            // user.updatedAt = g.user.updated_at,
-            // user.createdAt = g.user.created_at,
-            photoUrl: g.image,
-            discordWebhookUrl: g.discord_webhook_url,
-            discordInviteUrl: g.discord_invite_url,
-            likeCount: g.like_count,
-            createdAt: g.created_at,
-        }))
-        return allGroups
-    }
+  //모든 그룹 조회
+  GetAllGroup = async (data) => {
+    const { skip, take, orderBy, search } = data;
+    const where =
+      typeof search === 'string' && search.length > 0
+        ? { group_name: { contains: search } }
+        : {};
+    return await prisma.Group.findMany({
+      skip,
+      take,
+      orderBy,
+      where,
+      include: {
+        image: true,
+        tags: true,
+        // badge: true,
+        user: {
+          select: {
+            id: true,
+            nickname: true,
+            created_at: true,
+            updated_at: true,
+            auth_code: true,
+          },
+        },
+      },
+    });
+  };
+
+    //모든 그룹 조회
+    // GetAllGroup = async (skip,take,orderBy,groupname)=>{
+    //     let allGroups = await prisma.Group.findMany({
+    //         skip,
+    //         take,
+    //         orderBy,
+    //         where:{group_name: {contains: groupname}},
+    //         select:{
+    //             id:true,
+    //             description:true,
+    //             group_name:true,
+    //             image:true,
+    //             goal_rep:true,
+    //             discord_invite_url:true,
+    //             discord_webhook_url:true,
+    //             updated_at:true,
+    //             created_at:true,
+    //             tags:true,
+    //             user:{
+    //                 select:{
+    //                     id:true,
+    //                     nickname:true,
+    //                     updated_at:true,
+    //                     created_at:true,
+    //                     auth_code:true
+    //                 }
+    //             }
+    //         }
+    //     });
+
+        // allGroups = allGroups.map( g => ({
+        //     name: g.group_name,
+        //     id: g.id,
+        //     tags: g.tags,
+        //     description: g.description,
+        //     user:g.user,
+        //     // user.updatedAt = g.user.updated_at,
+        //     // user.createdAt = g.user.created_at,
+        //     photoUrl: g.image,
+        //     discordWebhookUrl: g.discord_webhook_url,
+        //     discordInviteUrl: g.discord_invite_url,
+        //     likeCount: g.like_count,
+        //     createdAt: g.created_at,
+        // }))
+    //     return allGroups
+    // }
 
     //그룹을 이용하여 그룹을 참조하는 모델을 불러올 때 사용합니다
     GetGroupByIdAll = async(id)=>{
@@ -67,49 +103,25 @@ class GroupRepository{
         return group
     }
     //특정 그룹 조회
-    GetGroupById = async(groupId)=>{
-        let group = await prisma.Group.findUnique({
-            where:{
-                id:groupId
-            },
-            select:{
-                id:true,
-                description:true,
-                group_name:true,
-                image:true,
-                tags:true,
-                goal_rep:true,
-                like_count:true,
-                user_count:true,
-                user:{
-                    select:{
-                        id:true,
-                        group_id:true,
-                        nickname:true,
-                        auth_code:true
-                    }
-                },
-                discord_webhook_url:true,
-                discord_invite_url:true,
-                created_at:true,
-                updated_at:true
-            }
-        })
-
-        group = {
-            name: group.group_name,
-            id:group.id,
-            tags: group.tags,
-            description: group.description,
-            user:group.user,
-            photoUrl: group.image,
-            discordWebhookUrl: group.discord_webhook_url,
-            discordInviteUrl: group.discord_invite_url,
-            likeCount: group.like_count,
-            createdAt: group.created_at,
-        };
-        return group
-    }
+  GetGroupById = async (groupId) => {
+    return await prisma.group.findUnique({
+      where: { id: groupId },
+      include: {
+        image: true,
+        tags: true,
+        // badge: true,
+        user: {
+          select: {
+            id: true,
+            nickname: true,
+            created_at: true,
+            updated_at: true,   
+            auth_code: true,
+          },
+        },
+      },
+    });
+  };
 
     //그룹 수정
     PatchGroup = async(inputData, groupId) => { 

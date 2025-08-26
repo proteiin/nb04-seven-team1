@@ -17,8 +17,8 @@ model Group {
   id                  Int        @id @default(autoincrement())
   group_name          String
   description         String
-  image               Image[]
-  tags                Tag[]
+  photo_url           String
+  tag                 Tag[]
   goal_rep            Int
   discord_webhook_url String
   discord_invite_url  String
@@ -85,8 +85,6 @@ model Image {
   name        String
   path        String
   uploaded_at DateTime @default(now())
-  group       Group?   @relation(fields: [group_id], references: [id])
-  group_id    Int?
   record      Record?  @relation(fields: [record_id], references: [id])
   record_id   Int?
 }
