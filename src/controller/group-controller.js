@@ -1,11 +1,11 @@
-
-import groupRepository from "../repository/group-repository.js";
-import groupService from "../service/group-service.js";
-
-
 //유효성 검증, req값 불러오기, res 보내는 코드
 
-class GroupController {
+export class GroupController {
+    constructor(groupRepository, groupService) {
+        this.groupRepository = groupRepository;
+        this.groupService = groupService;
+    }
+
     //CREATE METHOD 처리
     createGroup = async (req,res,next) => {
         const data = req.body
@@ -125,6 +125,3 @@ class GroupController {
         }
     }
 }
-
-
-export default new GroupController();

@@ -1,8 +1,6 @@
-import ImageService from '../service/image-service.js';
-
-export default class ImageController {
-  constructor() {
-    this.imageService = new ImageService();
+export class ImageController {
+  constructor(imageService) {
+    this.imageService = imageService;
   }
 
   getImage = async (req, res, next) => {
