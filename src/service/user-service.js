@@ -74,7 +74,7 @@ export class UserService {
       // --- DateTime -> Timestamp 매핑 ---
       createdAt: groupInfo.created_at.getTime(),
       updatedAt: groupInfo.updated_at.getTime(),
-      // badges: groupInfo.badge, // badge 로직 추가
+      badges: ['LIKE'], // badge 로직 추가
     };
   };
   
@@ -121,7 +121,7 @@ export class UserService {
         // --- DateTime -> Timestamp 매핑 ---
         createdAt: groupInfo.created_at.getTime(),
         updatedAt: groupInfo.updated_at.getTime(),
-        // badges: groupInfo.badge, // badge 로직 추가
+        badges: ['LIKE'], // badge 로직 추가
       };
     });
   };
