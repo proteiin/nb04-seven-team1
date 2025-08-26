@@ -111,8 +111,10 @@ export class RecordsService {
             const records = await this.recordsRepository.findAllRecords({groupId, orderBy, skip, take, search});
             const totalRecords = await this.recordsRepository.getTotalRecords(groupId);
             let formatRecords= [];
-            let formatRecord= {}
-            records.map( (r) => {
+            
+            console.log(records);
+            for (const r of records){
+                let formatRecord= {}
                 formatRecord.id = r.id,
                 formatRecord.exerciseType = r.exercise_type,
                 formatRecord.description= r.description,
@@ -124,7 +126,8 @@ export class RecordsService {
                     'nickname': r.nickname
                 }
                 formatRecords.push(formatRecord)
-            })
+            }
+            
             return {data:formatRecords, total: totalRecords};
         }catch(error){
             console.error(error)
