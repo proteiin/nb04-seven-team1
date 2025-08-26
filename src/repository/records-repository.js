@@ -1,8 +1,9 @@
-import { PrismaClient } from '@prisma/client';
+import { exercise_type, PrismaClient } from '@prisma/client';
+
 
 export class RecordsRepository {
-   constructor(prisma) { 
-        this.prisma = prisma;
+    constructor(){
+        this.prisma = new PrismaClient();
     }
  /**
  *운동 기록 생성
@@ -17,13 +18,22 @@ export class RecordsRepository {
  */
     createRecord = async (dataToCreate) => {
         const record = await this.prisma.record.create({
-            data: dataToCreate,
-            include: {
-                images: true,
-            },
+            data: dataToCreate
         });
-        return record;
+        return {
+            id: record.id,
+            exerciseType: record.exercise_type,
+            description: record.description,
+            time: record.time,
+            distance: record.distance,
+            photos: record.images,
+            author: {
+                id: record.user_id,
+                nickname: record.nickname
+            }
+        };
     };
+     
      
  /**
  * * 그룹 내 모든 운동 기록 조회
@@ -33,30 +43,46 @@ export class RecordsRepository {
  * @param {number} page - 페이지 번호
  * @param {number} pageSize - 페이지 당 항목 수
  */
- findAllRecords = async (groupId, orderBy, order, search, page = 1, pageSize = 10) => {
-    const whereCondition = {group_id: groupId};
-    if (search) {
-        whereCondition.nickname = {
-            contains: search,
-        };
-    }
-
-    let orderByCondition = { created_at: 'desc' };
-    if (orderBy && order) {
-        orderByCondition = { [orderBy]: order.toLowerCase() };
-    }
+ findAllRecords = async (data) => {
+    // groupId = Number(groupId)
+    // const whereCondition = {group_id: groupId};
+    // if (search) {
+    //     whereCondition.nickname = {
+    //         contains: search,
+    //     };
+    // }
+    
+    // let orderByCondition = { created_at: 'desc' };
+    // if (orderBy && order) {
+    //     if (orderBy == 'createdAt'){
+    //         orderBy = 'created_at';
+    //     }
+    //     orderByCondition = { [orderBy]: order.toLowerCase() };
+    // }
     
     
+    // const records = await this.prisma.record.findMany({
+    //     where: whereCondition,
+    //     orderBy: orderByCondition,
+    //     skip: (page -1) * pageSize,
+    //     take: pageSize,
+    //     include: {
+    //         images: true,
+    //     },
+    // });
+    // return records;
+    const {groupId, orderBy, skip, take, search} = data
     const records = await this.prisma.record.findMany({
-        where: whereCondition,
-        orderBy: orderByCondition,
-        skip: (page -1) * pageSize,
-        take: pageSize,
-        include: {
-            images: true,
+        where: {
+            group_id: groupId,
+            nickname:{contains:search}
         },
-    });
+        orderBy,
+        skip,
+        take
+    })
     return records;
+
  }
 
  /**
@@ -66,9 +92,6 @@ export class RecordsRepository {
  findRecordById = async (recordId) => {
     const record = await this.prisma.record.findUnique({
         where: { id: recordId },
-        include: {
-            images: true,
-        },
     });
     return record;
  }
@@ -162,20 +185,12 @@ export class RecordsRepository {
         by: ['nickname'],
         where: {
             group_id: groupId,
-            created_at: {
-                gte: startDate,
-            },
+            created_at: {gte: startDate},
         },
-        _count: {
-            id: true,
-        },
-        _sum: {
-            time: true,
-        },
+        _count: {id: true},
+        _sum: {time: true},
         orderBy: {
-            _count: {
-                id: 'desc',
-            },
+            _count: {id: 'desc'},
         },
         skip: (page - 1) * pageSize,
         take: pageSize,
@@ -189,4 +204,17 @@ export class RecordsRepository {
 
     return formattedRankings;
 };
+     createUser = async(dataToCreate)=>{
+        const newUser = await this.prisma.user.create({data: dataToCreate });
+        return newUser
+     }
+
+     getTotalRecords = async(groupId)=> {
+        const total = await this.prisma.record.count({
+            where:{group_id:groupId}
+        })
+        return total
+     }
+
+     
 }

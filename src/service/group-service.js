@@ -26,7 +26,7 @@ class GroupService {
             badges:['a']
         };
      
-        newGroup = userService.userSeparate(newGroup);
+        
 
         const ownerData = {
             nickname:ownerNickname,

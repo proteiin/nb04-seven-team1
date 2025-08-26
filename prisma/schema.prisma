@@ -58,7 +58,7 @@ model Record {
   description   String
   time          Int
   distance      Float
-  images        Image[]
+  images        String[]
   created_at    DateTime      @default(now())
   updated_at    DateTime      @updatedAt
   password      String
@@ -79,8 +79,6 @@ model Image {
   name        String
   path        String
   uploaded_at DateTime @default(now())
-  record      Record?  @relation(fields: [record_id], references: [id])
-  record_id   Int?
 }
 
 model Tag {

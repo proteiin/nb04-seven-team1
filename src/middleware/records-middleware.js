@@ -14,9 +14,9 @@ export const validateRecordBody = (req, res, next) => {
         return res.status(400).json({ message: '닉네임, 비밀번호, 운동 종류와 시간은 필수 항목입니다.'});
     }
 
-    const validExerciseTypes = ['RUNNING', 'CYCLE', 'SWIMMING'];
-    if (!validExerciseTypes.includes(exerciseType.toUpperCase())) {
-        return res.status(400).json({ message: "운동 종류는 'RUNNING', 'CYCLE', 'SWIMMING' 중 하나여야 합니다."
+    const validExerciseTypes = ['run', 'bike', 'swim'];
+    if (!validExerciseTypes.includes(exerciseType)) {
+        return res.status(400).json({ message: "운동 종류는 '러닝', '사이클링', '수영' 중 하나여야 합니다."
         })
     }
      

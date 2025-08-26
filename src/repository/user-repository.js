@@ -26,7 +26,6 @@ export class UserRepository {
       where: { id: groupId },
       data: { user_count: { increment: 1 } },
       include: {
-        photo_url: true,
         tags: true,
         // badge: true,
         user: {

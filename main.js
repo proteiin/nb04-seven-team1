@@ -48,7 +48,7 @@ app.use(
   userRouter(userController, userValidator),
 );
 app.use('/images', imageRouter.getRouter());
-app.use('/api', recordsRouter(recordsController));
+app.use('/', recordsRouter(recordsController));
 app.use('/tags', tagRouter(tagController));
 app.use('/groups/:groupId/likes', likeRouter);
 
