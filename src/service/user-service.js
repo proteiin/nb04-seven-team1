@@ -54,7 +54,6 @@ export class UserService {
 
       photoUrl: groupInfo.photo_url, // image 모델 관련 로직 추가 필요
       tags: groupInfo.tags.map((tag) => tag.name),
-
       owner: owner
         ? {
             id: owner.id,
@@ -73,6 +72,7 @@ export class UserService {
       // --- DateTime -> Timestamp 매핑 ---
       createdAt: groupInfo.created_at.getTime(),
       updatedAt: groupInfo.updated_at.getTime(),
+      badges: groupInfo.badges
     };
   };
   

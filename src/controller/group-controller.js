@@ -68,9 +68,6 @@ class GroupController {
             return res.status(200).send(group);
 
         }catch(error){
-            error.statusCode = 500;
-            error.message = "server Error(Database)"
-            error.path = "database"
             next(error);
         }
     }
