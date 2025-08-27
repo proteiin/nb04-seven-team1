@@ -25,7 +25,8 @@ export class UserService {
         );
         return result;
       });
-      return this.userSeparate(updatedGroup);
+      const resultGroup = await this.updateParticipantBadge(updatedGroup);
+      return this.userSeparate(resultGroup);
     } catch (error) {
       throw error;
     }
@@ -34,7 +35,6 @@ export class UserService {
   userSeparate = async (groupData) => {
     const { user, ...groupInfo } = groupData;
     const userToSeparate = [...user];
-
 
     const ownerArray = userToSeparate.filter((u) => u.auth_code === 'OWNER');
     const participants = userToSeparate.filter(
@@ -72,10 +72,10 @@ export class UserService {
       // --- DateTime -> Timestamp 매핑 ---
       createdAt: groupInfo.created_at.getTime(),
       updatedAt: groupInfo.updated_at.getTime(),
-      badges: groupInfo.badges
+      badges: groupInfo.badges,
     };
   };
-  
+
   userSeparateForAllGroups = async (groupArray) => {
     return groupArray.map((groupData) => {
       const { user, ...groupInfo } = groupData;
@@ -89,38 +89,38 @@ export class UserService {
 
       const owner = ownerArray[0]; // OWNER는 객체로 반환
 
- return {
-      id: groupInfo.id,
-      name: groupInfo.group_name,
-      description: groupInfo.description,
-      goalRep: groupInfo.goal_rep,
-      discordWebhookUrl: groupInfo.discord_webhook_url,
-      discordInviteUrl: groupInfo.discord_invite_url,
-      likeCount: groupInfo.like_count,
+      return {
+        id: groupInfo.id,
+        name: groupInfo.group_name,
+        description: groupInfo.description,
+        goalRep: groupInfo.goal_rep,
+        discordWebhookUrl: groupInfo.discord_webhook_url,
+        discordInviteUrl: groupInfo.discord_invite_url,
+        likeCount: groupInfo.like_count,
 
-      photoUrl: groupInfo.photo_url, // image 모델 관련 로직 추가 필요
-      tags: groupInfo.tags.map((tag) => tag.name),
+        photoUrl: groupInfo.photo_url, // image 모델 관련 로직 추가 필요
+        tags: groupInfo.tags.map((tag) => tag.name),
 
-      owner: owner
-        ? {
-            id: owner.id,
-            nickname: owner.nickname,
-            createdAt: owner.created_at.getTime(),
-            updatedAt: owner.updated_at.getTime(),
-          }
-        : null,
-      participants: participants.map((p) => ({
-        id: p.id,
-        nickname: p.nickname,
-        createdAt: p.created_at.getTime(),
-        updatedAt: p.updated_at.getTime(),
-      })),
+        owner: owner
+          ? {
+              id: owner.id,
+              nickname: owner.nickname,
+              createdAt: owner.created_at.getTime(),
+              updatedAt: owner.updated_at.getTime(),
+            }
+          : null,
+        participants: participants.map((p) => ({
+          id: p.id,
+          nickname: p.nickname,
+          createdAt: p.created_at.getTime(),
+          updatedAt: p.updated_at.getTime(),
+        })),
 
-      // --- DateTime -> Timestamp 매핑 ---
-      createdAt: groupInfo.created_at.getTime(),
-      updatedAt: groupInfo.updated_at.getTime(),
-      badges: groupInfo.badges
-    };
+        // --- DateTime -> Timestamp 매핑 ---
+        createdAt: groupInfo.created_at.getTime(),
+        updatedAt: groupInfo.updated_at.getTime(),
+        badges: groupInfo.badges,
+      };
     });
   };
 
@@ -146,11 +146,13 @@ export class UserService {
         error.path = 'password';
         throw error;
       }
-      await this.prisma.$transaction(async (tx) => {
+      const leaveGroup = await this.prisma.$transaction(async (tx) => {
         await this.userRepository.deleteRecords({ user_id: user.id }, tx);
         await this.userRepository.leaveGroup({ id: user.id }, tx);
-        await this.userRepository.decrementGroupUser(groupId, tx);
+        return await this.userRepository.decrementGroupUser(groupId, tx);
       });
+
+      await this.updateParticipantBadge(leaveGroup);
     } catch (error) {
       throw error;
     }
@@ -164,5 +166,32 @@ export class UserService {
   compareHashingPassword = async (password, hashingPassword) => {
     const isMatch = await bcrypt.compare(password, hashingPassword);
     return isMatch;
+  };
+
+  updateParticipantBadge = async (groupData) => {
+    const groupId = groupData.id;
+    const PARTICIPANT_BADGE = 'PARTICIPATION_10';
+
+    let updatedBadges = [...groupData.badges];
+
+    // 현재 상태를 기준으로 배지를 가져야 하는지, 가지고 있는지 확인
+    const shouldHaveBadge = groupData.user_count >= 10;
+    const hasBadge = updatedBadges.includes(PARTICIPANT_BADGE);
+
+    // 조건에 따라 배지를 추가하거나 제거
+    // Case 1: 배지를 가져야 하는데, 가지고 있지 않다면 -> 추가
+    if (shouldHaveBadge && !hasBadge) {
+      await this.userRepository.addBadgeToGroup(groupId, PARTICIPANT_BADGE);
+      updatedBadges.push(PARTICIPANT_BADGE);
+    }
+    // Case 2: 배지를 가지면 안 되는데, 가지고 있다면 -> 제거
+    else if (!shouldHaveBadge && hasBadge) {
+      updatedBadges = updatedBadges.filter(
+        (badge) => badge !== PARTICIPANT_BADGE,
+      );
+      await this.userRepository.setGroupBadges(groupId, updatedBadges);
+    }
+
+    return { ...groupData, badges: updatedBadges };
   };
 }
