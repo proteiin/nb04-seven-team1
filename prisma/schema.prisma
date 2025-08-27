@@ -22,7 +22,7 @@ model Group {
   goal_rep            Int
   discord_webhook_url String
   discord_invite_url  String
-  badges              String[]
+  badges              Badge[]
   user_count          Int      @default(0)
   like_count          Int      @default(0)
   created_at          DateTime @default(now())
@@ -88,4 +88,13 @@ model Tag {
   updated_at DateTime @updatedAt
   group      Group    @relation(fields: [group_id], references: [id],onDelete: Cascade)
   group_id   Int
+}
+
+model Badge {
+  id        Int     @id @default(autoincrement())
+  code      String
+  group     Group   @relation(fields: [group_id], references: [id],onDelete: Cascade)
+  group_id  Int
+
+  @@unique([code, group_id])
 }
