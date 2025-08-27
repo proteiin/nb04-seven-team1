@@ -75,15 +75,16 @@ export class GroupMiddleware{
     }
   };
 
-  validateGroupId = (req,res,next) => {
-      const groupId = Number(req.params.groupId);
-      if (isNaN(groupId)){
-          let error = new Error;
-          error.statusCode = 400;
-          error.message = "groupId must be integer"
-          error.path = 'groupId'
-          next(error);
-      }
-      next();
-  }
+    validateGroupId = (req,res,next) => {
+        const groupId = Number(req.params.groupId);
+        if (isNaN(groupId)){
+            let error = new Error;
+            error.statusCode = 400;
+            error.message = "groupId must be integer"
+            error.path = 'groupId'
+            next(error);
+        }
+        next();
+    }
+
 }

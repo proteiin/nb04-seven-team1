@@ -29,7 +29,7 @@ export class LikeController {
 /* class LikeController {
   async addLike(req, res, next) {
     try {
-      const { groupId } = req;
+      const { groupId } = req.params;
 
       const likecount = await LikeService.addLike(groupId);
       res.status(200).json({ message: '좋아요 추가 완료', likecount });
@@ -40,7 +40,7 @@ export class LikeController {
 
   async removeLike(req, res, next) {
     try {
-      const { groupId } = req;
+      const { groupId } = req.params;
 
       const likecount = await LikeService.removeLike(groupId);
       res.status(200).json({ message: '좋아요 취소 완료', likecount });
