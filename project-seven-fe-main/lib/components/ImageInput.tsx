@@ -67,7 +67,7 @@ const ImageInput = ({
             >
               <Image
                 className={cx('previewImage')}
-                src={value === '' ? null : value}
+                src={value}
                 alt="preview"
                 width={93}
                 height={60}
@@ -88,7 +88,7 @@ const ImageInput = ({
           <div className={cx('singlePreviewImageContainer')}>
             <Image
               className={cx('singlePreviewImage')}
-              src={values[0] === '' ? null : values[0]}
+              src={values[0]}
               alt="preview"
               width={352}
               height={206}

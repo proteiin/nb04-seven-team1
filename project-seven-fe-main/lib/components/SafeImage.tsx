@@ -5,14 +5,13 @@ import { useEffect, useState } from 'react';
 
 interface SafeImageProps extends ImageProps {
   fallback: string;
-  alt: string; // Make alt mandatory
 }
 
 const SafeImage = ({ fallback, src: srcProp, ...rest }: SafeImageProps) => {
-  const [src, setSrc] = useState(srcProp === '' ? null : srcProp); // Explicitly set to null if empty string
+  const [src, setSrc] = useState(srcProp);
 
   useEffect(() => {
-    setSrc(srcProp === '' ? null : srcProp); // Explicitly set to null if empty string
+    setSrc(srcProp);
   }, [srcProp]);
 
   // eslint-disable-next-line jsx-a11y/alt-text

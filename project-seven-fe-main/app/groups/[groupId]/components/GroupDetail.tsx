@@ -30,7 +30,7 @@ const GroupDetail = ({ group }: { group: Group }) => {
     <div className={cx('container')}>
       <Image
         className={cx('thumbnail')}
-        src={group.photoUrl === '' ? null : group.photoUrl || placeholderImage}
+        src={group.photoUrl ?? placeholderImage}
         alt="Group Image"
         width={200}
         height={200}

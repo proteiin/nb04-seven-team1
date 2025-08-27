@@ -47,7 +47,7 @@ const RecordListItem = ({ record }: { record: Record }) => {
         )}
         <Image
           className={cx('image')}
-          src={record.photos[currentIndex] === '' ? null : record.photos[currentIndex] || placeholderImage}
+          src={record.photos[currentIndex] ?? placeholderImage}
           alt="record image"
           width={352}
           height={206}
