@@ -53,11 +53,10 @@ export class GroupRepository{
     }
     //특정 그룹 조회
     GetGroupById = async (groupId) => {
-        return await this.prisma.group.findUnique({
+        const group = await this.prisma.group.findUnique({
         where: { id: groupId },
         include: {
             tags: true,
-            // badge: true,
             user: {
             select: {
                 id: true,
@@ -69,6 +68,10 @@ export class GroupRepository{
             },
         },
         });
+
+        group.badges = group.badges || []
+
+        return group;
     };
 
     //그룹 수정
