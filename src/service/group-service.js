@@ -21,11 +21,20 @@ export class GroupService {
             photo_url: photoUrl,
             badges:['a']
         };
-        
+     
+        if (!tags){
+            const error = new Error('invalid tag format');
+            error.status = 400;
+            error.path = 'tag';
+            throw error;
+        }
+
         const ownerData = {
             nickname:ownerNickname,
             password:ownerPassword
         }
+
+        
 
         const newGroup = await this.groupRepository.createGroup(newdata);
         const groupId = Number(newGroup.id);

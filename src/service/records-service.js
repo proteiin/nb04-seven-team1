@@ -40,7 +40,6 @@ export class RecordsService {
         };
         const newRecord = await this.recordsRepository.createRecord(dataToCreate);
          
-        return newRecord;
     }
 
 

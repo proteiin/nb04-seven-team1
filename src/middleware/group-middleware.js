@@ -1,12 +1,12 @@
 export class GroupMiddleware{
     validateGroupForm = (req,res,next) => {
         const inputData = req.body;
-
-        for (const [key,value] of Object.entries(inputData)){
-            if (!value){
+        console.log(inputData)
+        for (const key in inputData){
+            if (!inputData[key]){ 
                 let error = new Error()
                 error.statusCode = 400;
-                error.message = `${key} is missing`
+                error.message = `${inputData[key]} is missing`
                 error.path = key;
                 next(error);
             }
