@@ -125,13 +125,11 @@ export class GroupRepository{
             data:{
                 nickname,
                 password,
-                group:{
-                    connect:{id:groupId}
-                },
+                group:{connect:{id:groupId}},
                 auth_code: 'OWNER'
             }
-            
         });
+
         return newOwner;
     }
 }
