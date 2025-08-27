@@ -19,7 +19,6 @@ export class GroupService {
             discord_invite_url: discordInviteUrl,
             discord_webhook_url: discordWebhookUrl,
             photo_url: photoUrl,
-            badges:['a']
         };
      
         if (!tags){
