@@ -55,4 +55,27 @@ export class UserRepository {
     const prismaClient = tx || this.prisma;
     return await prismaClient.record.deleteMany({ where });
   };
+  // 그룹의 참가자가 조건 이상일 때 뱃지 추가
+  addBadgeToGroup = async (groupId, badgeName) => {
+    return await this.prisma.group.update({
+      where: { id: groupId },
+      data: {
+        badges: {
+          push: badgeName,
+        },
+      },
+    });
+  };
+
+  // 참가자 뱃지만 제거하기 위함
+  setGroupBadges = async (groupId, badges) => {
+    return await this.prisma.group.update({
+      where: { id: groupId },
+      data: {
+        badges: {
+          set: badges,
+        },
+      },
+    });
+  };
 }
