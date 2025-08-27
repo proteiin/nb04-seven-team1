@@ -3,22 +3,22 @@ export class LikeController {
     this.likeService = likeService;
   }
 
-  async addLike(req, res, next) {
+  addLike = async (req, res, next) => {
     try {
-      const { groupId } = req;
+      const { groupId } = req.params;
 
-      const likecount = await this.likeService.addLike(groupId);
+      const likecount = await this.likeService.addLike(parseInt(groupId));
       res.status(200).json({ message: '좋아요 추가 완료', likecount });
     } catch (err) {
       next(err);
     }
   }
 
-  async removeLike(req, res, next) {
+  removeLike = async (req, res, next) => {
     try {
-      const { groupId } = req;
+      const { groupId } = req.params;
 
-      const likecount = await this.likeService.removeLike(groupId);
+      const likecount = await this.likeService.removeLike(parseInt(groupId));
       res.status(200).json({ message: '좋아요 취소 완료', likecount });
     } catch (err) {
       next(err);
