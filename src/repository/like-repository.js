@@ -17,7 +17,7 @@ export class LikeRepository {
 class LikeRepository {
   async updateLikeCount(groupId, value) {
     return await prisma.group.update({
-      where: { id: groupId },
+      where: { id: Number(groupId) },
       data: { like_count: { increment: value } },
       select: { id: true, like_count: true },
     });

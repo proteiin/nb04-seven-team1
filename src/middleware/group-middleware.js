@@ -1,12 +1,11 @@
 export class GroupMiddleware{
     validateGroupForm = (req,res,next) => {
         const inputData = req.body;
-
-        for (const [key,value] of Object.entries(inputData)){
-            if (!value){
+        for (const key in inputData){
+            if (!inputData[key]){ 
                 let error = new Error()
                 error.statusCode = 400;
-                error.message = `${key} is missing`
+                error.message = `${inputData[key]} is missing`
                 error.path = key;
                 next(error);
             }
@@ -75,15 +74,16 @@ export class GroupMiddleware{
     }
   };
 
-  validateGroupId = (req,res,next) => {
-      const groupId = Number(req.params.groupId);
-      if (isNaN(groupId)){
-          let error = new Error;
-          error.statusCode = 400;
-          error.message = "groupId must be integer"
-          error.path = 'groupId'
-          next(error);
-      }
-      next();
-  }
+    validateGroupId = (req,res,next) => {
+        const groupId = Number(req.params.groupId);
+        if (isNaN(groupId)){
+            let error = new Error;
+            error.statusCode = 400;
+            error.message = "groupId must be integer"
+            error.path = 'groupId'
+            next(error);
+        }
+        next();
+    }
+
 }

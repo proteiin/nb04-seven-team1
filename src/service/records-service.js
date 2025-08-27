@@ -8,12 +8,18 @@ export class RecordsService {
     createRecord = async (recordData) => {
         const { groupId, nickname, password, exerciseType, description, time, distance, photos } = recordData;
         const user = await this.recordsRepository.findUserByNickname(groupId, nickname);
+        if (!user){
+            const error = new Error;
+            error.status = 404;
+            error.message = 'check nickname again '
+            throw error;
+        }
         const userPassword = String(user.password);
 
         const isMatch = this.userService.compareHashingPassword(userPassword,password);
         
         if (!user || !isMatch) {
-            const error = new Error('닉네임 또는 비밀번호를 확인해주세요.');
+            const error = new Error('check password');
             error.status = 401;
             throw error;
         }
@@ -33,8 +39,7 @@ export class RecordsService {
             images:photos
         };
         const newRecord = await this.recordsRepository.createRecord(dataToCreate);
-         
-        return newRecord;
+        return newRecord
     }
 
 

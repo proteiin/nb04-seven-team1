@@ -21,11 +21,20 @@ export class GroupService {
             photo_url: photoUrl,
             badges:['a']
         };
-        
+     
+        if (!tags){
+            const error = new Error('invalid tag format');
+            error.status = 400;
+            error.path = 'tag';
+            throw error;
+        }
+
         const ownerData = {
             nickname:ownerNickname,
             password:ownerPassword
         }
+
+        
 
         const newGroup = await this.groupRepository.createGroup(newdata);
         const groupId = Number(newGroup.id);
@@ -71,10 +80,14 @@ export class GroupService {
     getGroupById = async(Id) => {
 
         let group = await this.groupRepository.GetGroupById(Id);
+        if(!group){
+            const error =new Error(`Already there isn't group`);
+            error.status = 404;
+            error.path = 'group';
+            throw error;
+        }
 
         try{
-
-            let group = await this.groupRepository.GetGroupById(Id);
             group = await this.userService.userSeparate(group);
             return group;
         }catch(e){
@@ -90,7 +103,14 @@ export class GroupService {
                 photoUrl, tags, goalRep, 
                 discordWebhookUrl, discordInviteUrl} = data
 
-           
+        let group = await this.groupRepository.GetGroupById(groupId);
+        if(!group){
+            const error =new Error(`Already there isn't group`);
+            error.status = 404;
+            error.path = 'group';
+            throw error;
+        }
+                
                 // const data = {groupId,name, description,
                 // ownerNickname, ownerPassword, 
                 // photoUrl, tags, goalRep, 
@@ -138,7 +158,12 @@ export class GroupService {
     deleteGroup = async (groupId, inputPassword) => {
         //삭제할 그룹 찾기 
         const group = await this.groupRepository.GetGroupByIdAll(groupId);
-
+        if (!group){
+            const error =new Error(`Already there isn't group`);
+            error.status = 404;
+            error.path = 'group';
+            throw error;
+        }
         const groupPassword = await this.groupRepository.GetPassword(groupId);
         const reqPassword = inputPassword.ownerPassword;
         //에러처리하기
