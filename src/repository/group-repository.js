@@ -57,7 +57,6 @@ export class GroupRepository{
         where: { id: groupId },
         include: {
             tags: true,
-            badges: true,
             user: {
             select: {
                 id: true,
@@ -70,7 +69,7 @@ export class GroupRepository{
         },
         });
 
-        group.badges = (group.badges || []).map((badge) => badge.code);
+        group.badges = group.badges || []
 
         return group;
     };
