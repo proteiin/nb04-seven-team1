@@ -22,8 +22,8 @@ export class GroupController {
   getAllGroups = async (req, res, next) => {
     try {
       const queryOption = req.validateQuery;
-      const allGroups = await groupService.getAllGroups(queryOption);
-      const countAllGroups = await groupService.countAllGroups(
+      const allGroups = await this.groupService.getAllGroups(queryOption);
+      const countAllGroups = await this.groupService.countAllGroups(
         queryOption.search,
       );
       const responseData = {
