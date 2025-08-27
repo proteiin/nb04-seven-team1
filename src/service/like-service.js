@@ -1,21 +1,17 @@
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
-
 export class LikeService {
   constructor(likeRepository, prisma) {
     this.likeRepository = likeRepository;
     this.prisma = prisma;
   }
 
-  async addLike(groupId) {
+ addLike = async(groupId) =>{
     const { like_count } = await this.likeRepository.updateLikeCount(
       groupId,
       1,
     );
 
     if (like_count >= 100) {
-      const badge = await prisma.badge.findFirst({
+      const badge = await this.prisma.badge.findFirst({
         where: {
           code: 'LIKE_100',
           group_id: groupId,
@@ -23,7 +19,7 @@ export class LikeService {
       });
 
       if (!badge) {
-        await prisma.badge.create({
+        await this.prisma.badge.create({
           data: {
             code: 'LIKE_100',
             group_id: groupId,
@@ -33,14 +29,14 @@ export class LikeService {
     }
   }
 
-  async removeLike(groupId) {
+  removeLike = async (groupId) => {
     const { like_count } = await this.likeRepository.updateLikeCount(
       groupId,
       -1,
     );
 
     if (like_count < 100) {
-      const badge = await prisma.badge.findFirst({
+      const badge = await this.prisma.badge.findFirst({
         where: {
           code: 'LIKE_100',
           group_id: groupId,
@@ -48,7 +44,7 @@ export class LikeService {
       });
 
       if (badge) {
-        await prisma.badge.delete({
+        await this.prisma.badge.delete({
           where: {
             code_group_id: {
               code: 'LIKE_100',
