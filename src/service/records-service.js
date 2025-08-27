@@ -67,6 +67,8 @@ export class RecordsService {
         
         const skip = (page-1)*limit;
         const take = limit;
+
+
         try{
             const records = await this.recordsRepository.findAllRecords({groupId, orderBy, skip, take, search});
             const totalRecords = await this.recordsRepository.getTotalRecords(groupId);
