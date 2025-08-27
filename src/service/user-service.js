@@ -33,8 +33,8 @@ export class UserService {
 
   userSeparate = async (groupData) => {
     const { user, ...groupInfo } = groupData;
-
     const userToSeparate = [...user];
+
 
     const ownerArray = userToSeparate.filter((u) => u.auth_code === 'OWNER');
     const participants = userToSeparate.filter(
@@ -42,7 +42,6 @@ export class UserService {
     );
 
     const owner = ownerArray[0]; // OWNER는 객체로 반환
-
     return {
       id: groupInfo.id,
       name: groupInfo.group_name,
@@ -53,6 +52,53 @@ export class UserService {
       discordInviteUrl: groupInfo.discord_invite_url,
       likeCount: groupInfo.like_count,
 
+      photoUrl: groupInfo.photo_url, // image 모델 관련 로직 추가 필요
+      tags: groupInfo.tags.map((tag) => tag.name),
+      owner: owner
+        ? {
+            id: owner.id,
+            nickname: owner.nickname,
+            createdAt: owner.created_at.getTime(),
+            updatedAt: owner.updated_at.getTime(),
+          }
+        : null,
+      participants: participants.map((p) => ({
+        id: p.id,
+        nickname: p.nickname,
+        createdAt: p.created_at.getTime(),
+        updatedAt: p.updated_at.getTime(),
+      })),
+
+      // --- DateTime -> Timestamp 매핑 ---
+      createdAt: groupInfo.created_at.getTime(),
+      updatedAt: groupInfo.updated_at.getTime(),
+      badges: groupInfo.badges
+    };
+  };
+  
+  userSeparateForAllGroups = async (groupArray) => {
+    return groupArray.map((groupData) => {
+      const { user, ...groupInfo } = groupData;
+
+      const userToSeparate = [...user];
+
+      const ownerArray = userToSeparate.filter((u) => u.auth_code === 'OWNER');
+      const participants = userToSeparate.filter(
+        (u) => u.auth_code === 'PARTICIPANTS',
+      );
+
+      const owner = ownerArray[0]; // OWNER는 객체로 반환
+
+ return {
+      id: groupInfo.id,
+      name: groupInfo.group_name,
+      description: groupInfo.description,
+      goalRep: groupInfo.goal_rep,
+      discordWebhookUrl: groupInfo.discord_webhook_url,
+      discordInviteUrl: groupInfo.discord_invite_url,
+      likeCount: groupInfo.like_count,
+
+      photoUrl: groupInfo.photo_url, // image 모델 관련 로직 추가 필요
       tags: groupInfo.tags.map((tag) => tag.name),
 
       owner: owner
@@ -73,55 +119,8 @@ export class UserService {
       // --- DateTime -> Timestamp 매핑 ---
       createdAt: groupInfo.created_at.getTime(),
       updatedAt: groupInfo.updated_at.getTime(),
-      badges: ['LIKE'], // badge 로직 추가
+      badges: groupInfo.badges
     };
-  };
-
-  userSeparateForAllGroups = async (groupArray) => {
-    return groupArray.map((groupData) => {
-      const { user, ...groupInfo } = groupData;
-
-      const userToSeparate = [...user];
-
-      const ownerArray = userToSeparate.filter((u) => u.auth_code === 'OWNER');
-      const participants = userToSeparate.filter(
-        (u) => u.auth_code === 'PARTICIPANTS',
-      );
-
-      const owner = ownerArray[0]; // OWNER는 객체로 반환
-
-      return {
-        id: groupInfo.id,
-        name: groupInfo.group_name,
-        description: groupInfo.description,
-        photoUrl: groupInfo.image, // image 모델 관련 로직 추가 필요
-        goalRep: groupInfo.goal_rep,
-        discordWebhookUrl: groupInfo.discord_webhook_url,
-        discordInviteUrl: groupInfo.discord_invite_url,
-        likeCount: groupInfo.like_count,
-
-        tags: groupInfo.tags.map((tag) => tag.name),
-
-        owner: owner
-          ? {
-              id: owner.id,
-              nickname: owner.nickname,
-              createdAt: owner.created_at.getTime(),
-              updatedAt: owner.updated_at.getTime(),
-            }
-          : null,
-        participants: participants.map((p) => ({
-          id: p.id,
-          nickname: p.nickname,
-          createdAt: p.created_at.getTime(),
-          updatedAt: p.updated_at.getTime(),
-        })),
-
-        // --- DateTime -> Timestamp 매핑 ---
-        createdAt: groupInfo.created_at.getTime(),
-        updatedAt: groupInfo.updated_at.getTime(),
-        badges: ['LIKE'], // badge 로직 추가
-      };
     });
   };
 

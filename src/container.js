@@ -56,9 +56,9 @@ const userService = new UserService(userRepository, prisma); // user-serviceÏóêÏ
 const tagService = new TagService(tagRepository);
 const imageService = new ImageService(imageRepository);
 const likeService = new LikeService(likeRepository);
-const groupService = new GroupService(groupRepository, groupTagRepository);
+const groupService = new GroupService(groupRepository, groupTagRepository, userService);
 const rankingService = new RankingService(rankingRepository);
-const recordsService = new RecordsService(recordsRepository);
+const recordsService = new RecordsService(recordsRepository, userService);
 
 // controllers
 const userController = new UserController(userService);

@@ -43,7 +43,7 @@ app.use('/groups', groupRouter(groupController, groupMiddleware));
 app.use('/groups/:groupId/rank', rankingRouter(rankingController));
 app.use('/groups/:groupId/participants', userRouter(userController, userValidator));
 app.use('/images', imageRouter(imageController));
-app.use('/api', recordsRouter(recordsController));
+app.use('/', recordsRouter(recordsController));
 app.use('/tags', tagRouter(tagController));
 app.use('/groups/:groupId/likes', likeRouter(likeController));
 

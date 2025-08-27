@@ -1,7 +1,8 @@
 export class GroupService {
-    constructor(groupRepository, tagRepository) {
+    constructor(groupRepository, tagRepository, userService) {
         this.groupRepository = groupRepository;
         this.tagRepository = tagRepository;
+        this.userService = userService;
     }
 
     //태그 생성, 그룹생성, 유저생성 (트랜잭션 구현 필요)
@@ -10,81 +11,76 @@ export class GroupService {
         goalRep, discordInviteUrl,
         discordWebhookUrl, tags}) => {
         
-        
-        const data = {
+        const newdata = {
+            like_count: 0,
             group_name: name, 
             description, 
             goal_rep: goalRep, 
             discord_invite_url: discordInviteUrl,
             discord_webhook_url: discordWebhookUrl,
-            user: {
-                create:{
-                    nickname:ownerNickname,
-                    password:ownerPassword,
-                    auth_code:'OWNER'
-                }
-            }
+            photo_url: photoUrl,
+            badges:['a']
         };
         
-        const newGroup = await this.groupRepository.createGroup(data);
-        
+        const ownerData = {
+            nickname:ownerNickname,
+            password:ownerPassword
+        }
+
+        const newGroup = await this.groupRepository.createGroup(newdata);
         const groupId = Number(newGroup.id);
-        const newTags = await this.tagRepository.createTag(tags,groupId)
+        const newTags = await this.tagRepository.createTagsbyTagNames(tags,groupId)
+        const newOnwer = await this.groupRepository.createOwnerbyGroupId(ownerData,groupId)
         
-        return newGroup
+        let findGroup = await this.groupRepository.GetGroupById(groupId);
+        findGroup = await this.userService.userSeparate(findGroup)
+
+        return findGroup
     }
 
-    //pagination과 그룹들 불러오기, 검색기능
-    getAllGroups = async ({page, limit, orderBy, 
-        order, search}) => {
-        
-        page = Number(page);
-        limit = Number(limit);
+// 그룹 목록 조회
+    getAllGroups = async ({ page, limit, orderBy, order, search }) => {
+    const orderByMap = {
+      likecount: 'like_count',
+      participantCount: 'user_count',
+      createdAt: 'created_at',
+    };
 
-        switch (orderBy) {
-            case 'likecount':
-                if (order==='asc'){
-                    orderBy = {likecount: 'asc'}
-                }else if (order==='desc'){
-                    orderBy = {likecount: 'desc'}
-                }
-                
-                break;
+    const dbColumn = orderByMap[orderBy] || 'created_at';
+    const prismaOrderBy = { [dbColumn]: order };
 
-            case 'participantCount':
-                if (order==='asc'){
-                    orderBy = {user_count: 'asc'}
-                }else if (order==='desc'){
-                    orderBy = {user_count: 'desc'}
-                }
-                
-                break;
+    const skip = (page - 1) * limit;
+    const take = limit;
 
-            case 'createdAt':
-                if (order==='asc'){
-                    orderBy = {created_at: 'asc'}
-                }else if (order==='desc'){
-                    orderBy = {created_at: 'desc'}
-                }
+    const allGroups = await this.groupRepository.GetAllGroup({
+      skip,
+      take,
+      orderBy: prismaOrderBy,
+      search,
+    });
 
-                break;
-
-            default:
-                orderBy = {created_at: 'desc'}
-        };
-
-        let skip = (page-1)* limit ;
-        let take = limit ;
-        let groupname = search;
-
-        const allGroups= this.groupRepository.GetAllGroup(skip,take,orderBy,groupname);
-        return allGroups;
-    } 
+    const newGroups = this.userService.userSeparateForAllGroups(allGroups);
+        return newGroups;
+    };
+    // 그룹 카운트
+    countAllGroups = async (search) => {
+        return await this.groupRepository.countAllGroups({ search });
+    };
 
     //특정 그룹 가져오기
     getGroupById = async(Id) => {
-        const group = this.groupRepository.GetGroupById(Id)
-        return group;
+
+        let group = await this.groupRepository.GetGroupById(Id);
+
+        try{
+
+            let group = await this.groupRepository.GetGroupById(Id);
+            group = await this.userService.userSeparate(group);
+            return group;
+        }catch(e){
+            console.error(e);
+            next(e)
+        }
     }
 
     // 닉네임과 비밀번호 검증, tag와 group, user 수정(트랜잭션 구현 필요)
@@ -121,25 +117,19 @@ export class GroupService {
             throw error;
         }else{
             if (groupPassword === ownerPassword ){
-            const modifiedGroup = await this.groupRepository.PatchGroup(prismaData, groupId);
 
-            let newTags;
-            if (tags){   
-                const deleteTagIds = await this.tagRepository.deleteTagsbyGroupId(groupId);
+                let modifiedGroup = await this.groupRepository.PatchGroup(prismaData, groupId);
 
-                newTags = await this.tagRepository.createTagsbyTagNames(tags,groupId);
-            
-                const result = [modifiedGroup,newTags];
-                return result;
+                let newTags;
+                if (tags){   
+                    const deleteTagIds = await this.tagRepository.deleteTagsbyGroupId(groupId);
 
+                    newTags = await this.tagRepository.createTagsbyTagNames(tags,groupId);
+                }
+                let findGroup = await this.groupRepository.GetGroupById(groupId)
+                findGroup = this.userService.userSeparate(findGroup);
+                return findGroup
             }
-            }else{
-                let error = new Error;
-                error.statusCode = 401;
-                error.message = "wrong password"
-                error.path = 'password'
-                throw(error);
-        }
         }
         
     }
