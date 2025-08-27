@@ -81,7 +81,7 @@ export class GroupMiddleware{
             error.statusCode = 400;
             error.message = "groupId must be integer"
             error.path = 'groupId'
-            next(error);
+            return next(error);
         }
         next();
     }
