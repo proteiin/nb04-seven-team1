@@ -9,7 +9,7 @@ const upload = multer({
       cb(null, true); // 이미지면 통과
     } else {
       const error = new Error('File should be an image file'); // 이미지가 아니면 에러 발생
-      err.statusCode = 400; 
+      error.statusCode = 400; 
       cb(error,false)
     }
   },
