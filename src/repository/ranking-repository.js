@@ -28,7 +28,7 @@ export class RankingRepository {
         startDate.setMonth(endDate.getMonth() - 1);
     }
 
-    const result = await prisma.record.groupBy({
+    const result = await this.prisma.record.groupBy({
       by: ['nickname', 'user_id'],
       where: {
         // connect?
