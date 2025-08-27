@@ -39,7 +39,7 @@ export class RecordsService {
             images:photos
         };
         const newRecord = await this.recordsRepository.createRecord(dataToCreate);
-         
+        return newRecord
     }
 
 
