@@ -79,10 +79,15 @@ export class GroupService {
     //특정 그룹 가져오기
     getGroupById = async(Id) => {
 
-        // let group = await this.groupRepository.GetGroupById(Id);
+        let group = await this.groupRepository.GetGroupById(Id);
+        if(!group){
+            const error =new Error(`Already there isn't group`);
+            error.status = 404;
+            error.path = 'group';
+            throw error;
+        }
 
         try{
-            let group = await this.groupRepository.GetGroupById(Id);
             group = await this.userService.userSeparate(group);
             return group;
         }catch(e){
@@ -98,7 +103,14 @@ export class GroupService {
                 photoUrl, tags, goalRep, 
                 discordWebhookUrl, discordInviteUrl} = data
 
-           
+        let group = await this.groupRepository.GetGroupById(groupId);
+        if(!group){
+            const error =new Error(`Already there isn't group`);
+            error.status = 404;
+            error.path = 'group';
+            throw error;
+        }
+                
                 // const data = {groupId,name, description,
                 // ownerNickname, ownerPassword, 
                 // photoUrl, tags, goalRep, 
