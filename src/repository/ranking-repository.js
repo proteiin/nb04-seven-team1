@@ -33,7 +33,7 @@ export class RankingRepository {
       where: {
         // connect?
         group_id: groupId,
-        createdAt: {
+        created_at: {
           gte: startDate,
           lt: endDate,
         },
