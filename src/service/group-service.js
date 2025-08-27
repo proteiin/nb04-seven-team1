@@ -111,11 +111,6 @@ export class GroupService {
             throw error;
         }
                 
-                // const data = {groupId,name, description,
-                // ownerNickname, ownerPassword, 
-                // photoUrl, tags, goalRep, 
-                // discordWebhookUrl, discordInviteUrl}
-
         const groupPassword = await this.groupRepository.GetPassword(groupId);
         const groupNickname = await this.groupRepository.GetNickname(groupId);
         

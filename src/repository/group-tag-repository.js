@@ -13,19 +13,6 @@ export class GroupTagRepository{
         await this.prisma.tag.createMany({
             data:data
         })
-
-
-
-        // let tags = [];
-        // for (const tagName of tagNameArray){
-        //     const tag = await this.prisma.tag.create({
-        //         data:{name:tagName,
-        //             group: {connect:{id:groupId}}
-        //         }
-        //     })
-        //     tags.push(tag);
-        // }
-        // return tags;
     }
 
     //그룹 아이디로 연관된 태그들 가져오기

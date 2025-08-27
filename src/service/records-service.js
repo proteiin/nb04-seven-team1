@@ -11,14 +11,14 @@ export class RecordsService {
         if (!user){
             const error = new Error;
             error.status = 404;
-            error.message = 'check nickname again '
+            error.message = 'check nickname again';
             throw error;
         }
         const userPassword = String(user.password);
 
         const isMatch = this.userService.compareHashingPassword(userPassword,password);
         
-        if (!user || !isMatch) {
+        if (!isMatch) {
             const error = new Error('check password');
             error.status = 401;
             throw error;
@@ -67,6 +67,8 @@ export class RecordsService {
         
         const skip = (page-1)*limit;
         const take = limit;
+        
+
         try{
             const records = await this.recordsRepository.findAllRecords({groupId, orderBy, skip, take, search});
             const totalRecords = await this.recordsRepository.getTotalRecords(groupId);
@@ -74,7 +76,7 @@ export class RecordsService {
             
 
             for (const r of records){
-                let formatRecord= {}
+                let formatRecord= {};
                 formatRecord.id = r.id,
                 formatRecord.exerciseType = r.exercise_type,
                 formatRecord.description= r.description,

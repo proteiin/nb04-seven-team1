@@ -5,9 +5,9 @@ export class GroupMiddleware{
             if (!inputData[key]){ 
                 let error = new Error()
                 error.statusCode = 400;
-                error.message = `${inputData[key]} is missing`
+                error.message = `${key} is missing`
                 error.path = key;
-                next(error);
+                return next(error);
             }
             
         }
@@ -19,7 +19,7 @@ export class GroupMiddleware{
             error.statusCode = 400;
             error.message = 'goalRep must be integer'
             error.path = 'goalRep'
-            next(error);
+            return next(error);
         }
         next();
 
@@ -81,7 +81,7 @@ export class GroupMiddleware{
             error.statusCode = 400;
             error.message = "groupId must be integer"
             error.path = 'groupId'
-            next(error);
+            return next(error);
         }
         next();
     }
