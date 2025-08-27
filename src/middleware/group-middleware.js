@@ -5,7 +5,7 @@ export class GroupMiddleware{
             if (!inputData[key]){ 
                 let error = new Error()
                 error.statusCode = 400;
-                error.message = `${inputData[key]} is missing`
+                error.message = `${key} is missing`
                 error.path = key;
                 next(error);
             }
