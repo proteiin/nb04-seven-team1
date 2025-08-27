@@ -4,16 +4,11 @@ import * as dotenv from 'dotenv'; // 환경변수를 위한 라이브러리
 
 import container from './src/container.js';
 
-import GroupRouter from './src/router/group-router.js';
-import RankingRouter from './src/router/ranking-router.js';
-import userRouter from './src/router/user-router.js'; // 라우터 함수를 가져와야 합니다.
-import ImageRouter from './src/router/image-router.js';
+import groupRouter from './src/router/group-router.js';
+import rankingRouter from './src/router/ranking-router.js';
+import userRouter from './src/router/user-router.js';
+import imageRouter from './src/router/image-router.js';
 import recordsRouter from './src/router/records-router.js';
-
-// 컨테이너로 가져오시면 지워도 될 것 같습니다.
-import { RecordsRepository } from './src/repository/records-repository.js';
-import { RecordsService } from './src/service/records-service.js';
-import { RecordsController } from './src/controller/records-controller.js';
 import tagRouter from './src/router/tag-router.js';
 import likeRouter from './src/router/like-router.js';
 
@@ -31,26 +26,26 @@ function requestLogger(req, _, next) {
 }
 app.use(requestLogger);
 
-// 역시 컨테이너를 사용하시면 컨테이너에서 조립을 하시면 될 것 같습니다.
-const rankingRouter = new RankingRouter();
-const imageRouter = new ImageRouter();
-const recordsRepository = new RecordsRepository();
-const recordsService = new RecordsService(recordsRepository);
-const recordsController = new RecordsController(recordsService);
-
 // 컨테이너에서 필요에 따라 꺼내서 라우터에 전달합니다.
-const { userController, userValidator, tagController } = container;
+const { 
+  userController, 
+  userValidator, 
+  tagController, 
+  imageController,
+  groupController,
+  groupMiddleware,
+  rankingController,
+  likeController,
+  recordsController
+} = container;
 
-app.use('/groups', GroupRouter);
-app.use('/groups/:groupId/rank', rankingRouter.getRouter());
-app.use(
-  '/groups/:groupId/participants',
-  userRouter(userController, userValidator),
-);
-app.use('/images', imageRouter.getRouter());
+app.use('/groups', groupRouter(groupController, groupMiddleware));
+app.use('/groups/:groupId/rank', rankingRouter(rankingController));
+app.use('/groups/:groupId/participants', userRouter(userController, userValidator));
+app.use('/images', imageRouter(imageController));
 app.use('/', recordsRouter(recordsController));
 app.use('/tags', tagRouter(tagController));
-app.use('/groups/:groupId/likes', likeRouter);
+app.use('/groups/:groupId/likes', likeRouter(likeController));
 
 // 이미지 파일 정적 제공
 app.use('/uploads', express.static('uploads'));

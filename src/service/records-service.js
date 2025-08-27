@@ -1,33 +1,28 @@
-import { auth_code } from '@prisma/client';
-import { RecordsRepository } from '../repository/records-repository.js';
-import groupRepository from '../repository/group-repository.js';
-import axios from 'axios';
-import { UserService } from './user-service.js';
-
 export class RecordsService {
-    constructor(recordsRepository) {
-        this.recordsRepository = new RecordsRepository;
-        this.userService = new UserService;
+    constructor(recordsRepository, userService) {
+        this.recordsRepository = recordsRepository;
+        this.userService = userService;
     };
 
     
     createRecord = async (recordData) => {
         const { groupId, nickname, password, exerciseType, description, time, distance, photos } = recordData;
         const user = await this.recordsRepository.findUserByNickname(groupId, nickname);
+        if (!user){
+            const error = new Error;
+            error.status = 404;
+            error.message = 'check nickname again';
+            throw error;
+        }
         const userPassword = String(user.password);
 
         const isMatch = this.userService.compareHashingPassword(userPassword,password);
         
-        if (!user || !isMatch) {
-            const error = new Error('닉네임 또는 비밀번호를 확인해주세요.');
+        if (!isMatch) {
+            const error = new Error('check password');
             error.status = 401;
             throw error;
         }
-                             
-        // const imagesToCreate = photos.map(photoPath => ({
-        //     name: photoPath.substring(photoPath.lastIndexOf('/') + 1),
-        //     path: photoPath,
-        // }));
         
         const userId = user.id;
 
@@ -44,42 +39,7 @@ export class RecordsService {
             images:photos
         };
         const newRecord = await this.recordsRepository.createRecord(dataToCreate);
-
-        // 기능 확인을 위해 디스코드 웹훅 알림 잠시 주석처리
-
-        // try {
-        //     const group = await this.recordsRepository.prisma.group.findUnique({
-        //         where: { id: groupId },
-        //         select: { discord_webhook_url: true}
-        //     });
-        //     select에서 user 삭제 (모델 변경으로 nickname을 불러오기 어려워짐 )
-
-            
-            // if (group && group.discord_webhook_url) {
-            //     const webhookUrl = group.discord_webhook_url;
-            //     const groupName = group.nickname;
-                
-            //     const message = {
-            //         content: 
-            //                  `닉네임: ${nickname}\n` +
-            //                  `운동 종류: ${exerciseType}\n` +
-            //                  `운동 시간: ${time}분\n` +
-            //                  `운동 거리: ${distance}km\n` +
-            //                  (photos && photos.length > 0 ? `사진: ${photos.join(', ')}\n` : '') +
-            //                  `확인해보세요.`,
-            //     };
-
-            //     await axios.post(webhookUrl, message);
-            //     console.log('Discord 웹훅 알림 성공');
-            // }
-        // }   catch (webhookError) {
-        //     //에러 확인을 위한 error 추가
-        //     console.error(webhookError)
-            //
-            // console.log('Discord 웹훅 알림 실패', webhookError.message);
-        // }         
-         
-        return newRecord;
+        return newRecord
     }
 
 
@@ -107,6 +67,8 @@ export class RecordsService {
         
         const skip = (page-1)*limit;
         const take = limit;
+        
+
         try{
             const records = await this.recordsRepository.findAllRecords({groupId, orderBy, skip, take, search});
             const totalRecords = await this.recordsRepository.getTotalRecords(groupId);
@@ -114,7 +76,7 @@ export class RecordsService {
             
 
             for (const r of records){
-                let formatRecord= {}
+                let formatRecord= {};
                 formatRecord.id = r.id,
                 formatRecord.exerciseType = r.exercise_type,
                 formatRecord.description= r.description,
@@ -155,5 +117,4 @@ export class RecordsService {
 
         return record;
     };
-    
 }

@@ -1,8 +1,32 @@
 import express from 'express';
-import ImageController from '../controller/image-controller.js';
 import multer from 'multer';
 
-export default class ImageRouter {
+const router = express.Router({ mergeParams: true });
+const upload = multer({
+  dest: 'uploads/',
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype.startsWith('image/')) {
+      cb(null, true); // 이미지면 통과
+    } else {
+      const error = new Error('File should be an image file'); // 이미지가 아니면 에러 발생
+      err.statusCode = 400; 
+      cb(error,false)
+    }
+  },
+});
+
+export default (imageController) => {
+  router
+    .route('/')
+    .post(
+      upload.array('files', 5),
+      imageController.getImage.bind(imageController),
+    );
+
+  return router;
+};
+
+/* export default class ImageRouter {
   constructor() {
     this.router = express.Router({ mergeParams: true });
     this.imageController = new ImageController();
@@ -34,4 +58,4 @@ export default class ImageRouter {
   getRouter() {
     return this.router;
   }
-}
+} */

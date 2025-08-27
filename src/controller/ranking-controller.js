@@ -1,8 +1,6 @@
-import RankingService from '../service/ranking-service.js';
-
-export default class RankingController {
-  constructor() {
-    this.rankingService = new RankingService();
+export class RankingController {
+  constructor(rankingService) {
+    this.rankingService = rankingService;
   }
 
   /**

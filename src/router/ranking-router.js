@@ -1,7 +1,16 @@
 import express from 'express';
-import RankingController from '../controller/ranking-controller.js';
 
-export default class RankingRouter {
+const router = express.Router({ mergeParams: true });
+
+export default (rankingController) => {
+  router
+    .route('/')
+    .get(rankingController.getRanking.bind(rankingController));
+
+  return router;
+};
+
+/* export default class RankingRouter {
   constructor() {
     this.router = express.Router({ mergeParams: true });
     this.rankingController = new RankingController();
@@ -18,4 +27,4 @@ export default class RankingRouter {
   getRouter() {
     return this.router;
   }
-}
+} */

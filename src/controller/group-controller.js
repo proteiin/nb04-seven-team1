@@ -1,17 +1,17 @@
-
-import groupRepository from "../repository/group-repository.js";
-import groupService from "../service/group-service.js";
-
-
 //유효성 검증, req값 불러오기, res 보내는 코드
 
-class GroupController {
+export class GroupController {
+    constructor(groupRepository, groupService) {
+        this.groupRepository = groupRepository;
+        this.groupService = groupService;
+    }
+
     //CREATE METHOD 처리
     createGroup = async (req,res,next) => {
         const data = req.body
         
         try{
-            const newGroup = await groupService.createGroup(data);
+            const newGroup = await this.groupService.createGroup(data);
             return res.status(201).send(newGroup);
         }catch(error){
             next(error)
@@ -22,8 +22,8 @@ class GroupController {
   getAllGroups = async (req, res, next) => {
     try {
       const queryOption = req.validateQuery;
-      const allGroups = await groupService.getAllGroups(queryOption);
-      const countAllGroups = await groupService.countAllGroups(
+      const allGroups = await this.groupService.getAllGroups(queryOption);
+      const countAllGroups = await this.groupService.countAllGroups(
         queryOption.search,
       );
       const responseData = {
@@ -37,28 +37,11 @@ class GroupController {
     }
   };
 
-    // getAllGroups = async (req,res,next) => {
-
-    //     let {page=1, limit=20, order='asc',
-    //         orderBy='createdAt', search} = req.query;
-    //     try{
-    //         const AllGroups = await groupService.getAllGroups({page, limit, order,
-    //         orderBy, search});
-            
-    //         return res.status(200).send(AllGroups);
-    //     }catch(error){
-    //         error.statusCode = 500;
-    //         error.message = "server Error(Database)"
-    //         error.path = "database"
-    //         next(error)
-    //     }
-    // } 
-
     //GET groups/:groupid 처리
     getGroupById = async(req,res,next) => {
         const groupId = Number(req.params.groupId);
         try{
-            const group = await groupService.getGroupById(groupId);
+            const group = await this.groupService.getGroupById(groupId);
             if (!group){
                 let error = new Error;
                 error.statusCode = 404;
@@ -86,7 +69,7 @@ class GroupController {
                 photoUrl, tags, goalRep, 
                 discordWebhookUrl, discordInviteUrl}
 
-        const group = await groupService.getGroupById(groupId);
+        const group = await this.groupService.getGroupById(groupId);
 
         if (!group){
             let error = new Error;
@@ -96,7 +79,7 @@ class GroupController {
         }
 
         try{
-            const modifiedGroupAndTag = await groupService.modifyGroup(data);
+            const modifiedGroupAndTag = await this.groupService.modifyGroup(data);
             
             return res.status(200).send(modifiedGroupAndTag);
         }catch(error){
@@ -110,7 +93,7 @@ class GroupController {
         let groupId = req.params.groupId;
         groupId = Number(groupId);
 
-        const group = await groupRepository.GetGroupByIdAll(groupId);
+        const group = await this.groupRepository.GetGroupByIdAll(groupId);
         if (!group){
             let error = new Error;
             error.statusCode = 404;
@@ -118,12 +101,10 @@ class GroupController {
             next(error) ;
         }
 
-
-        const groupPassword = await groupRepository.GetPassword(groupId);
-
+        const groupPassword = await this.groupRepository.GetPassword(groupId);
 
         if (groupPassword == inputPassword){
-            await groupRepository.DeleteGroup(groupId);
+            await this.groupRepository.DeleteGroup(groupId);
             console.log("비밀번호 인증 성공")
             const result = {"ownerPassword": groupPassword}
             return res.status(200).send(result);
@@ -136,6 +117,3 @@ class GroupController {
         }
     }
 }
-
-
-export default new GroupController();

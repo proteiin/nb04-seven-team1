@@ -1,8 +1,6 @@
-import RankingRepository from '../repository/ranking-repository.js';
-
-export default class RankingService {
-  constructor() {
-    this.rankingRepository = new RankingRepository();
+export class RankingService {
+  constructor(rankingRepository) {
+    this.rankingRepository = rankingRepository;
   }
 
   getRanking = async ({ groupId, duration, page, pageSize }) => {

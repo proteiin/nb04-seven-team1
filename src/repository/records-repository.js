@@ -1,9 +1,6 @@
-import { exercise_type, PrismaClient } from '@prisma/client';
-
-
 export class RecordsRepository {
-    constructor(){
-        this.prisma = new PrismaClient();
+    constructor(prisma){
+        this.prisma = prisma;
     }
  /**
  *운동 기록 생성
@@ -44,33 +41,6 @@ export class RecordsRepository {
  * @param {number} pageSize - 페이지 당 항목 수
  */
  findAllRecords = async (data) => {
-    // groupId = Number(groupId)
-    // const whereCondition = {group_id: groupId};
-    // if (search) {
-    //     whereCondition.nickname = {
-    //         contains: search,
-    //     };
-    // }
-    
-    // let orderByCondition = { created_at: 'desc' };
-    // if (orderBy && order) {
-    //     if (orderBy == 'createdAt'){
-    //         orderBy = 'created_at';
-    //     }
-    //     orderByCondition = { [orderBy]: order.toLowerCase() };
-    // }
-    
-    
-    // const records = await this.prisma.record.findMany({
-    //     where: whereCondition,
-    //     orderBy: orderByCondition,
-    //     skip: (page -1) * pageSize,
-    //     take: pageSize,
-    //     include: {
-    //         images: true,
-    //     },
-    // });
-    // return records;
     const {groupId, orderBy, skip, take, search} = data
     const records = await this.prisma.record.findMany({
         where: {
@@ -215,6 +185,4 @@ export class RecordsRepository {
         })
         return total
      }
-
-     
 }

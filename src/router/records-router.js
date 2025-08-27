@@ -1,45 +1,31 @@
 import express from 'express';
-/** export default (recordsController) => {
-    const router = express.Router();
-
-    router.post('/groups/:groupId/records', recordsController.createRecord);
-    router.get('/groups/:groupId/records', recordsController.findAllRecords);
-    router.get('/groups/:groupId/records/ranking', recordsController.findRecordsRanking);
-    router.get('/groups/:groupId/records/:recordId', recordsController.findRecordById);
-
-    return router;
-};
-*/
 import { validateGroupId, validateRecordBody } from '../middleware/records-middleware.js';
-//import { RecordsController } from '../controller/records-controller.js';
+
+const router = express.Router({ mergeParams: true });
 
 export default (recordsController) => {
-    const router = express.Router();
+    router.route('/groups/:groupId/records')
+        .post(
+            validateGroupId,
+            validateRecordBody,
+            recordsController.createRecord
+        )
+        .get(
+            validateGroupId,
+            recordsController.findAllRecords
+        );
 
-    router.post(
-        '/groups/:groupId/records',
-        validateGroupId,
-        validateRecordBody,
-        recordsController.createRecord
-    );
+    router.route('/groups/:groupId/records/ranking')
+        .get(
+            validateGroupId,
+            recordsController.findRecordsRanking
+        );
 
-    router.get(
-        '/groups/:groupId/records',
-        validateGroupId,
-        recordsController.findAllRecords
-    );
-
-    router.get(
-        '/groups/:groupId/records/ranking',
-        validateGroupId,
-        recordsController.findRecordsRanking
-    );
-
-    router.get(
-        '/groups/:groupId/records/:recordId',
-        validateGroupId,
-        recordsController.findRecordById
-    );
+    router.route('/groups/:groupId/records/:recordId')
+        .get(
+            validateGroupId,
+            recordsController.findRecordById
+        );
 
     return router;
 };

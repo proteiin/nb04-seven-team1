@@ -1,8 +1,6 @@
-import ImageRepository from '../repository/image-repository.js';
-
-export default class ImageService {
-  constructor() {
-    this.imageRepository = new ImageRepository();
+export class ImageService {
+  constructor(imageRepository) {
+    this.imageRepository = imageRepository;
   }
 
   getUrls = async (files) => {

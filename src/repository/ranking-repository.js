@@ -1,8 +1,8 @@
-import { PrismaClient } from '@prisma/client';
+export class RankingRepository {
+  constructor(prisma) {
+    this.prisma = prisma;
+  }
 
-const prisma = new PrismaClient();
-
-export default class RankingRepository {
   /**
    * 특정 그룹에 속한 참여자들의 기록을 특정 기간 내에서 기록시간 순으로 순위 매김
    * @param {number} groupId 그룹 ID
@@ -28,7 +28,7 @@ export default class RankingRepository {
         startDate.setMonth(endDate.getMonth() - 1);
     }
 
-    const result = await prisma.record.groupBy({
+    const result = await this.prisma.record.groupBy({
       by: ['nickname', 'user_id'],
       where: {
         // connect?
