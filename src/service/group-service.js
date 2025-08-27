@@ -79,10 +79,9 @@ export class GroupService {
     //특정 그룹 가져오기
     getGroupById = async(Id) => {
 
-        let group = await this.groupRepository.GetGroupById(Id);
+        // let group = await this.groupRepository.GetGroupById(Id);
 
         try{
-
             let group = await this.groupRepository.GetGroupById(Id);
             group = await this.userService.userSeparate(group);
             return group;
@@ -147,7 +146,12 @@ export class GroupService {
     deleteGroup = async (groupId, inputPassword) => {
         //삭제할 그룹 찾기 
         const group = await this.groupRepository.GetGroupByIdAll(groupId);
-
+        if (!group){
+            const error =new Error(`Already there isn't group`);
+            error.status = 404;
+            error.path = 'group';
+            throw error;
+        }
         const groupPassword = await this.groupRepository.GetPassword(groupId);
         const reqPassword = inputPassword.ownerPassword;
         //에러처리하기

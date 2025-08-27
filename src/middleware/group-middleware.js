@@ -1,7 +1,6 @@
 export class GroupMiddleware{
     validateGroupForm = (req,res,next) => {
         const inputData = req.body;
-        console.log(inputData)
         for (const key in inputData){
             if (!inputData[key]){ 
                 let error = new Error()
