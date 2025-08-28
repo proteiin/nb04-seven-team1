@@ -28,8 +28,9 @@
 
 ### 손준영: 그룹 코드 구현
 #### 그룹 생성하기
-- <img width="250" height="300" alt="Image" src="https://github.com/user-attachments/assets/107dea1e-7a11-4da2-8f89-2325e35f505a" />
+<img width="250" height="300" alt="Image" src="https://github.com/user-attachments/assets/107dea1e-7a11-4da2-8f89-2325e35f505a" />
 <img width="250" height="300" alt="Image" src="https://github.com/user-attachments/assets/c5aeb077-4c28-4bec-a4e5-54a524c714db" />
+
 #### 그룹 나가기
 <img width="150" height="250" alt="Image" src="https://github.com/user-attachments/assets/ae6fe2d8-7c2e-4db6-8689-673e3fa5db3b" />
 <img width="250" height="200" alt="Image" src="https://github.com/user-attachments/assets/c33a37ff-e6c5-45e6-ac72-5b4251157d62" />
@@ -116,6 +117,7 @@ README.md
 ## 구현 홈페이지
 
 https://node04-seven-1-fe.onrender.com/
+
 
 
 
