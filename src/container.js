@@ -58,7 +58,7 @@ const imageService = new ImageService(imageRepository);
 const likeService = new LikeService(likeRepository, prisma);
 const groupService = new GroupService(groupRepository, groupTagRepository, userService);
 const rankingService = new RankingService(rankingRepository);
-const recordsService = new RecordsService(recordsRepository, userService);
+const recordsService = new RecordsService(recordsRepository, userService, prisma);
 
 // controllers
 const userController = new UserController(userService);
