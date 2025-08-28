@@ -65,9 +65,9 @@ export class RecordsService {
     }
     const userPassword = String(user.password);
 
-    const isMatch = this.userService.compareHashingPassword(
-      userPassword,
+    const isMatch = await this.userService.compareHashingPassword(
       password,
+      userPassword,
     );
 
     if (!isMatch) {
