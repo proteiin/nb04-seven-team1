@@ -148,8 +148,10 @@ export class RecordsService {
         take,
         search,
       });
-      const totalRecords =
-        await this.recordsRepository.getTotalRecords(groupId);
+      const totalRecords = await this.recordsRepository.getTotalRecords(
+        groupId,
+        search,
+      );
       let formatRecords = [];
 
       for (const r of records) {
