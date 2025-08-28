@@ -33,15 +33,14 @@
 
 #### 그룹 나가기
 <img width="150" height="250" alt="Image" src="https://github.com/user-attachments/assets/ae6fe2d8-7c2e-4db6-8689-673e3fa5db3b" />
-<img width="250" height="200" alt="Image" src="https://github.com/user-attachments/assets/c33a37ff-e6c5-45e6-ac72-5b4251157d62" />
+<img width="150" height="230" alt="Image" src="https://github.com/user-attachments/assets/4fe1b069-9c2f-44f8-abd4-5158f12d4dad" />
 
 
 ### 이재훈: 그룹 추천 / 태그 / 뱃지
 <img width="70" height="35" alt="Image" src="https://github.com/user-attachments/assets/66a31b41-475a-4e1d-a25e-63b9f7a43d4e" />
 
 ### 이제창: 운동 기록
-<img width="150" height="230" alt="Image" src="https://github.com/user-attachments/assets/4fe1b069-9c2f-44f8-abd4-5158f12d4dad" />
-
+<img width="250" height="200" alt="Image" src="https://github.com/user-attachments/assets/c33a37ff-e6c5-45e6-ac72-5b4251157d62" />
 <img width="250" height="300" alt="Image" src="https://github.com/user-attachments/assets/67a676d5-275c-4959-a368-ae4d86547773" />
 
 ### 전범주: 랭킹 / 이미지 업로드 / 코드 리펙토링
@@ -117,6 +116,7 @@ README.md
 ## 구현 홈페이지
 
 https://node04-seven-1-fe.onrender.com/
+
 
 
 
