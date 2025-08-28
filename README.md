@@ -36,7 +36,8 @@
 
 ### 이재훈: 그룹 추천 / 태그 / 뱃지
 <img width="70" height="35" alt="Image" src="https://github.com/user-attachments/assets/66a31b41-475a-4e1d-a25e-63b9f7a43d4e" />
-
+<img width="50" height="35" alt="Image" src="https://github.com/user-attachments/assets/04ab1835-321d-4126-bc4a-faf1da6aa4b5" />
+<img width="50" height="35" alt="Image" src="https://github.com/user-attachments/assets/1a9a0b4d-fd75-4676-880d-b3c50d85c119" />
 
 
 
@@ -117,6 +118,7 @@ README.md
 ## 구현 홈페이지
 
 https://node04-seven-1-fe.onrender.com/
+
 
 
 
