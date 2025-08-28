@@ -29,6 +29,16 @@
 - 전범주: 랭킹 / 이미지 업로드 / 코드 리펙토링
 - 홍준기: 참여자 / 그룹 코드 구현 Sub
 
+<img width="200" height="300" alt="Image" src="https://github.com/user-attachments/assets/697c8edd-117c-483b-8fa8-c8cce76398f4" />
+<img width="250" height="300" alt="Image" src="https://github.com/user-attachments/assets/107dea1e-7a11-4da2-8f89-2325e35f505a" />
+<img width="150" height="250" alt="Image" src="https://github.com/user-attachments/assets/ae6fe2d8-7c2e-4db6-8689-673e3fa5db3b" />
+<img width="250" height="200" alt="Image" src="https://github.com/user-attachments/assets/c33a37ff-e6c5-45e6-ac72-5b4251157d62" />
+<img width="150" height="230" alt="Image" src="https://github.com/user-attachments/assets/4fe1b069-9c2f-44f8-abd4-5158f12d4dad" />
+<img width="250" height="300" alt="Image" src="https://github.com/user-attachments/assets/67a676d5-275c-4959-a368-ae4d86547773" />
+<img width="70" height="35" alt="Image" src="https://github.com/user-attachments/assets/66a31b41-475a-4e1d-a25e-63b9f7a43d4e" />
+<img width="250" height="200" alt="Image" src="https://github.com/user-attachments/assets/56a7f5fb-9349-4233-919a-03bbf9896708" />
+
+
 ## 파일 구조
 
 ```jsx
@@ -86,3 +96,4 @@ README.md
 ## 구현 홈페이지
 
 https://node04-seven-1-fe.onrender.com/
+
