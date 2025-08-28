@@ -1,7 +1,8 @@
 export class RecordsService {
-    constructor(recordsRepository, userService) {
+    constructor(recordsRepository, userService, prisma) {
         this.recordsRepository = recordsRepository;
         this.userService = userService;
+        this.prisma = prisma;
     };
 
     
@@ -39,6 +40,25 @@ export class RecordsService {
             images:photos
         };
         const newRecord = await this.recordsRepository.createRecord(dataToCreate);
+
+        const recordCount = await this.recordsRepository.getTotalRecords(groupId);
+
+        if (recordCount >= 100) {
+          const group = await this.prisma.group.findUnique({
+            where: { id: groupId },
+          });
+    
+         
+          if (!group.badges.includes('RECORD_100')) {
+            await this.prisma.group.update({
+              where: { id: groupId },
+              data: {
+                badges: [...group.badges, 'RECORD_100'], 
+              },
+            });
+          }
+        }
+
         return newRecord
     }
 
