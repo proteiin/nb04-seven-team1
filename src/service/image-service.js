@@ -6,6 +6,6 @@ export class ImageService {
   getUrls = async (files) => {
     await this.imageRepository.insertMetadata(files);
     
-    return files.map((f) => `http://localhost:3000/` + f.path);
+    return files.map((f) => `https://nb04-seven-team1.onrender.com/` + f.path);
   }
 }
