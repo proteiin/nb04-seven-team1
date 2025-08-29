@@ -97,6 +97,7 @@ export class UserService {
         discordWebhookUrl: groupInfo.discord_webhook_url,
         discordInviteUrl: groupInfo.discord_invite_url,
         likeCount: groupInfo.like_count,
+        recordCount: groupInfo._count.record,
 
         photoUrl: groupInfo.photo_url, // image 모델 관련 로직 추가 필요
         tags: groupInfo.tags.map((tag) => tag.name),
