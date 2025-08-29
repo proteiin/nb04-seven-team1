@@ -19,7 +19,7 @@ export default (imageController) => {
   router
     .route('/')
     .post(
-      upload.array('files', 5),
+      upload.array('files', 3),
       imageController.getImage.bind(imageController),
     );
 
