@@ -32,14 +32,19 @@ export class GroupRepository{
             tags: true,
             // badge: true,
             user: {
-            select: {
-                id: true,
-                nickname: true,
-                created_at: true,
-                updated_at: true,
-                auth_code: true,
+                select: {
+                    id: true,
+                    nickname: true,
+                    created_at: true,
+                    updated_at: true,
+                    auth_code: true,
+                },
             },
-            },
+            _count: {
+                select: {
+                    record: true,
+                }
+            }
         },
         });
     };
