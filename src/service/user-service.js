@@ -152,7 +152,9 @@ export class UserService {
         return await this.userRepository.decrementGroupUser(groupId, tx);
       });
 
-      await this.updateParticipantBadge(leaveGroup);
+      const participantsBadgeGroup =
+        await this.updateParticipantBadge(leaveGroup);
+      await this.updateRecordBadge(participantsBadgeGroup);
     } catch (error) {
       throw error;
     }
@@ -191,6 +193,32 @@ export class UserService {
       );
       await this.userRepository.setGroupBadges(groupId, updatedBadges);
     }
+
+    return { ...groupData, badges: updatedBadges };
+  };
+
+  updateRecordBadge = async (groupData) => {
+    const groupId = groupData.id;
+    const RECORD_BADGE = 'RECORD_100';
+
+    const recordCount = await this.userRepository.getTotalRecords({
+      where: { group_id: groupId },
+    });
+
+    let updatedBadges = [...groupData.badges];
+    const hasBadge = updatedBadges.includes(RECORD_BADGE);
+    const shouldHaveBadge = recordCount >= 100;
+
+    if (shouldHaveBadge && !hasBadge) {
+      updatedBadges.push(RECORD_BADGE);
+    } else if (!shouldHaveBadge && hasBadge) {
+      updatedBadges = updatedBadges.filter((badge) => badge !== RECORD_BADGE);
+    }
+
+    await this.prisma.group.update({
+      where: { id: groupId },
+      data: { badges: { set: updatedBadges } },
+    });
 
     return { ...groupData, badges: updatedBadges };
   };
