@@ -78,4 +78,12 @@ export class UserRepository {
       },
     });
   };
+
+  // 임시로 유저리포지토리에 작성
+  getTotalRecords = async ({ where }) => {
+    const count = await this.prisma.record.count({
+      where,
+    });
+    return count;
+  };
 }
